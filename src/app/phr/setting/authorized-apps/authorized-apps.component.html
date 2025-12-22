@@ -1,0 +1,109 @@
+<div class="bg-white overflow-height PHICatureOuter">
+  <div class="border border-bottom-0 section-title phiTitle pl-3 h-33">
+    <span class="text-app-black font-weight-500">My Authorized Applications</span>
+  </div>
+
+  <div class="container col-12" style="padding-top:15px; padding-bottom: 15px;">
+
+
+
+    <div *ngIf="lstAuthorizedApps==undefined || lstAuthorizedApps.length==0" class="no-content ml-2 p-6">
+      <i class="fas fa-exclamation-triangle text-warning mr-2"></i>No Authorized Application Found.
+    </div>
+    <ng-container *ngFor="let app of lstAuthorizedApps">
+      <div class="row mb-2">
+        <div class="col-12 col-md-6">
+          <div class="card">
+            <div class="card-header py-1 d-flex justify-content-between">
+              <span>{{app.clientName}}</span>
+              <button class="btn btn-link btn-sm p-0" (click)="onRevokeAccess(app)">Revoke Access</button>
+            </div>
+            <div class="card-body p-1">
+              <div class="form-row form-dashboard mb-2 px-3">
+                <div class="form-group col-md-12">
+                  <label class="col-form-label width-120">Applicatino ID:</label>
+                  <label class="col-form-label font-weight-500">{{app.clientId}}</label>
+                </div>
+              </div>
+              <div class="form-row form-dashboard mb-2 px-3">
+                <div class="form-group col-md-12">
+                  <label class="col-form-label width-120">Applicatino Name:</label>
+                  <label class="col-form-label font-weight-500">{{app.clientName}}</label>
+                </div>
+              </div>
+
+              <table class="table light-blue-striped-border">
+                <thead>
+                  <tr>
+                    <th>User Name</th>
+                    <th>Email</th>
+                    <th>Relationship</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let user of lstAuthorizedAppsUsers | listFilter : 'clientId' : app.clientId">
+                    <td>{{user.userName}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.relationship}}</td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+
+          <!-- <div class="dashboard patient-summary-graph mt-3 h-100">
+            <div class="dashboard-title green-light-title">
+              <div class="title">
+                {{app.clientName}}
+              </div>
+            </div>
+            <div class="dashboard-content">
+
+              <div class="form-row form-dashboard mb-2">
+                <div class="form-group col-md-12">
+                  <label class="col-form-label">Applicatino ID:</label>
+                  <label class="col-form-label font-weight-500">{{app.clientId}}</label>
+                </div>
+              </div>
+              <div class="form-row form-dashboard mb-2">
+                <div class="form-group col-md-12">
+                  <label class="col-form-label">Applicatino Name:</label>
+                  <label class="col-form-label font-weight-500">{{app.clientName}}</label>
+                </div>
+              </div>
+
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </ng-container>
+
+  </div>
+  <!-- <div class="row">
+      <div class="col-lg-12 mt-2">
+        <div class="card">
+          <div class="card-body PHITableDiv">
+            <table class="table light-blue-striped-border">
+              <thead>
+                <tr>
+                  <th>Application ID</th>
+                  <th>Application Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let app of lstAuthorizedApps">
+                  <td>{{app.clientId}}</td>
+                  <td>{{app.clientName}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div> -->
+
+
+
+</div>

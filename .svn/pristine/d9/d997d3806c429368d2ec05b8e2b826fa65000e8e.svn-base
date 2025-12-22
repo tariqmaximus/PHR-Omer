@@ -1,0 +1,45 @@
+<patient-info class="flex-shrink-0"></patient-info>
+
+<div *ngIf="showMessage==''" class="bg-white m-8 d-flex flex-column flex-grow-1 overflow-height">
+  <div class="d-flex flex-row flex-shrink-0">
+    <!-- <button class="btn new-meesage flex-shrink-0" (click)="onNewMessage()">
+      <i class="fas fa-plus mr-2"></i>New Message</button> -->
+
+    <!-- <ul class="nav messages-bar flex-grow-1 justify-content-end">
+      <a class="nav-link" href="#" (click)="onDirectMessage()">Direct Messages</a>
+      <a class="nav-link" href="#" (click)="onPHRMessage()">Patient Messages</a>
+      <a class="nav-link" href="#" (click)="getSendReceive()">Send/Receive</a>
+    </ul> -->
+  </div>
+
+  <div class="messages d-flex flex-grow-1">
+    <ul class="nav nav-tabs justify-content-start phrMessageSideBar">
+      <li class="nav-item">
+        <a class="nav-link " [ngClass]="{  
+          'active' : (message_type  === 'Inbox')
+         }" (click)="OnInbox()">
+          <span>Inbox</span>
+          <!-- <span class="count">{{inboxCount}}</span> -->
+        </a>
+        <a class="nav-link" [ngClass]="{  
+          'active' : (message_type  === 'Archive')
+         }" (click)="OnArchive()">
+          <span>Archive</span>
+          <!-- <span class="count">{{archiveCount}}</span> -->
+        </a>
+        <a class="nav-link" [ngClass]="{  
+          'active' : (message_type  === 'Amendment')
+         }" (click)="OnAmendments()">
+          <span>Amendments</span>
+          <!-- <span class="count">{{archiveCount}}</span> -->
+        </a>
+      </li>
+    </ul>
+
+    <div class="tab-content">
+      <phr-message-inbox [isNewMessage]="isNewMessage" [message_type]="message_type"
+        (onCloseNewMessagebkpMain)="onCloseNewMessage($event)"
+        class="d-flex flex-column flex-grow-1"></phr-message-inbox>
+    </div>
+  </div>
+</div>

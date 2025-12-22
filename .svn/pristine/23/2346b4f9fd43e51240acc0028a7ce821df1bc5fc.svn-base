@@ -1,0 +1,250 @@
+<div class="container col-12" style="padding-top:25px;">
+
+  <div class="row">
+    <div class="col-3">
+      <div class="shadow-sm p-2 bg-app-blue2 rounded align-items-center height100">
+        <!-- <img src="./assets/images/pic.jpg" alt="pic" class="patient-pic rounded-circle flex-shrink-0 img-h-120 mr-5 "> -->
+
+        <div class="text-center">
+          <img src="{{patPicURL}}" alt="Patient Picture" class="phr-image-patient-main rounded-circle mb-3"
+            (error)="patPicErrorHandler($event)">
+        </div>
+
+        <div class="d-flex flex-column flex-grow-1 align-items-start col-12">
+          <h1 class="text-white font-weight-normal mb-1 pat-name text-center fz-16 EHRpatientName mb-3">{{patientName}}</h1>
+          <div class="pat-info-text d-flex">
+            <div class="label demographicLabel">Age:</div>
+            <div class="value ml-0">{{pat_age}}</div>
+          </div>
+          <div class="pat-info-text d-flex">
+            <div class="label demographicLabel">Gender:</div>
+            <div class="value ml-0">{{pat_gender}}</div>
+          </div>
+          <div class="pat-info-text d-flex">
+            <div class="label demographicLabel">DOB:</div>
+            <div class="value ml-0">{{pat_dob}}</div>
+          </div>
+          <div class="pat-info-text d-flex">
+            <div class="label demographicLabel">Address:</div>
+            <div class="value ml-3">{{patient_address}} {{patient_city}} {{patient_state}}, {{patient_zip}}</div>
+          </div>
+        </div>
+        <div class="pl-3 flex-shrink-0 col-12">
+          <div class="col-12 patient-Sidebar-info pl-0">
+            <h1 class="fz-14">Practice Information</h1>
+          </div>
+          <p class="fz-15 font-weight-light text-white mb-1">{{info_practice_name}}</p>
+          <p class="fz-15 font-weight-light text-white mb-1">{{info_practice_address}}</p>
+          <p class="fz-15 font-weight-light text-white mb-1">{{info_practice_contact}}</p>
+        </div>
+
+        <div class="pl-3 flex-shrink-0 col-12">
+          <div class="col-12 patient-Sidebar-info pl-0">
+            <h1 class="fz-14">Insurance Information</h1>
+          </div>
+          <div class="pat-info-text d-flex">
+            <div class="label">Primary:</div>
+            <div class="value ml-2">{{primar_ins}}</div>
+          </div>
+          <div class="pat-info-text d-flex">
+            <div class="label">Secondary:</div>
+            <div class="value ml-2">{{secondary_ins}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-9">
+
+      <div class="d-flex flex-column rounded mt-0">
+        <div class="d-flex">
+          <div class="flex-1 px-2 py-3 d-flex flex-column mr-2 align-items-center DashboardCard col-2">
+            <h1 class="mb-2 fz-14">Body Temperature:</h1>
+            <!-- <p class="mb-0">{{bodyTemp}}</p> -->
+            <div class="label">{{bodyTemp}}</div>
+          </div>
+
+          <div class="flex-1 px-2 py-3 d-flex flex-column mr-2 align-items-center DashboardCard col-2">
+            <h1 class="mb-2 fz-14">Weight:</h1>
+            <!-- <p class="mb-0">{{pat_weight}} kg</p> -->
+            <div class="label">{{pat_weight}} kg</div>
+          </div>
+
+          <div class="flex-1 px-2 py-3 d-flex flex-column mr-2 align-items-center DashboardCard col-2">
+            <h1 class="mb-2 fz-14">BMI:</h1>
+            <!-- <p class="mb-0">{{pat_bmi}}</p> -->
+            <div class="label">{{pat_bmi}}</div>
+          </div>
+
+          <div class="flex-1 px-2 py-3 d-flex flex-column mr-2 align-items-center DashboardCard col-2">
+            <h1 class="mb-2 fz-14">Height:</h1>
+            <!-- <p class="mb-0">{{pat_height}} ft.in</p> -->
+            <div class="label">{{pat_height}} ft.in</div>
+          </div>
+          <div class="flex-1 px-2 py-3 d-flex flex-column mr-2 align-items-center DashboardCard col-2">
+            <h1 class="mb-2 fz-14">Blood Pressure 1:</h1>
+            <!-- <p class="mb-0">{{pat_BP}} mm[Hg]</p> -->
+            <div class="label">{{pat_BP}} mm[Hg]</div>
+          </div>
+
+          <div class="flex-1 px-2 py-3 d-flex flex-column mr-2 align-items-center DashboardCard col-2">
+            <h1 class="mb-2 fz-14">Blood Pressure 2:</h1>
+            <!-- <p class="mb-0">{{pat_BP2}} mm[Hg]</p> -->
+            <div class="label">{{pat_BP2}} mm[Hg]</div>
+          </div>
+
+          <div class="flex-1 px-2 py-3 d-flex flex-column align-items-center DashboardCard col-2 ">
+            <h1 class="mb-2 fz-14">Pulse:</h1>
+            <!-- <p class="mb-0"> {{pulse}} </p> -->
+            <div class="label">{{pulse}}</div>
+          </div>
+        </div>
+
+        <!-- <div class="d-flex border-top mt-3 pt-3">
+           
+
+            <div class="flex-1 px-2 py-3 d-flex flex-column align-items-center">
+                <h6 class="text-black-50 mb-2"></h6>
+                <h4 class="mb-0"></h4>
+            </div>
+        </div> -->
+      </div>
+      <div class="dashboard-container flex-grow-1 max-height-auto">
+
+        <div class="row p8">
+
+          <div class="col-12 col-md-6">
+            <div class="dashboard patient-summary-graph mt-3 h-100">
+              <div class="dashboard-title green-light-title">
+                <div class="icon">
+                  <img class="img-h-24" src="./assets/images/icons/allergies_ico.svg" alt="Patient Allergies">
+                </div>
+                <div class="title">
+                  Allergies
+                </div>
+              </div>
+              <div class="dashboard-content">
+                <ul>
+                  <li *ngFor="let allergy of lookupList.patientAllergies">
+                    <div>
+                      <small>
+                        <span>{{allergy.description}}</span>
+                      </small>
+                    </div>
+                  </li>
+                </ul>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <div class="dashboard patient-summary-graph mt-3 h-100">
+              <div class="dashboard-title green-light-title">
+                <div class="icon">
+                  <!-- <i class="fas fa-pills" aria-hidden="true"></i> -->
+                  <img class="img-h-24" src="./assets/images/icons/Dashboard_ico_refill.svg" alt="Patient Medication">
+                </div>
+
+                <div class="title">
+                  Medication
+                </div>
+
+              </div>
+              <div class="dashboard-content">
+                <div role="tablist position-relative max-height-auto overflow-auto">
+                  <div class="card dashboard-card" *ngFor="let med of lookupList.patientMedication">
+                    <div class="card-header" role="tab">
+                      <h1 class="mb-0">
+                        <a data-toggle="collapse" href="#summaryMedication{{med.chart_prescription_id}}"
+                          ng-model="check" aria-expanded="false">
+                          <span class="card-header-date">{{med.start_date}}</span> {{med.drug_info}}
+                        </a>
+                      </h1>
+                    </div>
+
+                    <div ng-show="check" class="collapse" id="summaryMedication{{med.chart_prescription_id}}">
+                      <div class="card-body">
+                        <p>Prescription: <strong>{{med.drug_info}}</strong></p>
+                        <p>Date:<strong>{{med.start_date}}</strong></p>
+                        <p>Sig Detail:<strong>{{med.sig_text}}</strong></p>
+                        <p *ngIf="med.num_of_refills_allowed>0">Refill:<strong>{{med.num_of_refills_allowed}}</strong>
+                        </p>
+                        <p *ngIf="med.pharmacist_notes">Phar. Notes:<strong>{{med.pharmacist_notes}}</strong></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-12">
+            <div class="dashboard patient-summary-graph mt-3 h-100">
+              <div class="dashboard-title orange-light-title">
+                <div class="icon">
+                  <img class="img-h-24" src="./assets/images/icons/problems-ico.svg" alt="Patient Problems">
+                </div>
+
+                <div class="title">
+                  Problems
+                </div>
+              </div>
+              <div class="dashboard-content">
+                <div role="tablist">
+                  <div class="card dashboard-card" *ngFor="let problem of lookupList.PatientProblems">
+                    <div class="card-header" role="tab">
+                      <h1 class="mb-0">
+                        <a data-toggle="collapse" href="#summaryproblem{{problem.problem_id}}" aria-expanded="false">
+                          <span class="icd-code">{{problem.prob_code}}</span> {{problem.prob_description}}
+                        </a>
+                      </h1>
+                    </div>
+
+                    <div id="summaryproblem{{problem.problem_id}}" class="collapse">
+                      <div class="card-body">
+                        <p>Code:
+                          <strong>{{problem.prob_code}}</strong>
+                        </p>
+                        <p>Description:
+                          <strong>{{problem.prob_description}}</strong>
+                        </p>
+                        <p>Date:
+                          <strong class="mr-5">{{problem.prob_date}}</strong>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+
+
+
+
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="d-flex flex-column flex-12">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+</div>

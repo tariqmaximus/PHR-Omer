@@ -1,0 +1,7 @@
+export const environment = {
+  production: true,  
+  //AuthServerEndpoint:'https://apiauth.instanthealthcare.net',  
+  //APIEndpoint: 'https://ihclogin.instanthealthcare.net/ehr-rest/' 
+  APIEndpoint: 'https://192.168.18.13:8443/maximuscare-ehr/',
+  AuthServerEndpoint: 'https://192.168.18.13:7105'
+};

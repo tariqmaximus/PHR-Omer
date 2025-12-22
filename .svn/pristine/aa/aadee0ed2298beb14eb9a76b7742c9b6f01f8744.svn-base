@@ -1,0 +1,270 @@
+<div class="position-relative">
+<form [formGroup]="phrMsgComposeForm">
+  <ul class="nav message-bar flex-shrink-0 align-items-center justify-content-end">
+    <div class="mr-2">
+      <button class="btn btn-sm bg-blue text-white" (click)="sendPhrEmail($event)">Send</button>
+    </div>
+    <!-- <div class="mr-2">
+      <button class="btn btn-sm bg-info">Save as draft</button>
+    </div> -->
+    <div class="mr-2">
+      <button class="btn btn-sm btn-danger" (click)="discardMessage()">Discard</button>
+    </div>
+  </ul>
+  <div class="p-6 d-flex flex-column flex-grow-1 light-sky-blue" style="height:530px !important;">
+    <div class="row p3 flex-grow-1 flex-wrap-nowrap">
+      <div class="col-md-8 col-sm-8 d-flex flex-column flex-grow-1">
+        <div class="border rounded bg-white d-flex flex-column flex-grow-1">
+          <div class="border rounded bg-white d-flex flex-column flex-grow-1">
+            <div class="justify-content-between">
+
+
+              <div class="d-flex flex-column flex-grow-1">
+                <div class="border-top bg-white flex-grow-1 overflow-auto">
+                  <div class="messages-list d-flex flex-grow-1">
+                    <div class="tab-content bg-white">
+                      <div class="">
+
+                        <!-- <div class="input-group group-md mb-2">
+                                <div class="input-group-prepend">
+                                  <button class="btn light-blue" type="button" id="button-addon1">Message From</button>
+                                </div>
+                                <input type="text" class="form-control" formControlName="txtMsgFrom" readonly>
+                              </div> -->
+
+                        <div class="message-detail flex-grow-1 p-3 overflow-auto" style="height: 507px !important;">
+                          <div class="form-row form-dashboard">
+                            <div class="form-group col-md-12">
+                              <label class="col-form-label" for="txtPatientSearchTo">Message From:</label>
+                              <div class="form-row form-dashboard">
+                                <div class="form-group col-12">
+                                  <div class="input-icon d-flex flex-grow-3">
+                                    <input type="text" id="txtPatientSearchTo" class="form-control" formControlName="txtMsgFrom" readonly>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+
+                          <!-- <div class="input-group group-md mb-2">
+                                <div class="input-group-prepend">
+                                  <button class="btn light-blue" type="button" id="button-addon1">Select Provider</button>
+                                </div>
+                                <select class="form-control col-9" id="cmbProvider" formControlName="cmbProvider">
+                                  <option *ngFor="let prov of lookupList.providerList" [value]="prov.id">{{prov.name}}</option>
+                                </select>
+                              </div> -->
+
+
+
+
+                          <div class="form-row form-dashboard">
+                            <div class="form-group col-md-12">
+                              <label class="col-form-label" for="cmbProvider">Select Provider:</label>
+                              <div class="form-row form-dashboard">
+                                <div class="form-group col-12">
+                                  <div class="input-icon d-flex flex-grow-3">
+                                    <select class="form-control col-9" id="cmbProvider" formControlName="cmbProvider"
+                                      (change)="getSelectedProviderName($event.target.selectedIndex)">
+                                      <option *ngFor="let prov of lookupList.providerList" [value]="prov.id">{{prov.name}}</option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+
+
+                          <!-- <div class="input-group group-md mb-2">
+                                <div class="input-group-prepend">
+                                  <button class="btn light-blue" type="button" id="button-addon1">Message Type</button>
+                                </div>
+                                <div class="custom-checkbox blue-checkbox ml-5">
+                                  <input type="checkbox" class="custom-control-input" id="amendmentFlag" name="amendmentFlag" formControlName="amendment_Flag">
+                                  <label class="custom-control-label" for="amendmentFlag">Amendment</label>
+                                </div>
+                              </div> -->
+
+
+                          <!-- <div class="form-row form-dashboard">
+                                  <div class="form-group col-md-12">
+                                    <label class="col-form-label" for="txtPatientSearchTo">Message Type:</label>
+                                        <div class="form-row form-dashboard">
+                                            <div class="form-group col-12">
+                                              <div class="input-icon d-flex flex-grow-3">
+                                                  <div class="custom-checkbox blue-checkbox ml-5">
+                                                      <input type="checkbox" class="custom-control-input" id="amendmentFlag" name="amendmentFlag" formControlName="amendment_Flag">
+                                                      <label class="custom-control-label" for="amendmentFlag">Amendment</label>
+                                                    </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  </div>
+                                </div>123 -->
+
+
+
+                          <!-- <div class="input-group group-md mb-2">
+                                <div class="input-group-prepend w-15">
+                                  <button class="btn light-blue w-100" type="button" id="button-addon1">Subject</button>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Subject" formControlName="txt_subject">
+                              </div> -->
+                          <div class="form-row form-dashboard">
+                            <div class="form-group col-md-12">
+                              <label class="col-form-label" for="txtPSubject">Subject:</label>
+                              <div class="form-row form-dashboard">
+                                <div class="form-group col-12">
+                                  <div class="input-icon d-flex flex-grow-3">
+                                    <input type="text" id="txtPSubject" class="form-control" placeholder="Subject" formControlName="txt_subject">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="h-30 d-flex align-items-center justify-content-between">
+                            <div>
+                              <div class="form-check form-check-inline pt-1 custom-checkbox blue-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="amendmentFlag" name="amendmentFlag"
+                                  formControlName="amendment_Flag">
+                                <label class="custom-control-label" for="amendmentFlag">Amendment</label>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- <div class="form-group mb-2">
+                                <div class="form-group horizental col-12" style="height: 240px;">
+                                  <quill-editor id="messageRichEditorEdit" #messageRichEditorEdit [required]="true" format="text|html"
+                                    [formControl]="txtMessageEdit"></quill-editor>
+                                </div>
+                              </div> -->
+
+                              <div class="form-row form-dashboard">
+                                <div class="form-group col-md-12">
+                                  <label class="col-form-label" for="messageRichEditorEdit">Message:</label>
+                                  <div class="form-row form-dashboard">
+                                    <div class="form-group col-12">
+                                      <div class="input-icon d-flex flex-grow-3">
+                                        <textarea class="form-control ComposeMesg" id="messageRichEditorEdit" #messageRichEditorEdit [required]="true" [formControl]="txtMessageEdit"></textarea>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+
+
+                          <!-- <div class="form-row form-dashboard">
+                            <div class="form-group col-12">
+                              <div class="mt-3" style="height: 242px !important;"><textarea class="form-control" id="messageRichEditorEdit" #messageRichEditorEdit [required]="true" [formControl]="txtMessageEdit"></textarea>
+                                <quill-editor id="messageRichEditorEdit" #messageRichEditorEdit [required]="true"
+                                  format="text|html" [formControl]="txtMessageEdit"></quill-editor>
+                              </div>
+                            </div>
+                          </div> -->
+
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            
+
+
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-4 d-flex flex-column flex-grow-1">
+        <!-- <div class="col-md-3 col-sm-6 col-12 d-flex flex-column flex-grow-1"> -->
+        <div class="border rounded bg-white d-flex flex-column flex-grow-1">
+          <div class="justify-content-between">
+            <div class="light-blue-title-bar h-30 pl-3 d-flex align-items-center justify-content-between">
+              <div class="fz-14 font-weight-400 title text-white noShadow">Attachments</div>
+
+              <label class="fz-13 text-white bg-blue px-3 pt-2 m-0 pb-2 font-weight-300 url">
+                <!-- <button class="btn btn-sm bg-success green mt-2" type="button"></button> -->
+                Browse
+                <input type="file" style="display: none" file-handler (change)="onFileChange($event)">
+              </label>
+
+            </div>
+          </div>
+          <div class="d-flex flex-column flex-grow-1">
+            <div class="border-top bg-white flex-grow-1 overflow-auto">
+              <div class="messages-list d-flex flex-grow-1">
+                <table class="table layout-fixed sm light-blue-striped-border">
+                  <tbody>
+                    <tr *ngFor="let atch of arrAttachments;let i = index">
+                      <td>{{atch.original_file_name}} </td>
+                      <!-- <td class="text-right" >
+                                  <a class="text-danger" href="#" (click)="deleteSelectedAttach(atch, i)">
+                                      <i class="far fa-trash-alt"></i>
+                                  </a>
+                              </td> -->
+                    </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- </div> -->
+        <div class="border rounded bg-white d-flex flex-column flex-grow-1">
+          <div class="justify-content-between">
+            <div class="light-blue-title-bar h-30 px-3 d-flex align-items-center justify-content-between">
+              <div class="fz-14 font-weight-400 title noShadow text-white">Links</div>
+            </div>
+          </div>
+          <div class="message-info">
+            <div class="input-group flex-grow-1">
+              <input type="text" class="form-control" id="LinkTXT" formControlName="txtaddLinks" placeholder="Enter Link to add">
+              <label for="LinkTXT" class="input-group-btn mb-0">
+                <button class="btn btn-sm bg-blue text-white" type="button" (click)="addLink()" (keydown)="checkEnter($event)">Add</button>
+              </label>
+            </div>
+
+
+          </div>
+          <div class="d-flex flex-column flex-grow-1">
+            <div class="border-top bg-white flex-grow-1 overflow-auto">
+              <div class="messages-list d-flex flex-grow-1">
+                <table class="table layout-fixed sm light-blue-striped-border">
+                  <tbody>
+                    <tr *ngFor="let links of arrLinks;let i = index">
+                      <td> <a href="{{links.name}}" target="_blank">{{links.name}}</a> </td>
+                      <td class="text-right">
+                        <!-- *ngIf="links.message_attachment_id == '' " -->
+                        <a class="text-danger" href="#" (click)="deleteSelectedRecord(links, i)">
+                          <i class="far fa-trash-alt"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+
+
+
+  </div>
+</form>
+
+<div class="div-ui-blocker" id="uiBlocker" *ngIf="isLoading">
+  <div class="div-ui-blocker-message-box ">
+      <i class="fas fa-spinner fa-spin mr-1"></i>Loading
+  </div>
+</div>
+</div>

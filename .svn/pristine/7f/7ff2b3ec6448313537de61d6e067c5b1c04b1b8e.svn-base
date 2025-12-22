@@ -1,0 +1,49 @@
+<div class="modal-header custom">
+  <img alt="Maximus" class="logo" src="./assets/images/logo-small.png">
+  <h1 class="modal-title fz-14">Reset Password</h1>
+  <br>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button> 
+</div>
+
+
+  <div class="modal-body custom">
+    <div class="dashboard-content mt-0">
+    <form [formGroup]="inputForm" (ngSubmit)="onSubmit(inputForm.value)">
+      <div class="input-group flex-nowrap mt-3">
+        <div class="input-group-prepend">
+          <label for="cPassword" class="input-group-text bg-white" id="addon-wrapping"><i class="fas fa-key fa-md px-1"></i>
+          <span class="fz-0" aria-hidden="true">Current Password</span>
+          </label>
+        </div>
+        <input type="password" id="cPassword" formControlName="currentPassword" class="form-control bg-light search-highlight" placeholder="Current Password">
+      </div>
+     
+      <div class="input-group flex-nowrap mt-3">
+        <div class="input-group-prepend">
+          <label for="nPassword" class="input-group-text bg-white" id="addon-wrapping"><i class="fas fa-key fa-md px-1"></i>
+            <span class="fz-0" aria-hidden="true">New Password</span>
+          </label>
+        </div>
+        <input id="nPassword" type="password" formControlName="newPassword" class="form-control bg-light required " placeholder="New Password">
+      </div>
+      <div class="input-group flex-nowrap mt-3">
+        <div class="input-group-prepend">
+          <label for="cnPassword" class="input-group-text bg-white" id="addon-wrapping"><i class="fas fa-key fa-md px-1"></i>
+            <span class="fz-0" aria-hidden="true">Confirm Password</span>
+          
+          </label>
+        </div>
+        <input id="cnPassword" type="password" formControlName="confirmPassword" class="form-control bg-light required " placeholder="Confirm Password">
+      </div>
+    </form>
+    </div>
+
+  </div>
+  <div class="modal-footer custom pl-0">
+    <button type="button" style="width: 80px;" class="btn btn-dark btn-sm"
+      (click)="activeModal.dismiss('Cross click')">Cancel</button>
+    <button style="width: 80px;" class="btn btn-primary btn-sm" [disabled]="!inputForm.valid"
+      type="submit" (click)="onSubmit(inputForm.value)">Save</button>
+  </div>

@@ -1,0 +1,234 @@
+<patient-info class="flex-shrink-0"></patient-info>
+
+<div class="bg-white overflow-height PHICatureOuter">
+  <div class="border border-bottom-0 section-title phiTitle pl-3">
+    <span class="text-app-black font-weight-500">Patient Health Info Capture</span>
+    <div class="d-flex align-items-center">
+      <button *ngIf="!addEditView" title="Add" class="btn btn-primary fz-13 font-weight-400 py-0" type="button"
+        (click)="onAddPHI()">
+        <i class="fas fa-plus"></i> Add</button>
+      <button *ngIf="!addEditView" title="Edit" class="btn btn-primary fz-13 font-weight-400 py-0" type="button"
+        (clcik)="onEditPHI()">
+        <i class="far fa-edit"></i> Edit</button>
+      <!-- <button class="btn btn-danger fz-13 font-weight-400 py-0" type="button">
+        <i  class="far fa-trash-alt"></i> Delete</button> -->
+      <button *ngIf="addEditView" title="Save" class="btn btn-success fz-13 font-weight-400 py-0" type="button"
+        (click)="onSave()">Save</button>
+      <button *ngIf="addEditView" title="Cancel" class="btn btn-dark fz-13 font-weight-400 py-0" type="button"
+        (click)="onCancel()">Cancel</button>
+    </div>
+  </div>
+
+  <div class="container col-12" style="padding-top:15px; padding-bottom: 15px;">
+    <div class="row">
+
+      <div class="col-lg-5 pr-1">
+        <div class="card">
+          <div class="card-body">
+            <form [formGroup]="frmPHI">
+              <div class="form-row form-dashboard mb-2">
+                <div class="form-group col-md-12">
+
+                  <div class="form-row form-dashboard">
+                    <label for="cmbProvider" class="col-sm-4 col-form-label">Correspondence With:</label>
+                    <div class="form-group col-8">
+                      <select class="form-control col-12" id="cmbProvider" formControlName="cmbProvider">
+                        <option *ngFor="let prov of lookupList.providerList" [value]="prov.id">{{prov.name}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-row form-dashboard mb-2">
+                <div class="form-group col-md-12">
+
+                  <div class="form-row form-dashboard">
+                    <label for="inputLabeling" class="col-sm-4 col-form-label">Labeling:</label>
+                    <div class="form-group col-8">
+                      <div class="input-icon d-flex flex-grow-3">
+                        <input type="text" class="form-control" id="inputLabeling" placeholder="Enter Label"
+                          formControlName="txtlabel">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- <div class="form-row form-dashboard mb-2">
+        <div class="form-group col-md-12">
+
+          <div class="form-row form-dashboard">
+            <label for="inputProvider" class="col-sm-4 col-form-label">Provider:</label>
+            <div class="form-group col-8">
+              <div class="input-icon d-flex flex-grow-3">
+                <select id="inputProvider" class="form-control">
+                  <option selected>Choose...</option>
+                  <option>...</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+
+              <div class="form-row form-dashboard mb-2">
+                <div class="form-group col-md-12">
+
+                  <div class="form-row form-dashboard">
+                    <label for="txtDate" class="col-sm-4 col-form-label">Date:</label>
+
+                    <!-- <input type="date" class="form-control" id="inputDate" placeholder="MM/DD/YYYY" formControlName="txtDate"> -->
+                    <div class="input-group col-8">
+                      <input class="form-control date-control required" id="txtDate" title="Date"
+                        placeholder="mm/dd/yyyy" name="txtDate" formControlName="txtDate" ngbDatepicker
+                        #txtDate="ngbDatepicker">
+                      <span class="input-group-btn">
+                        <span class="btn date-control-btn" (click)="txtDate.toggle()">
+                        </span>
+                      </span>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-row form-dashboard mb-2">
+                <div class="form-group col-md-12">
+
+                  <div class="form-row form-dashboard">
+                    <label for="inputTextarea" class="col-sm-4 col-form-label">Correspondence Details:</label>
+                    <div class="form-group col-8">
+                      <div class="input-icon d-flex flex-grow-3">
+                        <textarea class="form-control" rows="4" id="inputTextarea" placeholder="Details"
+                          formControlName="txtnotes"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+
+
+      </div>
+      <div class="col-lg-3 phiBox phiAttachments pl-1 pr-1">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              Links
+            </div>
+            <div>
+              <button class="btn fz-13 phiaddAttachBtn font-weight-400 py-0" title="Add" type="button"
+                (click)="onLinkAdd()">
+                <i class="fas fa-plus"></i> Add
+              </button>
+
+            </div>
+
+          </div>
+          <div class="d-flex border-bottom flex-shrink-0 p-2 justify-content-between" *ngIf="showLinkbox">
+
+            <form [formGroup]="frmLink" style="width: 100%;">
+              <div class="form-linkadd d-flex">
+                <div class="col-9 pl-0">
+                  <div class="form-group flex-grow-1 mb-0">
+                    <input class="form-control" type="text" placeholder="Enter Link" formControlName="txtLink">
+                  </div>
+                </div>
+                <div class="col-auto d-flex p-0">
+
+                  <button class="btn btn-sm btn-info ml-1" title="Save" type="button" (click)="onSaveLink()">
+                    <i class="far fa-save"></i>
+                  </button>
+                  <button class="btn btn-sm btn-danger ml-1" title="Cancel" type="button" (click)="onCancelLink()">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+
+
+            </form>
+          </div>
+          <ul class="list-group phiList list-group-flush">
+            <li class="list-group-item" *ngFor="let att of lstLink; let i = index">
+              <span title="{{att.link}}">{{att.link}}</span>
+              <button class="btn btn-link fz-12 text-danger line-height-1 p-0" title="Delete"
+                (click)="onLinkDelete(att,i)">
+                <i class="far fa-trash-alt"></i>
+              </button>
+              <button class="btn btn-link fz-12 text-danger line-height-1 p-0" (click)="onLinkNavigate(att,i)">
+                <i class="far fa-eye"></i>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-4 phiBox phiLink pl-1">
+        <div class="card">
+          <div class="card-header">
+            <label class="mb-0" for="attachFile"> Attachments</label>
+            <input id="attachFile" title="Attach File" type="file" style="display: none" file-handler
+              (change)="onFileChange($event)">
+            <button type="button" class="btn fz-13 font-weight-400 py-0 PHIfileBtn"
+              onclick="document.getElementById('attachFile').click();">Attach
+              File</button>
+          </div>
+          <ul class="list-group phiList list-group-flush">
+            <li class="list-group-item" *ngFor="let att of lstAttachments; let i = index">
+              <span title="{{att.name}}">{{att.name}}</span>
+              <button class="btn btn-link fz-12 text-danger line-height-1 p-0" title="Delete"
+                (click)="onAttachmentDelete(att,i)">
+                <i class="far fa-trash-alt"></i>
+              </button>
+              <button class="btn btn-link fz-12 text-danger line-height-1 p-0" (click)="onAttachmentPreview(att,i)">
+                <i class="far fa-eye"></i>
+              </button>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12 mt-2">
+        <div class="card">
+          <div class="card-body PHITableDiv">
+            <table class="table light-blue-striped-border">
+              <thead>
+                <tr>
+                  <th>Correspondence With</th>
+                  <th>Labeling</th>
+                  <th>Date</th>
+                  <th>Correspondence Details</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let pat of lstPatientHealthinfo"
+                  [ngClass]="{'active' : (pat.health_info_id === isSelectedChartID)}" (click)="changeRowSelection(pat)">
+                  <td>{{pat.communicate_with}}</td>
+                  <td>{{pat.labeling}}</td>
+                  <td>{{pat.communicate_date}}</td>
+                  <td>{{pat.communication}}</td>
+                  <td>
+                    <button class="btn btn-link fz-12 text-danger line-height-1 p-0" title="Delete" value="Delete"
+                      (click)="onDeleteInfo(pat)">
+                      <i class="far fa-trash-alt"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+  </div>
+</div>

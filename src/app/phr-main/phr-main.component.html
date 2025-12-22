@@ -1,0 +1,95 @@
+<div class="content-wrapper">
+  <nav class="navbar navbar-expand-lg navbar-top-main">
+    <a class="navbar-brand" aria-label="Maximus Patient Health Portal" href="#"><img alt="Maximus Patient Health Portal"
+        src="./assets/images/logo-small.png"></a>
+    <h1>PERSONAL HEALTH RECORD</h1>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+
+        <li class="nav-item dropdown" ngbDropdown>
+          <a class="user-profile-btn dropdown-toggle" href="#" id="navbarDropdownMenuLink" ngbDropdownToggle>
+            <img src="./assets/images/pic-holder.jpg" alt="Profile Picture" class="pic">
+            {{lookupList.logedInUser.userFullName}}
+          </a>
+          <div class="dropdown-menu dropdown-menu-left schedular-card rounded-bottom" ngbDropdownMenu
+            aria-labelledby="navbarDropdownMenuLink">
+            <!-- <a class="dropdown-item" href="#"><i class="fa fa-lock" aria-hidden="true"></i> Lock EHR</a> -->
+            <!-- <a class="dropdown-item" href="#"><i class="fas fa-shield-alt" aria-hidden="true"></i> Override Security</a> -->
+            <a class="dropdown-item" href="#" (click)="onResetPassword()"><i class="fa fa-key" aria-hidden="true"></i>
+              Reset Password</a>
+            <!-- <a class="dropdown-item" href="#" (click)="logoutUser()"><i class="fas fa-sign-out-alt"
+                aria-hidden="true"></i>
+              Logout</a> -->
+          </div>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <button class="btn btn-sm btn-link" (click)="logoutUser()"> <i
+              class=" fas fa-sign-out-alt text-danger fa-md mr-1" aria-hidden="true"></i> Logout</button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="navbar left-nav">
+    <ul class="nav nav-tabs justify-content-start">
+      <li class="nav-item" (click)="openModule('home')">
+        <span class="nav-link" data-title="Home">
+          <!-- <i class="phr-home"></i> -->
+          <i class="fas fa-home"></i>
+          <!-- <strong>Home</strong> -->
+        </span>
+
+      </li>
+      <li class="nav-item" (click)="openModule('encounter')">
+        <span class="nav-link" data-title="Encounters">
+          <i class="fas fa-notes-medical"></i>
+        </span>
+      </li>
+      <li class="nav-item" (click)="openModule('LabSummary')">
+        <span class="nav-link" data-title="Lab Summary">
+          <i class="fas fa-flask"></i>
+        </span>
+      </li>
+      <li class="nav-item" (click)="openModule('messages')">
+        <span class="nav-link" data-title="Messages">
+          <i class="fas fa-envelope"></i>
+        </span>
+      </li>
+      <li class="nav-item" (click)="openModule('phi')">
+        <span class="nav-link" data-title="PHI">
+          <i class="fas fa-laptop-medical"></i>
+
+        </span>
+      </li>
+      <li class="nav-item" (click)="openModule('ActivityLog')">
+        <span class="nav-link" data-title="Activity Log">
+          <i class="fas fa-history"></i>
+        </span>
+      </li>
+      <li class="nav-item" (click)="openModule('LoginLog')">
+        <span class="nav-link" data-title="Login Log">
+          <i class="far fa-clock"></i>
+        </span>
+      </li>
+      <li class="nav-item" (click)="openModule('setting')">
+        <span class="nav-link" data-title="Setting">
+          <i class="fa fa-cog"></i>
+        </span>
+      </li>
+    </ul>
+
+    <div class="tab-content">
+      <app-dashboard *ngIf="module_name==='home'" class="main-app d-flex flex-column p-0"></app-dashboard>
+      <encounter-summary *ngIf="module_name==='encounter'" class="main-app d-flex flex-column p-0"></encounter-summary>
+      <phr-lab-summary *ngIf="module_name==='LabSummary'" class="main-app d-flex flex-column p-0"></phr-lab-summary>
+      <app-messages *ngIf="module_name==='messages'" class="main-app d-flex flex-column p-0"></app-messages>
+      <phi *ngIf="module_name==='phi'" class="main-app d-flex flex-column p-0"></phi>
+      <app-activity-log *ngIf="module_name==='ActivityLog'" class="main-app d-flex flex-column p-0"></app-activity-log>
+      <app-login-log *ngIf="module_name==='LoginLog'" class="main-app d-flex flex-column p-0"></app-login-log>
+      <setting-main *ngIf="module_name==='setting'" class="main-app d-flex flex-column p-0"></setting-main>
+    </div>
+  </div>
+
+</div>

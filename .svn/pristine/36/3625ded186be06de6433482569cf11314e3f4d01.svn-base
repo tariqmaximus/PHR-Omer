@@ -1,0 +1,581 @@
+import { Component, Inject } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import { timer } from 'rxjs';
+import { AuthService } from './authentication/auth-service';
+import { AuthenticationCredentials } from './authentication/authenticationCredentials';
+import { LOOKUP_LIST, LookupList } from './providers/lookupList.module';
+import { GeneralService } from './services/general/general.service';
+import { LoadStartupService } from './services/login/load-startup.service';
+import { PhrService } from './services/phr/phr.service';
+import { DateTimeUtil } from './shared/date-time-util';
+import { ListFilterPipe } from './shared/list-filter-pipe';
+import { LogMessage } from './shared/log-message';
+import { GeneralOperation } from './shared/generalOperation';
+import { ChangePasswordModel } from './models/change-password-model';
+import { AlertTypeEnum, ServiceResponseStatusEnum } from './shared/enum-util';
+import { GenerateResetPasswordLinkModel } from './models/generate-reset-password-link-model';
+import { HttpParams } from '@angular/common/http';
+import { ConfirmationPopupComponent } from './general-modules/confirmation-popup/confirmation-popup.component';
+
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+
+  loadingCount: number = 0;
+
+  phrLoginForm: FormGroup;
+  phrPatientSelectionForm: FormGroup;
+  loginStatusMessage = "Verifying Login Information. Please wait....";
+  loginStatus: string = "";
+  loginAtemptUser: string = "";
+
+  title = 'maximuscare-phr-ng7';
+  curFeature = 1;
+  totalNum = 2;
+
+  source = timer(8000, 8000);
+  subscribe = this.source.subscribe(val => this.curFeature == this.totalNum ? this.curFeature = 1 : this.curFeature++);
+
+  lstUserAssignedPatients: Array<any>;
+  showPatientSelection: boolean = false;
+  isShowFirstPasswordChange: boolean = false;
+  isShowForgotPassword: boolean = false;
+  isShowResetPassword: boolean = false;
+
+  lstUserPatient: Array<any> = new Array();
+  poupUpOptions: NgbModalOptions = {
+    backdrop: 'static',
+    keyboard: false
+  };
+
+  changePasswordFormGroup = new FormGroup({
+    newPassword: new FormControl('', Validators.required),
+    confirmPassword: new FormControl('', Validators.required),
+  });
+
+  resetPasswordFormGroup = new FormGroup({
+    newPassword: new FormControl('', Validators.required),
+    confirmPassword: new FormControl('', Validators.required),
+  });
+
+  forgotPasswordFormGroup = new FormGroup({
+    txtuser: new FormControl('', Validators.required),
+  });
+
+  paramsObject: any;
+
+  constructor(private formBuilder: FormBuilder,
+    @Inject(LOOKUP_LIST) public lookupList: LookupList, private logMessage: LogMessage,
+    private generalService: GeneralService, private dateTimeUtil: DateTimeUtil,
+    private modalService: NgbModal,
+    private authService: AuthService, private loadStartup: LoadStartupService,
+    private phrService: PhrService) {
+
+  }
+
+
+  ngOnInit() {
+    debugger;
+    this.lookupList.isPhrDataLoad = false;
+    this.buildForm();
+
+    const resetPwd: string = this.getParamValueQueryString('resetPwd');
+    console.log('resetPwd==>' + resetPwd);
+
+    if (resetPwd != undefined && resetPwd != null) {
+      debugger;
+      this.paramsObject = JSON.parse(atob(resetPwd));
+      this.isShowResetPassword = true;
+    }
+
+
+    // this.route.queryParams.subscribe(params => {
+    //   debugger;   
+    //   if (params != undefined && params != null) {        
+    //       this.paramsObject = { ...params.keys, ...params };
+    //   }
+    // });
+  }
+
+  getParamValueQueryString(paramName) {
+    const url = window.location.href;
+    let paramValue;
+    if (url.includes('?')) {
+      const httpParams = new HttpParams({ fromString: url.split('?')[1] });
+      paramValue = httpParams.get(paramName);
+    }
+    return paramValue;
+  }
+
+
+  buildForm() {
+    this.phrLoginForm = this.formBuilder.group({
+      txtuser: this.formBuilder.control("", Validators.required),
+      txtpassword: this.formBuilder.control("", Validators.required)
+    })
+
+    this.phrPatientSelectionForm = this.formBuilder.group({
+      ddPatient: this.formBuilder.control(null, Validators.required)
+    })
+  }
+
+  onSubmit(formData) {
+
+    // this.generalService.test().subscribe(
+    //   {
+    //     next: (value: any) => {    
+    //       debugger;      
+    //       console.log(value);          
+    //     },
+    //     error: (e: any) => {
+    //       debugger;
+    //       console.log(e);
+    //     }
+    //   }
+    // );
+
+    // return;
+
+    if (formData.txtuser == undefined || formData.txtuser == "" || formData.txtpassword == undefined || formData.txtpassword == "") {
+      this.loginStatus = "login_required";
+      this.loginStatusMessage = "Please enter User Name and/or Password.";
+    }
+    else {
+      this.loginAtemptUser = formData.txtuser
+      this.phrLoginForm.get("txtuser").disable();
+      this.phrLoginForm.get("txtpassword").disable();
+      this.loginStatus = "verify_login";
+      this.loginStatusMessage = "Verifying login info ...."
+      //this.messageStatus='loading';
+      this.generateToken(formData);
+      //this.validateuser(formData);   
+    }
+  }
+
+  public generateToken(formData) {
+    debugger;
+    let auth: AuthenticationCredentials = new AuthenticationCredentials;
+    //auth.app = "PHR";
+    if (this.lookupList.isPhrDataLoad == false) {
+      auth.email = formData.txtuser;
+      auth.password = formData.txtpassword;//Md5.hashStr(formData.txtpassword).toString();
+    }
+    //else {
+    //  auth.username = this.lookupList.logedInUser.user_name;
+    //  auth.password = this.lookupList.logedInUser.password;
+    // }
+
+    // let body = new URLSearchParams();
+    // body.set('username', formData.txtuser);
+    // body.set('password', formData.txtpassword);
+    // body.set('grant_type', 'password');
+    // body.set('scope', 'system/Patient.read');
+    // body.set('client_id', 'maxcare.fhir.swagger');
+    // body.set('client_secret', 'SuperSecretPassword');
+
+
+    this.generalService.getAccessToken(auth).subscribe(
+      {
+        next: (value: any) => {
+
+          debugger;
+          console.log(value);
+
+          let encryptedToken = value.accessToken;
+          this.authService.setToken(value.accessToken)
+          //let parseToken = this.token.decodeToken(value.accessToken);
+          let parseToken: any = this.authService.decodeEncryptedToken(encryptedToken);
+          this.lookupList.loginLogID = value.logInId;
+          this.authService.userId = parseToken.user_id;
+
+          if (value.firstChangePassStatus == false) {
+
+            this.isShowFirstPasswordChange = true;
+
+            this.loginStatusMessage = "";
+            this.loginStatus = "first_change_password";
+
+            return;
+          }
+
+          this.authService.jwt_token_expiry = parseToken.exp - parseToken.iat;
+          this.authService.jwt_token_creation_time = this.dateTimeUtil.getCurrentDateTimeDate();
+
+
+
+
+          this.loginStatusMessage = "Loading PHR Data, Please wait....";
+          this.loginStatus = "loading_data";
+          this.lstUserPatient = value.patientList;
+
+          if (this.lookupList.isPhrDataLoad == false) {
+
+            if (this.lstUserPatient != undefined) {
+              this.phrPatientSelectionForm.get("ddPatient").setValue(this.lstUserPatient[0].patient_id);
+              this.showPatientSelection = true;
+              this.loginStatus = "patient_selection";
+              this.loginStatusMessage = "";
+            }
+            else if (this.lstUserPatient != undefined && this.lstUserPatient.length == 1) {
+              this.loadingCount = 2;
+              this.getPHRLogedInUserDetail(this.authService.userId);
+              this.getPatientInfo(this.lstUserPatient[0].patient_id);
+            }
+
+            //this.loadingCount = 2;
+            //this.getPHRLogedInUserDetail(this.token.userId);
+            //this.getPHRLogedInUserPatients(this.token.userId);
+          }
+        },
+        error: (e: any) => {
+          debugger;
+          console.log(e);
+
+          this.phrLoginForm.get("txtuser").enable()
+          this.phrLoginForm.get("txtpassword").enable();
+          this.loginStatus = "login_failed";
+          if (e.status == 401) {
+            //this.updateLoginInformation(true); //not call unauth error           
+            this.logMessage.log("User Name or Password is Invalid. ")
+            this.loginStatusMessage = "User Name and/or Password is Invalid.";
+          }
+          else if (e.status == 400) {
+            this.logMessage.log(e.error.message)
+            this.loginStatusMessage = e.error.message;
+          }
+          else if (e.status == 0 || e.status == 503) {
+            this.logMessage.log(e.error)
+            this.loginStatusMessage = "Connection with Server Failed.";
+          }
+          else {
+            this.loginStatusMessage = e.message;
+          }
+        }
+      }
+    );
+
+
+
+    // this.generalService.userToken(auth).subscribe(
+    //   data => {//setToken
+    //     debugger;
+    //     let parseToken = this.token.decodeToken(data['token']);
+    //     this.token.setToken(data['token'])
+    //     this.token.userId = parseToken.user_id;
+    //     this.token.jwt_token_expiry = parseToken.exp - parseToken.iat;
+    //     this.token.jwt_token_creation_time = this.dateTimeUtil.getCurrentDateTimeDate();
+    //     //this.startTokenTick(this.token.jwt_token_expiry);        
+    //     this.loginStatusMessage = "Loading PHR Data, Please wait....";
+    //     this.loginStatus = "loading_data";
+    //     if (this.lookupList.isPhrDataLoad == false) {
+    //       this.loadingCount = 2;
+    //       this.getPHRLogedInUserDetail(this.token.userId);
+    //       this.getPHRLogedInUserPatients(this.token.userId);
+    //       //this.updateLoginInformation(false); // commit due to practice id not load on this call
+    //     }
+    //   }, error => {
+    //     if (error.status == 401) {
+    //       //this.updateLoginInformation(true); //not call unauth error
+    //       this.phrLoginForm.get("txtuser").enable()
+    //       this.phrLoginForm.get("txtpassword").enable();
+    //       this.loginStatus = "login_failed";
+    //       this.logMessage.log("User Name or Password is Invalid. ")
+    //       this.loginStatusMessage = "User Name and/or Password is Invalid.";
+    //     }
+    //   });
+  }
+  // updateLoginInformation(value) {
+  //   let ormLoginLog: ORMPHRLoginuser = new ORMPHRLoginuser();
+  //   ormLoginLog.logid = "";
+  //   ormLoginLog.practice_id = this.lookupList.logedInUser.practiceId.toString(); //this.lookupList.practiceInfo.practiceId.toString();
+  //   ormLoginLog.user_id = this.loginAtemptUser;
+  //   ormLoginLog.logintime = this.dateTimeUtil.getCurrentDateTimeString();
+  //   ormLoginLog.loginfail = value;
+  //   ormLoginLog.system_ip = this.lookupList.logedInUser.systemIp;
+  //   this.phrService.updateLoginInformation(ormLoginLog).subscribe(
+  //     data => {
+  //       this.lookupList.loginLogID = data['result'];
+  //     },
+  //     error => {
+  //       return;
+  //     }
+  //   );
+  // }
+  getPHRLogedInUserDetail(userId: number) {
+    this.phrService.getPHRLogedInUserDetail(userId).subscribe(
+      data => {
+        if (data != null && data != undefined) {
+          debugger;
+          this.lookupList.logedInUser.userId = data['user_id'];
+          this.lookupList.logedInUser.userFullName = data['full_name'];
+          this.lookupList.logedInUser.user_name = data['user_name'];
+          this.lookupList.logedInUser.userFName = data['first_name'];
+          this.lookupList.logedInUser.userLName = data['last_name'];
+          this.lookupList.logedInUser.userMname = data['mname'];
+          this.lookupList.logedInUser.password = data['password'];
+          //this.lookupList.logedInUser.userRole = data['default_role'];          
+          this.lookupList.logedInUser.systemIp = "255.255.255.255";
+          this.lookupList.logedInUser.userType = data['user_type'];
+          this.lookupList.logedInUser.practiceId = data['practice_id'];
+          //this.lookupList.logedInUser.acPrintSetting = data['user_rights'];
+          //this.updateLoginInformation(false);
+
+          this.loadingCount--;
+          if (this.loadingCount == 0) {
+            //this.doPatietnSelection();
+            this.loadStartup.loadAppData();
+          }
+        }
+      },
+      error => {
+        debugger;
+        this.loginStatus = "login_failed";
+        this.loginStatusMessage = error.message;
+        this.logMessage.log("getLoginUserData: " + error.status + " " + error.message);
+      }
+    );
+  }
+
+  getPatientInfo(patientId: number) {
+
+    this.phrService.getPatientInfo(patientId).subscribe(
+      {
+        next: (value: any) => {
+
+          this.lookupList.patientInfo = value;
+
+          debugger;
+          //this.lstUserAssignedPatients = data as Array<any>;
+          this.loadingCount--;
+          if (this.loadingCount == 0) {
+            //this.doPatietnSelection();
+            this.loadStartup.loadAppData();
+          }
+
+
+        },
+        error: (e: any) => {
+          debugger;
+          this.loginStatus = "login_failed";
+          this.loginStatusMessage = e.message;
+          this.logMessage.log("getPatientInfo: " + e.status + " " + e.message);
+        }
+      });
+  }
+
+  // doPatietnSelection() {
+
+  //   if (this.lstUserAssignedPatients != undefined) {
+  //     if (this.lstUserAssignedPatients.length == 1) {
+  //       this.lookupList.patientInfo = this.lstUserAssignedPatients[0];
+  //       this.loadStartup.loadAppData();
+  //     }
+  //     else if (this.lstUserAssignedPatients.length > 1) {
+  //       this.phrPatientSelectionForm.get("ddPatient").setValue(this.lstUserAssignedPatients[0].patient_id);
+  //       this.showPatientSelection = true;
+  //     }
+  //   }
+  //   else {
+  //     alert("No Patient Info is found for this user.")
+  //   }
+  // }
+
+  onPatientSelectionSubmit(formData: any) {
+    debugger;
+    if (formData.ddPatient == undefined) {
+      alert("Please select patient.")
+    }
+    else {
+      this.showPatientSelection = false;
+
+      this.loadingCount = 2;
+      this.getPHRLogedInUserDetail(this.authService.userId);
+      this.getPatientInfo(formData.ddPatient);
+
+      // let lstPatient = new ListFilterPipe().transform(this.lstUserAssignedPatients, "patient_id", formData.ddPatient);
+
+      // if (lstPatient != undefined && lstPatient.length > 0) {
+      //   this.lookupList.patientInfo = lstPatient[0];
+      //   this.loadStartup.loadAppData();
+      // }
+
+    }
+  }
+
+
+  onSubmitChangePassword(frm: any) {
+
+    debugger;
+    // if (frm.currentPassword == undefined || frm.currentPassword == '') {
+    //   GeneralOperation.showAlertPopUp(this.modalService, "Change Password", "Please enter current password.", "warning")
+    //   return;
+    // }
+    if (frm.newPassword == undefined || frm.newPassword == '') {
+      GeneralOperation.showAlertPopUp(this.modalService, "Change Password", "Please enter new password.", "warning")
+      return;
+    }
+    if (frm.newPassword != frm.confirmPassword) {
+      GeneralOperation.showAlertPopUp(this.modalService, "Change Password", "New and Confirm password should be same.", "warning")
+      return;
+    }
+
+    //auth.email = formData.txtuser;
+    //auth.password = formData.txtpassword;
+
+
+    let changePasswordModel: ChangePasswordModel = new ChangePasswordModel();
+    changePasswordModel.NewPassword = btoa(frm.newPassword);
+    changePasswordModel.OldPassword = btoa(this.phrLoginForm.get('txtpassword').value);
+    changePasswordModel.UserId = this.authService.userId;
+    changePasswordModel.IsFirstChangePassword = true;
+
+    this.phrService.changePassword(changePasswordModel).subscribe(
+      {
+        next: (value: any) => {
+          debugger;
+          if (value.status === ServiceResponseStatusEnum.SUCCESS) {
+            //GeneralOperation.showAlertPopUp(this.modalService, "Change Password", "Password Changed Successfully.", AlertTypeEnum.SUCCESS)
+            this.loginStatus = "";
+            this.phrLoginForm.get('txtpassword').setValue('');
+            this.phrLoginForm.get("txtuser").enable()
+            this.phrLoginForm.get("txtpassword").enable();
+            this.isShowFirstPasswordChange = false;
+          }
+          else if (value.status === ServiceResponseStatusEnum.ERROR) {
+            GeneralOperation.showAlertPopUp(this.modalService, "First Change Password", value.response, AlertTypeEnum.DANGER)
+          }
+        },
+        error: (e: any) => {
+        }
+      });
+
+  }
+
+  onForgotPassword() {
+    this.forgotPasswordFormGroup.enable();
+    this.isShowForgotPassword = true;
+  }
+
+  onGenerateForgotPasswordLink(frm: any) {
+
+    let obj: GenerateResetPasswordLinkModel = new GenerateResetPasswordLinkModel();
+    obj.Email = frm.txtuser;
+    this.forgotPasswordFormGroup.disable();
+    this.loginStatus = 'sending_reset_pwd_link';
+    this.loginStatusMessage = "Sending Reset Password Link.";
+    this.generalService.GenerateResetPasswordLink(obj).subscribe(
+      {
+        next: (value: any) => {
+          debugger;
+          this.isShowForgotPassword = false;
+
+          GeneralOperation.showAlertPopUp(this.modalService, "Reset Password", value.message, AlertTypeEnum.SUCCESS);
+          this.forgotPasswordFormGroup.enable();
+          this.loginStatus = '';
+          this.loginStatusMessage = "";
+        },
+        error: (e: any) => {
+          debugger;
+          console.log(e);
+          if (e.status == 400) {
+            this.logMessage.log(e.error.message)
+            this.loginStatusMessage = e.error.message;
+            GeneralOperation.showAlertPopUp(this.modalService, "Reset Password", e.error.message, AlertTypeEnum.DANGER);
+          }
+          else if (e.status == 0 || e.status == 503) {
+            this.logMessage.log(e.error)
+            this.loginStatusMessage = "Connection with Server Failed.";
+            GeneralOperation.showAlertPopUp(this.modalService, "Reset Password", "Connection with Server Failed.", AlertTypeEnum.DANGER);
+          }
+          else {
+            this.loginStatusMessage = e.message;
+            GeneralOperation.showAlertPopUp(this.modalService, "Reset Password", e.message, AlertTypeEnum.DANGER);
+          }
+
+          this.forgotPasswordFormGroup.enable();
+          this.loginStatus = '';
+          this.loginStatusMessage = "";
+        }
+      }
+    );
+
+  }
+
+  onSubmitResetPassword(frm: any) {
+    if (frm.newPassword == undefined || frm.newPassword == '') {
+      GeneralOperation.showAlertPopUp(this.modalService, "Change Password", "Please enter new password.", "warning")
+      return;
+    }
+    if (frm.newPassword != frm.confirmPassword) {
+      GeneralOperation.showAlertPopUp(this.modalService, "Change Password", "New and Confirm password should be same.", "warning")
+      return;
+    }
+
+    let changePasswordModel: ChangePasswordModel = new ChangePasswordModel();
+    changePasswordModel.NewPassword = btoa(frm.newPassword);
+    //changePasswordModel.OldPassword = btoa(this.phrLoginForm.get('txtpassword').value);
+    changePasswordModel.UserId = this.paramsObject.UserId;
+    //changePasswordModel.IsFirstChangePassword = true;
+    this.resetPasswordFormGroup.disable();
+
+    this.loginStatus = 'resetting_pwd';
+    this.loginStatusMessage = "Resetting Password.";
+
+    debugger;
+
+    this.generalService.ResetPasswordByToken(changePasswordModel, this.paramsObject.ResetToken).subscribe(
+      {
+        next: (value: any) => {
+          debugger;
+          debugger;
+          this.isShowResetPassword = false;
+
+          // GeneralOperation.showAlertPopUp(this.modalService, "Reset Password", value.message, AlertTypeEnum.SUCCESS);
+          this.resetPasswordFormGroup.enable();
+          this.loginStatus = '';
+          this.loginStatusMessage = "";
+
+          //window.location.search="";
+          //window.location.reload();
+          window.location.replace(location.pathname);
+          //window.location = window.location.pathname
+        },
+        error: (e: any) => {
+          debugger;
+          console.log(e);
+          if (e.status == 400) {
+            this.logMessage.log(e.error.message)
+            this.loginStatusMessage = e.error.message;
+            GeneralOperation.showAlertPopUp(this.modalService, "Reset Password", e.error.message, AlertTypeEnum.DANGER);
+          }
+          else if (e.status == 0 || e.status == 503) {
+            this.logMessage.log(e.error)
+            this.loginStatusMessage = "Connection with Server Failed.";
+            GeneralOperation.showAlertPopUp(this.modalService, "Reset Password", "Connection with Server Failed.", AlertTypeEnum.DANGER);
+          }
+          else {
+            this.loginStatusMessage = e.message;
+            GeneralOperation.showAlertPopUp(this.modalService, "Reset Password", e.message, AlertTypeEnum.DANGER);
+          }
+
+          this.resetPasswordFormGroup.enable();
+          this.loginStatus = '';
+          this.loginStatusMessage = "";
+        }
+      });
+
+  }
+
+  onReturnToLogin() {
+    this.isShowFirstPasswordChange = false;
+    this.isShowForgotPassword = false;
+  }
+}
+
+
+

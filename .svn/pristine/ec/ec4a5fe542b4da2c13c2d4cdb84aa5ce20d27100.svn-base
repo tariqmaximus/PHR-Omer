@@ -1,0 +1,5 @@
+export const environment = {
+  production: true,  
+  AuthServerEndpoint:'https://apiauth.instanthealthcare.net',  
+  APIEndpoint: 'https://ihclogin.instanthealthcare.net/ehr-rest/' 
+};

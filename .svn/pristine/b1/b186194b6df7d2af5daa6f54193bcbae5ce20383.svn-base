@@ -1,0 +1,15 @@
+import { ORMPatientMessage } from "./ORMPatientMessage";
+import { ORMPatientMessageDetail } from "./ORMPatientMessageDetail";
+import { ORMAmemdmentRequest } from "./ORMAmemdmentRequest";
+import { ORMMessageAttachmentsendfromPhr } from "./ORMMessageAttachmentsendfromPhr";
+
+
+export class WrapperPhrMsg {
+    objPatientMessage:ORMPatientMessage;
+    objPatientMessageDetails:Array<ORMPatientMessageDetail>;
+    objAmemdmentReq:ORMAmemdmentRequest;
+    objMessageAttachmentPhr:Array<ORMMessageAttachmentsendfromPhr>;
+    path: String; //for path
+    constructor(){
+    }
+}

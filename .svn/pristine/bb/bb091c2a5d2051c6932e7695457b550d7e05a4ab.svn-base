@@ -1,0 +1,562 @@
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import { AlertPopupComponent } from 'src/app/general-modules/alert-popup/alert-popup.component';
+import { ConfirmationPopupComponent } from 'src/app/general-modules/confirmation-popup/confirmation-popup.component';
+import { DocumentViewerComponent } from 'src/app/general-modules/document-viewer/document-viewer.component';
+import { SearchCriteria } from 'src/app/models/common/search-criteria';
+import { ORMHealthInformationCapture } from 'src/app/models/general/ORMHealthInformationCapture';
+import { ORM_HealthInformationCaptureAttachments } from 'src/app/models/general/ORM_HealthInformationCaptureAttachments';
+import { WrapperPatientInfoCapture } from 'src/app/models/general/WrapperPatientInfoCapture';
+import { ORMDeleteRecord } from 'src/app/models/general/orm-delete-record';
+import { SendFaxAttachmentsFromClient } from 'src/app/models/general/send-fax-attachments-from-client';
+import { LOOKUP_LIST, LookupList } from 'src/app/providers/lookupList.module';
+import { GeneralService } from 'src/app/services/general/general.service';
+import { PhrService } from 'src/app/services/phr/phr.service';
+import { DateTimeFormat, DateTimeUtil } from 'src/app/shared/date-time-util';
+import { AlertTypeEnum, FaxAttachemntsTypeEnum, PromptResponseEnum, ServiceResponseStatusEnum } from 'src/app/shared/enum-util';
+import { GeneralOperation } from 'src/app/shared/generalOperation';
+import { LogMessage } from 'src/app/shared/log-message';
+
+@Component({
+  selector: 'phi',
+  templateUrl: './phi.component.html',
+  styleUrls: ['./phi.component.css']
+})
+export class PhiComponent implements OnInit {
+
+  frmPHI:FormGroup;
+  frmLink:FormGroup;
+  lstMultiPart: Array<any>;
+  lstAttachments: Array<any>; 
+  lstLink: Array<any>; 
+  lstPatientHealthinfo;
+  strOperation;
+  lstPatientHealthInfo;
+  addEditView: boolean = false;
+  downloadPath;
+  constructor(@Inject(LOOKUP_LIST) public lookupList: LookupList,
+  private phrService: PhrService,
+  private logMessage: LogMessage,
+  private modalService: NgbModal,
+  private generalOperation: GeneralOperation,
+  private generalService: GeneralService,
+  private dateTimeUtil: DateTimeUtil,private domSanitizer: DomSanitizer,
+  private formBuilder: FormBuilder) { }
+  isSelectedChartID;
+  ngOnInit() {
+    this.buildForm();
+    this.enableDisable(false);
+
+    this.getPatientPHI();
+    this.lstAttachments = new Array();
+    this.lstMultiPart = new Array();
+    this.lstLink = new Array();
+
+    if (this.lookupList.lstdocumentPath != undefined && this.lookupList.lstdocumentPath.length > 0) {
+      let lstDocPath = this.generalOperation.filterArray(this.lookupList.lstdocumentPath, "category_name", "PatientDocuments");
+      if (lstDocPath.length > 0)
+        this.downloadPath = lstDocPath[0].upload_path + "//" + this.lookupList.practiceInfo.practiceId + "//PatientDocuments";
+      else
+        this.downloadPath = '';
+    }
+  }
+  getPatientPHI  () {
+    this.generalService.getPatientHealthInfo(this.lookupList.patientInfo.patient_id,this.lookupList.practiceInfo.practiceId).subscribe(
+      data => {
+        //this.lstEncounter = data;
+        this.lstPatientHealthinfo =  data as Array<any>;
+        this.addEditView = false;
+        this.strOperation='';
+        this.frmLink.reset();
+        this.changeRowSelection(this.lstPatientHealthinfo[0])
+        this.enableDisable(false);
+      },
+      error => {
+        this.logMessage.log("getPatientHealthInfo " + error);
+        
+      }
+    );
+    
+  }
+  selectedRow;
+  changeRowSelection(row){
+    this.selectedRow=row;
+    this.isSelectedChartID = row.health_info_id;
+
+    (this.frmPHI.get("cmbProvider") as FormControl).setValue(row.communicate_with);
+    (this.frmPHI.get("txtlabel") as FormControl).setValue(row.labeling);
+    //(this.frmPHI.get("txtDate") as FormControl).setValue(row.communicate_date);
+
+    this.frmPHI.get('txtDate').setValue(this.dateTimeUtil.getDateModelFromDateString(row.communicate_date, DateTimeFormat.DATEFORMAT_MM_DD_YYYY));
+
+    (this.frmPHI.get("txtlabel") as FormControl).setValue(row.communication);
+
+    this.getInfoLinks(row.health_info_id);
+    this.getInfoAttachment(row.health_info_id);
+  }
+  buildForm() {
+    this.frmPHI = this.formBuilder.group({
+      cmbProvider: this.formBuilder.control(null),
+      txtlabel: this.formBuilder.control(""),
+      txtDate: this.formBuilder.control(""),
+      txtnotes: this.formBuilder.control(""),
+    })
+    this.frmLink = this.formBuilder.group({
+      txtLink: this.formBuilder.control(null),
+       
+    })
+    
+  }
+
+  clearFields() {
+    this.frmPHI.reset();
+    this.lstAttachments = new Array();
+    this.lstMultiPart = new Array();
+    this.lstLink = new Array();
+  }
+  enableDisable(value)
+  {
+    if(value)
+    {
+      this.frmPHI.get("cmbProvider").enable();
+      this.frmPHI.get("txtlabel").enable();
+      this.frmPHI.get("txtDate").enable();
+      this.frmPHI.get("txtnotes").enable();
+    }
+    else{
+      this.frmPHI.get("cmbProvider").disable();
+      this.frmPHI.get("txtlabel").disable();
+      this.frmPHI.get("txtDate").disable();
+      this.frmPHI.get("txtnotes").disable();
+    }
+  }
+  showLinkbox=false;
+  onLinkAdd()
+  {
+    this.showLinkbox=true;
+  }
+  onFileChange(event: any) {
+    debugger;
+    if (event.target.files != undefined && event.target.files.length > 0) {
+      if (this.lstMultiPart == undefined) {
+        this.lstMultiPart = new Array<any>();
+      }
+      let file: File = event.target.files[0];
+      this.lstMultiPart.push(file);
+
+      if (this.lstAttachments == undefined) {
+        this.lstAttachments = new Array<any>();
+      }
+
+      let sendFaxAttachmentsFromClient: ORM_HealthInformationCaptureAttachments = new ORM_HealthInformationCaptureAttachments()
+      sendFaxAttachmentsFromClient.attachment_id="0";
+      sendFaxAttachmentsFromClient.name = file.name;
+      sendFaxAttachmentsFromClient.attach_type = 'file';
+      sendFaxAttachmentsFromClient.system_ip = (this.lstMultiPart.length - 1).toString();
+      //sendFaxAttachmentsFromClient.read_only = false;// true;
+
+      this.lstAttachments.push(sendFaxAttachmentsFromClient);
+    }
+  }
+  onSaveLink()
+  {
+    let sendFaxAttachmentsFromClient: ORM_HealthInformationCaptureAttachments = new ORM_HealthInformationCaptureAttachments()
+
+      sendFaxAttachmentsFromClient.link = this.frmLink.get("txtLink").value;
+      sendFaxAttachmentsFromClient.attach_type = 'link';
+      sendFaxAttachmentsFromClient.attachment_id="0";
+      this.lstLink.push(sendFaxAttachmentsFromClient);
+
+    //this.lstLink.push(this.frmLink.get("txtLink").value);
+    this.showLinkbox=false;
+    this.frmLink.reset();
+
+  }
+  onCancelLink()
+  {
+    this.frmLink.reset();
+    this.showLinkbox=false;
+   
+  }
+  onCancel(){
+
+  this.addEditView = false;
+  this.strOperation='';
+  this.frmLink.reset();
+  this.changeRowSelection(this.lstPatientHealthinfo[0])
+  this.enableDisable(false);
+  }
+  onAddPHI()
+  {
+    this.addEditView = true;
+    this.strOperation='add';
+    this.clearFields();    
+    this.enableDisable(true);
+  }
+  onEditPHI()
+  {
+    this.addEditView = true;
+    this.strOperation='edit';  
+    this.enableDisable(true);
+  }
+  onSave()
+  {
+    debugger;
+    const formData: FormData = new FormData();
+    let wrapperSave: WrapperPatientInfoCapture = new WrapperPatientInfoCapture();
+    let objinfo:ORMHealthInformationCapture=new ORMHealthInformationCapture();
+    let lstInfoAttachment: Array<ORM_HealthInformationCaptureAttachments>= new Array();
+
+    if(this.strOperation=='add')
+    {
+      objinfo.created_user=this.lookupList.logedInUser.user_name;;
+      objinfo.client_date_created=this.dateTimeUtil.getCurrentDateTimeString();
+      objinfo.health_info_id='';
+    }
+    else
+    {
+      objinfo.health_info_id=this.selectedRow.health_info_id;
+      objinfo.date_created=this.selectedRow.date_created;
+      objinfo.modified_user=this.lookupList.logedInUser.user_name;
+      objinfo.client_date_modified=this.dateTimeUtil.getCurrentDateTimeString();
+    }
+    objinfo.patient_id=this.lookupList.patientInfo.patient_id;
+    objinfo.practice_id=this.lookupList.practiceInfo.practiceId.toString();
+    objinfo.communicate_with=this.frmPHI.get("cmbProvider").value;
+    objinfo.communication=this.frmPHI.get("txtnotes").value;
+    objinfo.communicate_date= this.dateTimeUtil.getStringDateFromDateModel(this.frmPHI.get("txtDate").value);
+    objinfo.labeling=this.frmPHI.get("txtlabel").value;
+    objinfo.system_ip=this.lookupList.logedInUser.systemIp;
+
+    wrapperSave.objHealthInfoCapture=objinfo;
+  //
+  let multiPartIndex: number = 0;
+  this.lstAttachments.forEach(att => {
+    let objAttach:ORM_HealthInformationCaptureAttachments=new ORM_HealthInformationCaptureAttachments();
+
+    if(this.strOperation=='add')
+    {
+      objAttach.created_user=this.lookupList.logedInUser.user_name;
+      objAttach.client_date_created=this.dateTimeUtil.getCurrentDateTimeString();
+    }
+    else{
+      objAttach.created_user=att.created_user;
+      objAttach.health_info_id=this.selectedRow.health_info_id;
+      objAttach.date_created=att.date_created;
+      objAttach.client_date_created=att.client_date_created;
+      // extra check in case of edit
+      objAttach.attachment_id=att.attachment_id;
+    }
+    
+    objAttach.patient_id=this.lookupList.patientInfo.patient_id;
+    objAttach.practice_id=this.lookupList.practiceInfo.practiceId.toString();
+    objAttach.document_date=this.dateTimeUtil.getCurrentDateTimeStringWithFormat(DateTimeFormat.DATEFORMAT_MM_DD_YYYY);
+    
+    objAttach.name=att.name;
+    objAttach.original_file_name=att.name;
+    objAttach.link;    
+    objAttach.attach_type='file';
+    objAttach.deleted="false";    
+    objAttach.modified_user=this.lookupList.logedInUser.user_name;
+    objAttach.client_date_modified=this.dateTimeUtil.getCurrentDateTimeString();
+    objAttach.system_ip=this.lookupList.logedInUser.systemIp;
+    debugger;
+    lstInfoAttachment.push(objAttach);
+    
+
+    if (att.system_ip != undefined) {
+      if (this.lstMultiPart != undefined || this.lstMultiPart != null) {
+        formData.append('attachFile', this.lstMultiPart[att.system_ip]);
+        multiPartIndex++;
+      }
+    }
+     
+  });
+ // wrapperSave.lstAttachments=lstInfoAttachment;
+  this.lstLink.forEach(att => {
+      let objAttach:ORM_HealthInformationCaptureAttachments=new ORM_HealthInformationCaptureAttachments();
+  
+      if(this.strOperation=='add')
+      {
+        objAttach.created_user=this.lookupList.logedInUser.user_name;
+        objAttach.client_date_created=this.dateTimeUtil.getCurrentDateTimeString();
+        objAttach.attachment_id='';
+      }
+      else{
+        objAttach.created_user=att.created_user;
+      objAttach.health_info_id=this.selectedRow.health_info_id;
+      objAttach.date_created=att.date_created;
+      objAttach.client_date_created=att.client_date_created;
+      // extra check in case of edit
+      objAttach.attachment_id=att.attachment_id;
+      }
+      
+      objAttach.patient_id=this.lookupList.patientInfo.patient_id;
+      objAttach.practice_id=this.lookupList.practiceInfo.practiceId.toString();
+      objAttach.document_date=this.dateTimeUtil.getCurrentDateTimeStringWithFormat(DateTimeFormat.DATEFORMAT_MM_DD_YYYY);
+      
+      objAttach.name='';
+      objAttach.original_file_name='';
+      objAttach.link=att;    
+      objAttach.attach_type='link';
+      objAttach.deleted="false";    
+      objAttach.modified_user=this.lookupList.logedInUser.user_name;
+      objAttach.client_date_modified=this.dateTimeUtil.getCurrentDateTimeString();
+      objAttach.system_ip=this.lookupList.logedInUser.systemIp;
+      lstInfoAttachment.push(objAttach);
+     
+  });
+  wrapperSave.arrHealthInfoAttachmentsLinks=lstInfoAttachment;
+  
+  formData.append('infoWrapperData', JSON.stringify(wrapperSave));
+ 
+  this.generalService.saveHealthInfo(formData).subscribe(
+    data => {
+      this.getPatientPHI();
+      // if (data['status'] === ServiceResponseStatusEnum.SUCCESS) {
+      //          GeneralOperation.showAlertPopUp(this.modalService, 'Send Email', "Email has been sent.", AlertTypeEnum.INFO);
+      //          this.onClose();          
+      //        }
+      //        if (data['status'] === ServiceResponseStatusEnum.NOT_FOUND) {
+      //          GeneralOperation.showAlertPopUp(this.modalService, 'Email not Sent', "Email not configured, Please contact your administrator.", AlertTypeEnum.WARNING);
+      //         return;
+      //        }
+    },
+    error => {
+      GeneralOperation.showAlertPopUp(this.modalService, 'Error in saveHealthInfo ', "An Error Occured While Saving.", AlertTypeEnum.DANGER);
+      return;
+    }
+  );
+
+  }
+  getInfoLinks(id) {
+    debugger;
+    let searchCriteria: SearchCriteria = new SearchCriteria();
+    searchCriteria.practice_id = this.lookupList.practiceInfo.practiceId;
+    searchCriteria.param_list = [
+      { name: "health_info_id", value: id, option: "" },
+      { name: "recType", value: 'link', option: "" }
+    ];
+
+    this.generalService.getHealthInfoCaptureLinks(searchCriteria).subscribe(
+      data => {
+        this.lstLink=data as Array<any>;
+      });
+  }
+  getInfoAttachment(id) {
+    debugger;
+    let searchCriteria: SearchCriteria = new SearchCriteria();
+    searchCriteria.practice_id = this.lookupList.practiceInfo.practiceId;
+    searchCriteria.param_list = [
+      { name: "health_info_id", value: id, option: "" },
+      { name: "recType", value: 'file', option: "" }
+    ];
+
+    this.generalService.getHealthInfoCaptureAttach(searchCriteria).subscribe(
+      data => {
+        this.lstAttachments=data as Array<any>;
+      });
+  }
+  poupUpOptions: NgbModalOptions = {
+    backdrop: 'static',
+    keyboard: false
+  };
+  onDeleteInfo(record){   
+
+    const modalRef = this.modalService.open(ConfirmationPopupComponent, this.poupUpOptions);
+    modalRef.componentInstance.promptHeading = 'Confirm Deletion !';
+    modalRef.componentInstance.promptMessage = 'Do you want to delete the selected record ?';
+    modalRef.componentInstance.alertType='danger';
+    let closeResult;
+
+    modalRef.result.then((result) => {
+
+      if (result == PromptResponseEnum.YES) {
+        debugger;
+        let deleteRecordData = new ORMDeleteRecord();
+        deleteRecordData.column_id = record.health_info_id.toString();
+        deleteRecordData.modified_user = this.lookupList.logedInUser.user_name;
+        deleteRecordData.client_date_time = this.dateTimeUtil.getCurrentDateTimeString();
+        deleteRecordData.client_ip = this.lookupList.logedInUser.systemIp;
+
+        this.generalService.deleteInfoCapture(deleteRecordData)
+          .subscribe(            
+          data => this.onDeleteSuccessfully(data),
+          error => alert(error),
+          () => this.logMessage.log("Health Info Deleted Successfull.")
+          );
+      }
+    }, (reason) => {
+      //alert(reason);
+    });
+  }
+  onDeleteSuccessfully(data) {
+
+    if (data.status === ServiceResponseStatusEnum.ERROR) {
+
+      const modalRef = this.modalService.open(AlertPopupComponent, this.poupUpOptions);
+      modalRef.componentInstance.promptHeading = "Health Info Capture"
+      modalRef.componentInstance.promptMessage = data.response;
+
+      let closeResult;
+
+      modalRef.result.then((result) => {
+
+
+        //alert(result);
+        if (result === PromptResponseEnum.OK) { }
+      }
+        , (reason) => {
+          //alert(reason);
+        });
+    }
+    else {
+      //this.getViewData();
+      this.getPatientPHI();
+     
+    }
+  }
+  onAttachmentDelete(record,index)
+  {
+    if(record.attachment_id==0)
+    {
+      this.lstAttachments.splice(index, 1)
+    }
+    else
+    {
+      //db  delete
+      const modalRef = this.modalService.open(ConfirmationPopupComponent, this.poupUpOptions);
+    modalRef.componentInstance.promptHeading = 'Confirm Deletion !';
+    modalRef.componentInstance.promptMessage = 'Do you want to delete the selected record ?';
+    modalRef.componentInstance.alertType='danger';
+    let closeResult;
+
+    modalRef.result.then((result) => {
+
+      if (result == PromptResponseEnum.YES) {
+        debugger;
+        let deleteRecordData = new ORMDeleteRecord();
+        deleteRecordData.column_id = record.attachment_id.toString();
+        deleteRecordData.modified_user = this.lookupList.logedInUser.user_name;
+        deleteRecordData.client_date_time = this.dateTimeUtil.getCurrentDateTimeString();
+        deleteRecordData.client_ip = this.lookupList.logedInUser.systemIp;
+
+        
+        this.generalService.deleteInfoAttachments(deleteRecordData)
+          .subscribe(            
+          data => this.lstAttachments.splice(index, 1),
+          error => alert(error),
+          () => this.logMessage.log("Deleted Successfull.")
+          );
+      }
+    }, (reason) => {
+      //alert(reason);
+    });
+    }
+  }
+  onLinkDelete(record,index)
+  {
+    if(record.attachment_id==0)
+    {
+      this.lstLink.splice(index, 1)
+    }
+    else
+    {
+      //db  delete
+      const modalRef = this.modalService.open(ConfirmationPopupComponent, this.poupUpOptions);
+    modalRef.componentInstance.promptHeading = 'Confirm Deletion !';
+    modalRef.componentInstance.promptMessage = 'Do you want to delete the selected record ?';
+    modalRef.componentInstance.alertType='danger';
+    let closeResult;
+
+    modalRef.result.then((result) => {
+
+      if (result == PromptResponseEnum.YES) {
+        debugger;
+        let deleteRecordData = new ORMDeleteRecord();
+        deleteRecordData.column_id = record.attachment_id.toString();
+        deleteRecordData.modified_user = this.lookupList.logedInUser.user_name;
+        deleteRecordData.client_date_time = this.dateTimeUtil.getCurrentDateTimeString();
+        deleteRecordData.client_ip = this.lookupList.logedInUser.systemIp;
+
+        
+        this.generalService.deleteInfoAttachments(deleteRecordData)
+          .subscribe(            
+          data => this.lstLink.splice(index, 1),
+          error => alert(error),
+          () => this.logMessage.log("Deleted Successfull.")
+          );
+      }
+    }, (reason) => {
+      //alert(reason);
+    });
+    }
+  }
+  lgPopUpOptions: NgbModalOptions = {
+    backdrop: 'static',
+    keyboard: false,
+    size: 'lg'
+  };
+  onLinkNavigate(record,index)
+  {
+    window.open(record.link, '_blank');
+  }
+  onAttachmentPreview(record,index)
+  {  
+    let searchCriteria: SearchCriteria = new SearchCriteria;
+    searchCriteria.criteria = this.downloadPath + "/" + record.link;
+    this.phrService.downloadFile(searchCriteria)
+      .subscribe(
+        data => {
+          this.downloafileResponse(data, record.link);
+        },
+        error => alert(error)
+      );
+
+  }
+  openDocument(document) {
+  
+  }
+  doc_path = '';
+  downloafileResponse(data, doc_link) {
+    let file_ext: string = doc_link.substring(doc_link.indexOf('.') + 1, doc_link.length);
+    let file_type: string = '';
+    switch (file_ext.toLowerCase()) {
+      case 'png':
+        file_type = 'IMAGE/PNG';
+        break;
+      case 'jpg':
+        file_type = 'IMAGE/JPEG';
+        break;
+      case 'pdf':
+        file_type = 'application/pdf';
+        break;
+      case 'txt':
+        file_type = 'text/plain';
+        break;
+        case 'html':
+          file_type = 'text/html';
+          break;
+    }
+    var file = new Blob([data], { type: file_type });//, {type: 'application/pdf'}
+    var fileURL = URL.createObjectURL(file);
+    let path = fileURL;
+
+    this.doc_path = path;
+    this.getLink();
+    const modalRef = this.modalService.open(DocumentViewerComponent, this.lgPopUpOptions);
+    modalRef.componentInstance.path_doc = path;
+  }
+  urlCache = new Map<string, SafeResourceUrl>();
+  getLink(): SafeResourceUrl {
+    var url = this.urlCache.get(this.doc_path);
+    if (!url) {
+      url = this.domSanitizer.bypassSecurityTrustResourceUrl(
+        this.doc_path);
+      this.urlCache.set("41", url);
+    }
+    return url;
+  }
+}

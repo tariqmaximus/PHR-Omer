@@ -1,0 +1,12 @@
+    <div class="modal-content custom">
+        <div class="modal-header custom" >
+          <img class="Maximus" src="./assets/images/phr-logo-small.png">
+          <h1 class="modal-title fz-14">Document Viewer</h1>
+          <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body custom" >
+            <iframe [src]="getLink()" id="doc_frame" #docframe style="height: 550px !important;" width="100%" height="100%" frameborder="0"> </iframe>
+        <div>
+      </div>

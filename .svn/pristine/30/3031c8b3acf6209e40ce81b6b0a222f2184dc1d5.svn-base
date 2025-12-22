@@ -1,0 +1,129 @@
+// import { HttpHeaders, HttpClient } from "@angular/common/http";
+// import { APP_CONFIG, AppConfig } from "src/app/providers/app-config.module";
+// import { Inject } from "@angular/core";
+
+
+// export class PrintChartService {
+//     private httpOptions = {
+//         headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+//       };
+//       private httpPdfOptions = {
+//         headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+//         responseType: 'arraybuffer'
+//       };  
+//       constructor(private http: HttpClient,
+//         @Inject(APP_CONFIG) private config: AppConfig) { }
+
+//         getProvider(practice_id: number) {
+//           return this.http.get(
+//             this.config.apiEndpoint + 'general/getProviderList/' + practice_id, this.httpOptions);
+//         }
+//         //         getChartReasonForVisit_HPI
+//         getProvider(practice_id: number) {
+//           return this.http.get(
+//             this.config.apiEndpoint + 'general/getProviderList/' + practice_id, this.httpOptions);
+//         }
+// // getChartVital
+// getChartVital(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getChartVital/' + practice_id, this.httpOptions);
+// }
+// // getChartProblem
+// getChartProblem(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getChartProblem/' + practice_id, this.httpOptions);
+// }
+// // getChartSurgery
+// getChartSurgery(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getChartSurgery/' + practice_id, this.httpOptions);
+// }
+// // getChartProcedures
+// getChartProcedures(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getChartProcedures/' + practice_id, this.httpOptions);
+// }
+// // getChartImmunizationSummary
+// getChartImmunizationSummary(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getChartImmunizationSummary/' + practice_id, this.httpOptions);
+// }
+// // getChartSocialHistDetailById
+// getChartSocialHistDetailById(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getChartSocialHistDetailById/' + practice_id, this.httpOptions);
+// }
+// // getChartFamilyHis
+// getChartFamilyHis(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getChartFamilyHis/' + practice_id, this.httpOptions);
+// }
+// // getPatPrescription
+// getPatPrescription(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getPatPrescription/' + practice_id, this.httpOptions);
+// }
+// // getPatAllergies
+// //123
+// getPatAllergies(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getPatAllergies/' + practice_id, this.httpOptions);
+// }
+// // getPatROS
+// getPatROS(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getPatROS/' + practice_id, this.httpOptions);
+// }
+// // getPatProgressNotes
+// getPatProgressNotes(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getPatProgressNotes/' + practice_id, this.httpOptions);
+// }
+// // getPatAnnotation
+// getPatAnnotation(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getPatAnnotation/' + practice_id, this.httpOptions);
+// }
+// // getPatCarePlan
+// getPatCarePlan(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getPatCarePlan/' + practice_id, this.httpOptions);
+// }
+// // getPatCognitive
+// getPatPrescription(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getPatPrescription/' + practice_id, this.httpOptions);
+// }
+// // getPatPhysicalExam
+// getPatPrescription(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getPatPrescription/' + practice_id, this.httpOptions);
+// }
+// // getPatInjuryNotes
+// getPatPrescription(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getPatPrescription/' + practice_id, this.httpOptions);
+// }
+// // getChartFollowUpProblem
+// getPatPrescription(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getPatPrescription/' + practice_id, this.httpOptions);
+// }
+// // getPastMedHistory
+// getPatPrescription(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getPatPrescription/' + practice_id, this.httpOptions);
+// }
+// // getAssessments
+// getPatPrescription(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getPatPrescription/' + practice_id, this.httpOptions);
+// }
+// // getPatient_AWVPrint
+// getPatPrescription(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getPatPrescription/' + practice_id, this.httpOptions);
+// }
+// // getHealthMaint_Print
+// getPatPrescription(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getPatPrescription/' + practice_id, this.httpOptions);
+// }
+// // getLabOrderTest_Print
+// getPatPrescription(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getPatPrescription/' + practice_id, this.httpOptions);
+// }
+// // getOfficeTestPrint
+// getPatPrescription(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getPatPrescription/' + practice_id, this.httpOptions);
+// }
+// // getAmendments_Print
+// getPatPrescription(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getPatPrescription/' + practice_id, this.httpOptions);
+// }
+// // getChartReportDetails
+// getPatPrescription(practice_id: number) {
+//   return this.http.get(this.config.apiEndpoint + 'general/getPatPrescription/' + practice_id, this.httpOptions);
+// }
+
+
+// }

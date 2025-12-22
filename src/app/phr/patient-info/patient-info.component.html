@@ -1,0 +1,60 @@
+<div class="patient-summary">
+  <div class="summary-info">
+
+    <!-- <img src="./assets/images/pic.jpg" alt="pic" class="patient-pic rounded-circle"> -->
+    <img src="{{patPicURL}}" alt="pic" class="patient-pic rounded-circle" (error)="patPicErrorHandler($event)">
+
+    <div class="info-box">
+      <h1>{{patient_Name}}</h1>
+      <p>{{patient_gender}} | {{patient_maritalStatus}}</p>
+    </div>
+    <div class="info-box">
+      <p>PID: {{patient_pid}}</p>
+      <p>DOB: {{patient_dob}}</p>
+    </div>
+
+    <div class="info-box">
+      <p>
+        <i class="fas fa-phone"></i>{{patient_contactNumber}}
+      </p>
+      <p>
+        <i class="fas fa-map-marker-alt"></i>{{patient_Address}} {{patient_City}} {{patient_State}}, {{patient_Zip}}
+      </p>
+
+    </div>
+    <div class="status">
+      <h2>
+        <span>{{patient_age_yy}}</span><span class="fz-12 pr-1">Y</span>
+        <span>{{patient_age_mm}}</span> <span class="fz-12 pr-1">M</span>
+        <span>{{patient_age_dd}}</span><span class="fz-12 pr-1">D</span>
+      </h2>
+      <p>Age</p>
+    </div>
+
+    <div class="status statusPHI">
+      <p *ngIf="patient_weight !=''">{{patient_weight}}</p>
+      <p>Weight (kg)</p>
+    </div>
+
+    <div class="status statusPHI">
+      <p>{{patient_height}}</p>
+      <p>Height (ft.in)</p>
+    </div>
+    
+    <div class="status statusPHI">
+      <p>{{patietn_bmi}}</p>
+      <p>BMI</p>
+    </div>
+
+    <div class="status statusPHI">
+      <p>{{patietn_temp}}<span>&#176;</span>
+      </p>
+      <p>Temp (<span>&#176;F</span>)</p>
+    </div>
+
+    <div class="status statusPHI">
+      <p>{{patietn_bp}}</p>
+      <p>BP </p>
+    </div>
+  </div>
+</div>

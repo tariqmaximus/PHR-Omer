@@ -1,0 +1,40 @@
+<patient-info class="flex-shrink-0"></patient-info>
+
+<div class="bg-white m-8 d-flex flex-column flex-grow-1 overflow-height">
+    <div class="border border-bottom-0 section-title pl-3">
+      <span class="text-app-blue font-weight-500">OBGYN</span>
+    </div>
+    <div class="border flex-grow-1 overflow-auto max-height-100">
+      <table class="table light-blue-striped-border">
+        <thead>
+          <tr>
+            <th>Registered Date</th>
+            <th>Registered By</th>
+            <th>Assign To</th>
+            <th>Facility</th>
+            <th>Hospital</th>
+            <th>Completed</th>
+            <th>Completed Date</th>
+            <th>&nbsp;</th>
+          </tr>
+        </thead>
+    
+        <tbody>
+          <tr *ngFor="let gyn of lstPHRGyn">
+            <td>{{gyn.date_created}}</td>
+            <td>{{gyn.created_user}}</td>
+            <td>{{gyn.provider_name}}</td>
+            <td>{{gyn.facility}}</td>
+            <td>{{gyn.hospital}}</td>
+            <td>{{gyn.completed}}</td>
+            <td>{{gyn.completed_date}}</td>
+            <td class="text-right">
+              <button type="button" class="btn btn-link text-primary line-height-1 p-0">
+                <i class="fas fa-print"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+</div>

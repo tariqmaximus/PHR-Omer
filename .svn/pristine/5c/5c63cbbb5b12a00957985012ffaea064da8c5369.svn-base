@@ -1,0 +1,33 @@
+export class ORMPatientChart {
+    chart_id:String;
+    visit_date:String;
+    patient_id:String;
+    practice_id:String;
+    provider_id:String;
+    location_id:String;
+    appointment_id:String;
+    signed:Boolean;
+    signed_by:String;
+    signed_date:String;
+    complete:Boolean;
+    complete_by:String;
+    complete_date:String;
+    co_signed:Boolean;
+    co_signed_by:String;
+    co_signed_date:String;
+    amendment:Boolean;
+    amendment_by:String;
+    amendment_date:String;
+    deleted:Boolean;
+    created_user:String;
+    client_date_created:String;
+    modified_user:String;
+    client_date_modified:String;
+    date_created:String;
+    date_modified:String;
+    no_allergy:Boolean;
+    no_problem:Boolean;
+    no_med:Boolean;
+    external_education:Boolean;
+    med_reviewed:Boolean;
+}

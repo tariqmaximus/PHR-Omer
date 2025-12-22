@@ -1,0 +1,430 @@
+/********************* Dashboard Summary *********************/
+.dashboard-summary-container {
+    padding: 0;
+}
+
+.dashboard-summary-container .dashboard-summary {
+    background-color: #ffffff;
+    height: 75px;
+    display: flex;
+    flex-direction: row;
+    border-radius: 2px;
+}
+
+.dashboard-summary .icon {
+    width: 35%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 34px;
+    border-radius: 2px 0 0 2px;
+}
+
+.dashboard-summary .info {
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard-summary .info .count {
+    font-family: 'Roboto';
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 30px;
+    color: #2972ad;
+    margin: 0;
+    padding-bottom: 5px;
+}
+
+.dashboard-summary .info .title {
+    font-family: 'Roboto';
+    font-weight: 300;
+    font-size: 13px;
+    color: #757575;
+    margin: 0;
+}
+
+.red-dark {
+    background-color: #ce4b27;
+}
+.purple {
+    background-color: #a300aa;
+}
+.deep-purple {
+    background-color: #5b3ab6;
+}
+.green {
+    background-color: #009600;
+}
+.cyan-dark {
+    background-color: #0093a8;
+}
+.orange-dark {
+    background-color: #e88a05;
+}
+.light-gray {
+    background-color: rgba(237, 239, 245, .45);
+}
+
+.row.p8 {
+    margin-right: -4px;
+    margin-left: -4px;
+}
+
+.row.p8 > [class^="col-"] {
+    padding: 4px;
+}
+
+
+/********************* Main Dashboard *********************/
+.dashboard {
+    /* height: 262px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-radius: 1px;
+    border: 1px solid rgb(197, 212, 226); */
+    background: #ffffff;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    border: none;
+    -webkit-box-shadow: 0px 4px 5px 1px rgba(175, 175, 175, 0.1);
+    box-shadow: 0px 4px 5px 1px rgba(175, 175, 175, 0.1);
+}
+
+.dashboard .dashboard-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 35px;
+    flex-shrink: 0;
+    border-radius: 1px 1px 0 0;
+    padding-right: 10px;
+    /* background: -moz-linear-gradient(top, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.0) 100%);
+    background: -webkit-linear-gradient(top, rgba(0,0,0,0.03) 0%,rgba(0,0,0,0.0) 100%); 
+    background: linear-gradient(to bottom, rgba(0,0,0,0.03) 0%,rgba(0,0,0,0.0) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#0d000000',GradientType=0 ); */
+    border-bottom: 1px solid #2972ad;
+}
+.dashboard .dashboard-title-md {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 30px;
+    flex-shrink: 0;
+    border-radius: 1px 1px 0 0;
+    padding-right: 10px;
+    /* background: -moz-linear-gradient(top, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.0) 100%);
+    background: -webkit-linear-gradient(top, rgba(0,0,0,0.03) 0%,rgba(0,0,0,0.0) 100%);
+    background: linear-gradient(to bottom, rgba(0,0,0,0.03) 0%,rgba(0,0,0,0.0) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#0d000000',GradientType=0 ); */
+}
+
+.dashboard-title .icon {
+    width: 35px;
+    height: 35px;
+    font-size: 20px;
+    border-radius: 1px 0 0 0;
+    color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard-title .title {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: #2972ad;
+    font-weight: 500;
+    padding: 0 10px;
+}
+
+.dashboard-title-md .title-md {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #2972ad;
+    font-weight: 500;
+    padding: 0 10px;
+}
+
+.dashboard-title .title .badge {
+    color: #ffffff;
+    background-color: #FFC107;
+    margin-left: 8px;
+    padding: 4px;
+    min-width: 24px;
+    height: 24px;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.badge-sm {
+    color: #ffffff;
+    background-color: #FFC107;
+    margin-left: 8px;
+    padding: 4px;
+    min-width: 20px;
+    height: 20px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard-title .title-btn {
+    font-size: 18px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard-title .title-btn a {
+    color: #2972ad;
+    transition: 0.5s;
+}
+.dashboard-title .title-btn a:hover {
+    color: #00aaef;
+}
+
+.dashboard-title .title-link {
+    font-size: 13px;
+    flex-shrink: 0;
+}
+
+.dashboard-title .title-link a,
+.dashboard-title .title-link button {
+    color: #00aaef;
+    transition: 0.5s;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-weight: 300;
+}
+.dashboard-title .title-link a:hover,
+.dashboard-title .title-link button:hover {
+    color: #2972ad;    
+    text-decoration: none;
+}
+
+.dashboard-title .title-link + .title-link {
+    margin-left: 8px;
+}
+
+.dashboard-title.sm-title {
+    height: 25px;
+}
+
+.dashboard-title.sm-title .title {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.dashboard .dashboard-content {
+    flex-grow: 1;
+    background: #ffffff;
+    margin: 1px 0 0;
+    overflow: auto;
+    position: relative;
+}
+
+
+/********************* Dashboard View and Edit boxes *********************/
+.dashboard-container {
+    padding: 0;
+    margin-bottom: 0px;
+    flex-grow: 1;
+}
+
+.dashboard-content .dashboard-add-edit {
+    background-color: rgba(235,242,249,0.4);
+    padding: 10px;
+    transition: 0.5s;
+}
+
+.dashboard-content .dashboard-view-title {
+    font-size: 13px;
+    color: #101010;
+    font-weight: 400;
+    line-height: 20px;
+    margin: 0;
+    background-color: rgba(46, 127, 193, .4);
+    padding: 0 8px;
+}
+
+.dashboard-content .dashboard-view {
+    background-color: rgba(235,242,249,0.8);
+    padding: 6px 10px;
+    transition: 0.5s;
+}
+
+.form-view {
+    display: flex;
+    font-size: 12px;
+    margin: 2px 0px;
+}
+
+.form-view .btn {  
+    font-size: 12px;    
+}
+
+.form-view .title {
+    color: #2e7fc1;
+    font-weight: 500;
+}
+.form-view .title-normal {
+    color: #2e7fc1;
+}
+
+.form-view .value {
+    flex-grow: 1;
+    color: #101010;
+    font-weight: 400;
+    padding-left: 6px;
+    flex-basis: 0;
+}
+
+.form-view .value pre{
+    font-family: inherit;
+    font-size: 12px;
+    margin-bottom: 2px;
+    border: none;
+    white-space: pre-wrap;
+}
+.form-view .btn {  
+    font-size: 12px;    
+}
+/********************* Dashboard 3D flip *********************/
+.perspective {
+    perspective: 1000px;
+}
+
+.dashboard-3d-container {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: .7s;
+    overflow: hidden;
+}
+
+.dashboard-front {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    transform: rotateX( 0deg );
+    backface-visibility: hidden;
+    transition: 0.7s;
+}
+
+.dashboard-back {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    transform: rotateX( 180deg );
+    backface-visibility: hidden;
+    transition: 0.7s;
+}
+
+.dashboard-3d-container.rotate .dashboard-front {
+    transform: rotateX( 180deg );
+}
+
+.dashboard-3d-container.rotate .dashboard-back {
+    transform: rotateX( 0deg );
+}
+
+
+
+
+
+.pat-info-text {
+    font-size: 13px;
+}
+
+.pat-info-text .label {
+    font-weight: 300;
+    color: #fde049;
+}
+
+.pat-info-text .value {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.bg-app-blue2 {
+    /* background-color: #5dba67; */
+    background-color: #1960A3;
+    
+}
+
+.dashboard-box-title {
+    background-color: rgba(0, 115, 170, .35);
+}
+.pat-name{
+    font-size: 16px !important;
+}
+/* Dashboard Card css */
+.DashboardCard{
+    padding: 24px !important;
+    border-radius: 7px;
+    text-align: center;
+}
+.DashboardCard:nth-child(1){
+    background-color: #cfd9ef;
+    line-height: 1.75;
+    color: #3f414d;
+    font-size: 0.875rem;
+}
+.DashboardCard:nth-child(2){
+    background-color: #ffebc8;
+    line-height: 1.75;
+    color: #3f414d;
+    font-size: 0.875rem;
+}
+.DashboardCard:nth-child(3){
+    background-color: #d2efff;
+    line-height: 1.75;
+    color: #3f414d;
+    font-size: 0.875rem;
+}
+.DashboardCard:nth-child(4){
+    background-color: #efded8;
+    line-height: 1.75;
+    color: #3f414d;
+    font-size: 0.875rem;
+}
+.DashboardCard:nth-child(5){
+    background-color: #ceebee;
+    line-height: 1.75;
+    color: #3f414d;
+    font-size: 0.875rem;
+}
+.DashboardCard:nth-child(6){
+    background-color: #cdd7e5;
+    line-height: 1.75;
+    color: #3f414d;
+    font-size: 0.875rem;
+}
+.DashboardCard:nth-child(7){
+    background-color: #ffe4b3;
+    line-height: 1.75;
+    color: #3f414d;
+    font-size: 0.875rem;
+}

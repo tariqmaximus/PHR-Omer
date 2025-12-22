@@ -1,0 +1,504 @@
+import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular/core';
+import { AbstractControl, FormGroup, FormBuilder } from '@angular/forms';
+import { LookupList, LOOKUP_LIST } from 'src/app/providers/lookupList.module';
+import { LogMessage } from 'src/app/shared/log-message';
+import { PhrService } from 'src/app/services/phr/phr.service';
+import { ConfirmationPopupComponent } from 'src/app/general-modules/confirmation-popup/confirmation-popup.component';
+import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import { PromptResponseEnum } from 'src/app/shared/enum-util';
+import { SearchCriteria } from 'src/app/models/common/search-criteria';
+import { GeneralOperation } from 'src/app/shared/generalOperation';
+import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
+import { DocumentViewerComponent } from '../../../general-modules/document-viewer/document-viewer.component';
+import { DateTimeUtil } from 'src/app/shared/date-time-util';
+
+@Component({
+  selector: 'phr-message-inbox',
+  templateUrl: './phr-message-inbox.component.html',
+  styleUrls: ['./phr-message-inbox.component.css']
+})
+export class PhrMessageInboxComponent implements OnInit {
+  @Input() isNewMessage;
+  @Output() onCloseNewMessagebkpMain = new EventEmitter<any>();
+  @Input() message_type;
+  msgPatAttachmentsList;
+  lstMessagelist;
+  lstAmendent;
+  MessageDetail;
+  message_detail_id;
+  msg_selected_body;
+  msg_sender_id;
+  message_id;
+  // msg_detail_from;
+  // msg_detail_to;
+  // msg_detail_cc;
+  // msg_detail_subject;
+  // msg_detail_body;
+  // msg_detail_date;
+  msg_detail_subject;
+  msg_user_name;
+  msg_recieve_date;
+  msg_mess_to;
+  msg_amendment_check;
+  msg_provider;
+  selectedMessage_id;
+  selectedrequest_id;
+  selectedMessageDetail;
+  indexSelected;
+  downloadPath;
+  showInArchive;
+  quilMessageHeaderEdit: FormGroup;
+  public messageTextView: AbstractControl;
+
+  patientId: string = "";
+
+  lgPopupUpOptions: NgbModalOptions = {
+    backdrop: 'static',
+    keyboard: false,
+    size: 'lg'
+  };
+
+  constructor(@Inject(LOOKUP_LIST) public lookupList: LookupList,
+    private logMessage: LogMessage,
+    private modalService: NgbModal,
+    private generalOperation: GeneralOperation,
+    private formBuilder: FormBuilder,
+    private dateTimeUtil: DateTimeUtil,
+    private domSanitizer: DomSanitizer,
+    private phrService: PhrService) {
+
+    this.patientId = this.lookupList.patientInfo.patient_id.toString();
+
+    this.quilMessageHeaderEdit = formBuilder.group({
+      'messageTextView': [''],
+    });
+    this.messageTextView = this.quilMessageHeaderEdit.controls['messageTextView'];
+
+  }
+
+  public replyMsg: any[] =
+    [{
+      msgFrom: [{ msg_from: '' }],
+      selectedProvider: [{ selected_provider: '' }],
+      selectedProviderName: [{ selected_provider_name: '' }],
+      msgType: [{ msg_type: '' }],
+      msgSubject: [{ msg_subject: '' }],
+      msgText: [{ msg_text: '' }],
+      msgId: [{ msg_id: '' }],
+      amendment: [{ msg_Amendment: '' }],
+      attachments: [{ msg_Attachments: '' }]
+    }];
+
+
+  ngOnInit() {
+    if (this.lookupList.lstdocumentPath != undefined && this.lookupList.lstdocumentPath.length > 0) {
+      let lstDocPath = this.generalOperation.filterArray(this.lookupList.lstdocumentPath, "category_name", "Messages");
+      if (lstDocPath.length > 0)
+        this.downloadPath = lstDocPath[0].upload_path + "//" + this.lookupList.practiceInfo.practiceId + "//Messages";
+      else
+        this.downloadPath = '';
+    }
+  }
+  ngOnChanges() {
+    debugger;
+    if (this.message_type == "Amendment") {
+      this.showInArchive = "Amendment";
+      this.getPatientAmendments();
+    }
+    else {
+      this.getPatientMessages();
+    }
+    //this.onGetMessageList();
+    if (this.message_type == "Inbox") {
+      this.showInArchive = "inbox";
+    }
+    else if (this.message_type == "Draft") {
+      this.showInArchive = "draft";
+    }
+    else if (this.message_type == "Sent") {
+      this.showInArchive = "sent";
+    }
+    else if (this.message_type == "Deleted") {
+      this.showInArchive = "deleted";
+    }
+    else if (this.message_type == "Archive") {
+      this.showInArchive = "archive";
+    }
+
+  }
+  getPatientMessages() {
+    debugger;
+    //this.phrService.getPatientMessages(this.patientId, this.lookupList.logedInUser.user_name, this.message_type, this.lookupList.logedInUser.userId.toString()) 
+    this.phrService.getPatientMessages(this.patientId, this.lookupList.logedInUser.userId.toString(), this.message_type)
+      .subscribe(
+        data => {
+          this.lstMessagelist = data;
+          if (this.lstMessagelist != undefined && this.lstMessagelist.length > 0)
+            this.onMessageChange(data[0], 0);
+          //this.onMessageClick(this.lstMessagelist[0].message_id);
+          //this.isLoading = false;
+        },
+        error => {
+          this.logMessage.log("An Error Occured while getting getPatientMessages list.")
+          //this.isLoading = false;
+        }
+      );
+  }
+  // onGetMessageList() {
+  //   this.phrService.getMessageslist(this.lookupList.logedInUser.userId.toString(), this.message_type)
+  //     .subscribe(
+  //       data => {
+  //         this.lstMessagelist = data;
+  //         this.onMessageClick(this.lstMessagelist[0].message_id);
+  //         //this.isLoading = false;
+  //       },
+  //       error => {
+  //         this.logMessage.log("An Error Occured while getting getMessages list.")
+  //         //this.isLoading = false;
+  //       }
+  //     );
+  // }
+  onMessageChange(values, index) {
+    if(values==undefined){
+      return;
+    }
+    this.selectedMessageDetail = values;
+    this.selectedMessage_id = values.message_id;
+    this.indexSelected = index;
+
+    if (values.readed == 0) {
+      let searchCriteria: SearchCriteria = new SearchCriteria();
+      searchCriteria.practice_id = this.lookupList.practiceInfo.practiceId;
+      searchCriteria.param_list = [
+        { name: "column_id", value: this.selectedMessageDetail.message_detail_id, option: "" },
+        { name: "modified_user", value: this.lookupList.logedInUser.user_name, option: "" },
+        { name: "client_date_modified", value: this.dateTimeUtil.getCurrentDateTimeString(), option: "" },
+        { name: "client_ip", value: this.lookupList.logedInUser.systemIp, option: "" },
+        { name: "callingFrom", value: "readed", option: "" }
+      ];
+      this.phrService.updateMessage(searchCriteria)
+        .subscribe(
+          data => this.updateMessage(data, this.indexSelected),
+          error => alert(error),
+          () => this.logMessage.log("Selected Record chagned to readed Successfull.")
+        );
+    }
+
+    this.msg_detail_subject = "";
+    this.msg_user_name = "";
+    this.msg_recieve_date = "";
+    this.msg_mess_to = "";
+    this.msg_amendment_check = "";
+    this.msg_provider = "";
+
+    if (values != "" || values != null) {
+      this.msg_detail_subject = values.subject;
+      this.msg_user_name = values.user_name;
+      this.msg_recieve_date = values.message_date;// values.recieve_date;
+      this.msg_mess_to = values.mess_to;
+      this.quilMessageHeaderEdit = this.formBuilder.group({
+        'messageTextView': [values.mess_body_html.trim()],
+      });
+      this.messageTextView = this.quilMessageHeaderEdit.controls['messageTextView'];
+      this.msg_amendment_check = values.is_amendments;
+      this.msg_provider = values.user_name;
+    }
+    this.msg_selected_body = values.mess_body_html.trim();
+    this.msg_sender_id = values.from_id;// values.sender_id;
+
+    this.getPatientMsgAttachments(this.selectedMessage_id);
+  }
+
+  getPatientMsgAttachments(message_ID) {
+    this.phrService.getPatientMsgAttachments(message_ID, this.lookupList.practiceInfo.practiceId.toString()).subscribe(
+      data => {
+        this.msgPatAttachmentsList = data as Array<any>;
+      },
+      error => {
+        this.getPatientMsgAttachmentsError(error);
+      }
+    );
+  }
+  getPatientMsgAttachmentsError(error) {
+    this.logMessage.log("getPatientMsgAttachments Error." + error);
+  }
+
+  replySelectedMessage(value) {
+    this.isNewMessage = true;
+    var strBody: String = "<p><br/></p><TEXTFORMAT LEADING=\"2\"><P ALIGN=\"LEFT\"></P></TEXTFORMAT>" +
+      "<TEXTFORMAT LEADING=\"2\"><P ALIGN=\"LEFT\"><FONT FACE=\"Verdana\" SIZE=\"10\" COLOR=\"#e6e6e6\" LETTERSPACING=\"0\" KERNING=\"0\">_____________________________________________________________</FONT>" +
+      "</P></TEXTFORMAT>";
+    strBody = strBody + "<TEXTFORMAT LEADING='2'><P ALIGN='LEFT'></P></TEXTFORMAT>" +
+      "<TEXTFORMAT LEADING='2'><P ALIGN='LEFT'><FONT FACE='Verdana' SIZE='11' LETTERSPACING='0' KERNING='0'><B>From: </B>" + this.msg_user_name + "</FONT></P></TEXTFORMAT>" +
+      "<TEXTFORMAT LEADING='2'><P ALIGN='LEFT'><FONT FACE='Verdana' SIZE='11' LETTERSPACING='0' KERNING='0'><B>Sent: </B> " + this.msg_recieve_date + "</FONT></P></TEXTFORMAT>" +
+      "<TEXTFORMAT LEADING='2'><P ALIGN='LEFT'><FONT FACE='Verdana' SIZE='11' LETTERSPACING='0' KERNING='0'><B>To: </B> " + this.msg_mess_to + "</FONT></P></TEXTFORMAT>" +
+      "<TEXTFORMAT LEADING='2'><P ALIGN='LEFT'><FONT FACE='Verdana' SIZE='11' LETTERSPACING='0' KERNING='0'><B>Subject:</B> " + this.msg_detail_subject + "</FONT></P></TEXTFORMAT>" +
+      "<TEXTFORMAT LEADING='2'><P ALIGN='LEFT'><FONT FACE='Verdana' SIZE='10' LETTERSPACING='0' KERNING='0'></FONT></P></TEXTFORMAT><p><br/></p>";
+
+    this.replyMsg[0].msgId.pop();
+    this.replyMsg[0].msgText.pop();
+    this.replyMsg[0].msgSubject.pop();
+    this.replyMsg[0].msgType.pop();
+    this.replyMsg[0].selectedProvider.pop();
+    this.replyMsg[0].msgFrom.pop();
+    this.replyMsg[0].amendment.pop();
+    this.replyMsg[0].attachments.pop();
+    this.replyMsg[0].selectedProviderName.pop();
+
+    if (value == "reply") {
+      this.replyMsg[0].msgType.push({ action_type: "reply" });
+      this.replyMsg[0].msgSubject.push({ msg_subj: this.msg_detail_subject });
+
+      if (this.msgPatAttachmentsList != null) {
+        this.replyMsg[0].attachments.push({ msg_Attachments: "" });
+      }
+
+    } else if (value == "forward") {
+      this.replyMsg[0].msgType.push({ action_type: "forward" });
+      this.replyMsg[0].msgSubject.push({ msg_subj: "FW: " + this.msg_detail_subject });
+
+      if (this.msgPatAttachmentsList != null) {
+        this.replyMsg[0].attachments.push({ msg_Attachments: this.msgPatAttachmentsList });
+      }
+
+    }
+    this.replyMsg[0].msgFrom.push({ name: this.msg_user_name.toLowerCase() });
+    this.replyMsg[0].msgText.push({ msg_text: strBody + this.msg_selected_body });
+    this.replyMsg[0].msgId.push({ msg_id: this.message_id });
+    this.replyMsg[0].selectedProvider.push({ msg_selected_provider: this.msg_sender_id });//this.msg_provider
+    this.replyMsg[0].amendment.push({ msg_Amendment: this.msg_amendment_check });
+    this.replyMsg[0].selectedProviderName.push({ selected_provider_name: this.msg_provider });
+    //selectedProvider
+
+  }
+
+  onCloseNewMessage() {
+    this.isNewMessage = false;
+    this.onCloseNewMessagebkpMain.emit();
+    this.msg_selected_body = "";
+    this.replyMsg[0].msgId = [];
+    this.replyMsg[0].msgText = [];
+    this.replyMsg[0].msgSubject = [];
+    this.replyMsg[0].msgType = [];
+    this.replyMsg[0].selectedProvider = [];
+    this.replyMsg[0].msgFrom = [];
+    this.replyMsg[0].amendment = [];
+
+    this.getPatientMessages();
+  }
+  // onMessageClick(msg_id) {
+  //   this.message_id = msg_id;
+  //   this.msg_detail_from = '';
+  //   this.msg_detail_to = '';
+  //   this.msg_detail_cc = '';
+  //   this.msg_detail_subject = '';
+  //   this.msg_detail_body = '';
+  //   this.msg_detail_date = '';
+  //   this.phrService.getMessageDetail(msg_id, this.lookupList.logedInUser.userId.toString(), this.message_type)
+  //     .subscribe(
+  //       data => {
+  //         this.MessageDetail = data;
+  //         this.msg_detail_from = this.MessageDetail.created_user;
+  //         this.msg_detail_to = this.MessageDetail.mess_to;
+  //         this.msg_detail_cc = this.MessageDetail.mess_cc;
+  //         this.msg_detail_subject = this.MessageDetail.mess_subject;
+  //         this.msg_detail_date = this.MessageDetail.client_date_modified;
+  //         this.message_detail_id = this.MessageDetail.message_detail_id;
+  //         this.quilMessageHeaderEdit = this.formBuilder.group({
+  //           'messageTextView': [this.MessageDetail.mess_body_html.trim()],
+  //         });
+  //         this.messageTextView = this.quilMessageHeaderEdit.controls['messageTextView'];
+  //         this.msg_selected_body = this.MessageDetail.mess_body_html.trim();
+  //         //this.isLoading = false;
+  //       },
+  //       error => {
+  //         this.logMessage.log("An Error Occured while getting getMessages list.")
+  //         //this.isLoading = false;
+  //       }
+  //     );
+  // }
+  poupUpOptions: NgbModalOptions = {
+    backdrop: 'static',
+    keyboard: false
+  };
+  deletearchiveSelectedMessage(value) {
+    const modalRef = this.modalService.open(ConfirmationPopupComponent, this.poupUpOptions);
+    if (value == "delete") {
+      modalRef.componentInstance.promptHeading = 'Cofirm Deletion !';
+      modalRef.componentInstance.promptMessage = 'Are you sure you want to delete selected message?';
+    } else if (value == "archive") {
+      modalRef.componentInstance.promptHeading = 'Cofirm Archive !';
+      modalRef.componentInstance.promptMessage = 'Are you sure you want to archive selected message?';
+    }
+    let closeResult;
+    modalRef.result.then((result) => {
+
+      if (result == PromptResponseEnum.YES) {
+        let msgType = "";
+        if (value == "archive") {
+          msgType = "archive";
+        } else {
+          msgType = "delete"
+        }
+
+
+        let searchCriteria: SearchCriteria = new SearchCriteria();
+        searchCriteria.practice_id = this.lookupList.practiceInfo.practiceId;
+        searchCriteria.param_list = [
+          { name: "column_id", value: this.selectedMessageDetail.message_detail_id, option: "" },
+          { name: "modified_user", value: this.lookupList.logedInUser.user_name, option: "" },
+          { name: "client_date_modified", value: this.dateTimeUtil.getCurrentDateTimeString(), option: "" },
+          { name: "client_ip", value: this.lookupList.logedInUser.systemIp, option: "" },
+          { name: "callingFrom", value: msgType, option: "" }
+        ];
+
+        this.phrService.updateMessage(searchCriteria)
+          .subscribe(
+            data => this.updateMessage(data, this.indexSelected),
+            error => alert(error),
+            () => this.logMessage.log("Selected Record archive Successfull.")
+          );
+      }
+    }, (reason) => {
+      //alert(reason);
+    });
+
+
+
+
+
+
+
+
+    // if (value == "archive") {
+    //     if (this.lstMessagelist[this.indexSelected].mail_status != "archive") {
+    //       const modalRef = this.modalService.open(ConfirmationPopupComponent, this.poupUpOptions);
+    //       modalRef.componentInstance.promptHeading = 'Cofirm Archive !';
+    //       modalRef.componentInstance.promptMessage = 'Are you sure you want to archive this message?';
+    //       let closeResult;
+    //       modalRef.result.then((result) => {
+    //         if (result == PromptResponseEnum.YES) {
+    //           let msgType = "";
+    //           msgType = "archive";
+    //           let searchCriteria: SearchCriteria = new SearchCriteria();
+    //           searchCriteria.practice_id = this.lookupList.practiceInfo.practiceId;
+    //           searchCriteria.param_list = [
+    //             { name: "column_id", value: this.selectedMessageDetail.message_detail_id, option: "" },
+    //             { name: "modified_user", value: this.lookupList.logedInUser.user_name, option: "" },
+    //             { name: "client_date_modified", value: "2019-05-31 17:11:01.000", option: "" },
+    //             { name: "client_ip", value: this.lookupList.logedInUser.systemIp, option: "" },
+    //             { name: "callingFrom", value: "archive", option: "" }
+    //           ];
+
+    //           this.phrService.updateMessage(searchCriteria)
+    //             .subscribe(
+    //               data => this.updateMessage(data, this.indexSelected),
+    //               error => alert(error),
+    //               () => this.logMessage.log("Selected Record archive Successfull.")
+    //             );
+    //         }
+    //       }, (reason) => {
+    //         //alert(reason);
+    //       });
+    //     }
+
+    // }
+  }
+  updateMessage(data, index) {
+    debugger;
+    this.lstMessagelist[index].readed = true;
+
+    //this.lstMessagelist.splice(index, 1)
+  }
+  showDoc = false;
+  openDocument(document) {
+    this.showDoc = true;
+    let searchCriteria: SearchCriteria = new SearchCriteria;
+    searchCriteria.criteria = this.downloadPath + "/" + document.link;
+    this.phrService.downloadFile(searchCriteria)
+      .subscribe(
+        data => {
+          this.downloafileResponse(data, document.link);
+        },
+        error => alert(error)
+      );
+  }
+  doc_path = '';
+  downloafileResponse(data, doc_link) {
+    let file_ext: string = doc_link.substring(doc_link.indexOf('.') + 1, doc_link.length);
+    let file_type: string = '';
+    switch (file_ext.toLowerCase()) {
+      case 'png':
+        file_type = 'IMAGE/PNG';
+        break;
+      case 'jpg':
+        file_type = 'IMAGE/JPEG';
+        break;
+      case 'pdf':
+        file_type = 'application/pdf';
+        break;
+      case 'txt':
+        file_type = 'text/plain';
+        break;
+    }
+    var file = new Blob([data], { type: file_type });//, {type: 'application/pdf'}
+    var fileURL = URL.createObjectURL(file);
+    let path = fileURL;
+
+    this.doc_path = path;
+    this.getLink();
+    const modalRef = this.modalService.open(DocumentViewerComponent, this.lgPopupUpOptions);
+    modalRef.componentInstance.path_doc = path;
+    //modalRef.componentInstance.width='800px';
+
+    // this.req_document=data;
+    // String encodedImage = Base64.encode(res);
+
+  }
+  urlCache = new Map<string, SafeResourceUrl>();
+  getLink(): SafeResourceUrl {
+    var url = this.urlCache.get(this.doc_path);
+    if (!url) {
+      url = this.domSanitizer.bypassSecurityTrustResourceUrl(
+        this.doc_path);
+      this.urlCache.set("41", url);
+    }
+    return url;
+  }
+  onNewMessage() {
+    this.isNewMessage = true;
+    this.replyMsg[0].msgId.pop();
+    this.replyMsg[0].msgText.pop();
+    this.replyMsg[0].msgSubject.pop();
+    this.replyMsg[0].msgType.pop();
+    this.replyMsg[0].selectedProvider.pop();
+    this.replyMsg[0].msgFrom.pop();
+    this.replyMsg[0].amendment.pop();
+    this.replyMsg[0].msgFrom.push({ name: this.msg_user_name.toLowerCase() });
+  }
+  refreshSendReceive() {
+    this.getPatientMessages();
+  }
+  getPatientAmendments() {
+    debugger;
+    //this.phrService.getPatientMessages(this.patientId, this.lookupList.logedInUser.user_name, this.message_type, this.lookupList.logedInUser.userId.toString()) 
+    let searchCriteria: SearchCriteria = new SearchCriteria();
+    searchCriteria.practice_id = this.lookupList.practiceInfo.practiceId;
+    searchCriteria.param_list = [
+      { name: "patient_id", value: this.lookupList.patientInfo.patient_id.toString(), option: "" }
+    ];
+    this.phrService.getAmendmentRequest(searchCriteria)
+      .subscribe(
+        data => {
+          this.lstAmendent = data;
+          if (this.lstAmendent != null && this.lstAmendent.length > 0) {
+            this.selectedrequest_id = this.lstAmendent[0].request_id
+          }
+        },
+        error => {
+          this.logMessage.log("An Error Occured while getting getAmendmentRequest list.")
+          //this.isLoading = false;
+        }
+      );
+  }
+}

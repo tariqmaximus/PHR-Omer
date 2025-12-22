@@ -1,0 +1,18 @@
+export class ORMAmemdmentRequest {
+    request_id:String;
+	patient_id:String;
+	message_id:String;
+	request_details:String;
+	request_status:String;
+	practice_id:String;
+	deleted:Boolean;
+	created_user:String;
+	client_date_created:String;
+	modified_user:String;
+	client_date_modified:String;
+	date_created:String;
+	date_modified:String;
+	system_ip:String;
+	request_date:String;
+	response_date:String;	
+}

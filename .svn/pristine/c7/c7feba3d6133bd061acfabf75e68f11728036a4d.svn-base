@@ -1,0 +1,274 @@
+<div role="main">
+  <phr-main id="phr_main" #phr_main *ngIf="this.lookupList.isPhrDataLoad"></phr-main>
+
+  <div class="login-new d-flex flex-column" *ngIf="!this.lookupList.isPhrDataLoad">
+    <div class="login-page d-flex flex-column flex-grow-1">
+      <div class="header">
+        <div class="d-flex flex-grow-1 align-items-center justify-content-between maxWidth-login">
+          <div class="d-flex align-items-center justify-content-start flex-grow-1">
+            <img class="h-50px" aria-label="Maximus Patient Health Portal" src="./assets/images/logo-horizontal.png"
+              alt="">
+          </div>
+
+          <div class="d-flex flex-column flex-grow-1 align-items-end justify-content-end">
+            <div class="d-flex align-items-center text-right" style="right:15px;">
+              <span class="text-secondary fz-12 mr-2"><i class="fas fa-phone-square text-app-blue mr-1"></i>For a
+                free demonstration today</span>
+              <h5 class="text-app-blue m-0 fz-12">info@mremind.com</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex flex-column flex-grow-1 align-items-center justify-content-center">
+        <div class="login-body w-100 max-width-login">
+          <div class="features-box mr-4">
+            <div class="feature">
+              <div class="flex-grow-1">
+                <h1 class="title text-black">Welcome to Maximus Patient Health Portal</h1>
+                <ul class="fa-ul ml-4">
+                  <li class="text-black font-weight-light">
+                    <span class="fa-li"><i class="fas fa-check-circle text-app-blue"></i></span>
+                    Take control of your healthcare with Maximus Patient Health Portal
+                  </li>
+                  <li class="text-black font-weight-light">
+                    <span class="fa-li"><i class="fas fa-check-circle text-app-blue"></i></span>
+                    Through our free patient portal, you can record and manage your own and your family's Maximus
+                    information
+                  </li>
+                  <li class="text-black font-weight-light">
+                    <span class="fa-li"><i class="fas fa-check-circle text-app-blue"></i></span>
+                    Patient Health Portal is secure, user-friendly platform that permits you to gather, manage and share
+                    your
+                    health care data
+
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+          <!-- <div class="features-box mr-4">
+          <div class="feature" [ngClass]="{'active': curFeature == 1, 'right': curFeature < 1, 'left': curFeature > 1}">
+            <div class="flex-grow-1">
+              <h5 class="title">Welcome to Instant Health Care PHR</h5>
+              <ul class="fa-ul ml-4">
+                <li class="text-white font-weight-light">
+                  <span class="fa-li"><i class="fas fa-check-circle text-app-green"></i></span>
+                  Easy Access
+                </li>
+                <li class="text-white font-weight-light">
+                  <span class="fa-li"><i class="fas fa-check-circle text-app-green"></i></span>
+                  Ease Manage
+                </li>
+                <li class="text-white font-weight-light">
+                  <span class="fa-li"><i class="fas fa-check-circle text-app-green"></i></span>
+                  Share your health information
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="feature" [ngClass]="{'active': curFeature == 2, 'right': curFeature < 2, 'left': curFeature > 2}">
+            <div class="flex-grow-1">
+              <h5 class="title">Instant Health Care PHR use for</h5>
+              <ul class="fa-ul ml-4">
+                <li class="text-white font-weight-light">
+                  <span class="fa-li"><i class="fas fa-check-circle text-app-green"></i></span>
+                  View demographics
+                </li>
+                <li class="text-white font-weight-light">
+                  <span class="fa-li"><i class="fas fa-check-circle text-app-green"></i></span>
+                  View lab reports
+                </li>
+                <li class="text-white font-weight-light">
+                  <span class="fa-li"><i class="fas fa-check-circle text-app-green"></i></span>
+                  Secure Messaging
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="feature-nav">
+            <button type="button" class="feature-nav-btn" [ngClass]="{'active': curFeature == 1}"
+              (click)="curFeature = 1"><i class="fas fa-circle"></i></button>
+            <button type="button" class="feature-nav-btn" [ngClass]="{'active': curFeature == 2}"
+              (click)="curFeature = 2"><i class="fas fa-circle"></i></button>
+           
+          </div>
+        </div> -->
+
+          <div class="login-form flex-shrink-0">
+
+            <form [formGroup]="phrLoginForm" (ngSubmit)="onSubmit(phrLoginForm.value)"
+              *ngIf="!showPatientSelection  && !isShowFirstPasswordChange && !isShowForgotPassword && !isShowResetPassword"
+              class="phrPatient_Selection">
+              <h1 class="font-weight-normal text-center fz-14">Login</h1>
+
+              <div class="form-group">
+                <label for="txtuser">User Name</label>
+                <input formControlName="txtuser" id="txtuser" type="text" class="form-control bg-light"
+                  placeholder="User Name">
+
+              </div>
+              <div class="form-group">
+                <label for="txtpassword">Password</label>
+                <input type="password" formControlName="txtpassword" id="txtpassword" class="form-control bg-light"
+                  placeholder="Password">
+              </div>
+
+
+
+              <!-- <div class="input-group flex-nowrap mt-3">
+              <label for="txtuser">User Name</label>
+              <input formControlName="txtuser" id="txtuser" type="text" class="form-control bg-light" placeholder="User Name">
+            </div>
+
+            <div class="input-group flex-nowrap mt-3">
+              <label for="txtpassword">User Name</label>
+              <input type="password" formControlName="txtpassword" id="txtpassword" class="form-control bg-light" placeholder="Password">
+            </div> -->
+              <button [disabled]="!phrLoginForm.valid || loginStatus=='verify_login' ||  loginStatus=='loading_data'"
+                type="submit" class="btn btn-primary btn-login w-100 mt-3 mb-3">Login</button>
+
+              <div class="d-flex flex-grow justify-content-end">
+                <button class="btn btn-link btn-sm" type="button" (click)="onForgotPassword()">Forgot Password?</button>
+              </div>
+
+
+            </form>
+            <form [formGroup]="phrPatientSelectionForm"
+              (ngSubmit)="onPatientSelectionSubmit(phrPatientSelectionForm.value)" *ngIf="showPatientSelection"
+              class="phrPatient_Selection">
+              <h1 class="font-weight-normal fz-14 text-center">Select Patient</h1>
+              <div class="input-group flex-nowrap mt-3">
+
+                <select aria-label="Select Patient" class="form-control bg-light" id="ddPatient"
+                  formControlName="ddPatient">
+                  <option *ngFor="let patient of lstUserPatient" [value]="patient.patient_id">
+                    {{patient.patient_name}}
+                  </option>
+                </select>
+
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-login w-100 mt-3 mb-3">OK</button>
+            </form>
+
+            <form [formGroup]="changePasswordFormGroup" *ngIf="isShowFirstPasswordChange">
+
+              <h3 class="font-weight-normal text-center">Change Password</h3>
+
+
+              <div class="form-group">
+                <label for="newPassword">New Password</label>
+                <input type="password" formControlName="newPassword" id="newPassword" class="form-control bg-light"
+                  placeholder="Password">
+              </div>
+
+              <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" formControlName="confirmPassword" id="confirmPassword"
+                  class="form-control bg-light" placeholder="Password">
+              </div>
+
+              <button type="button" (click)="onSubmitChangePassword(changePasswordFormGroup.value)"
+                class="btn btn-primary btn-login w-100 mt-3 mb-3">Change Password</button>
+
+            </form>
+
+            <form [formGroup]="forgotPasswordFormGroup" *ngIf="isShowForgotPassword">
+
+              <h3 class="font-weight-normal text-center">Reset Password</h3>
+
+
+              <div class="form-group">
+                <label for="txtuser">User Name/Email</label>
+                <input formControlName="txtuser" id="txtuser" type="text" class="form-control bg-light"
+                  placeholder="User Name">
+              </div>
+
+              <p>
+                A password reset link will be sent to your email address.
+              </p>
+
+              <button type="button" (click)="onGenerateForgotPasswordLink(forgotPasswordFormGroup.value)"
+                class="btn btn-primary btn-login w-100 mt-3 mb-3">Reset Password</button>
+
+              <div class="d-flex flex-grow justify-content-end">
+                <button class="btn btn-link btn-sm" type="button" (click)="onReturnToLogin()">Return to Login</button>
+              </div>
+
+            </form>
+
+            <form [formGroup]="resetPasswordFormGroup" *ngIf="isShowResetPassword">
+
+              <h3 class="font-weight-normal text-center">Reset Password</h3>
+
+              <div class="form-group">
+                <label for="txtuser">User Name/Email</label>
+                <label id="txtuser" type="text" class="form-control disabled"
+                  placeholder="User Name">{{paramsObject.Email}}</label>
+              </div>
+
+              <div class="form-group">
+                <label for="newPassword">New Password</label>
+                <input type="password" formControlName="newPassword" id="newPassword" class="form-control bg-light"
+                  placeholder="Password">
+              </div>
+
+              <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" formControlName="confirmPassword" id="confirmPassword"
+                  class="form-control bg-light" placeholder="Password">
+              </div>
+
+              <button type="button" (click)="onSubmitResetPassword(resetPasswordFormGroup.value)"
+                class="btn btn-primary btn-login w-100 mt-3 mb-3">Change Password</button>
+
+            </form>
+
+
+            <!-- <div
+            *ngIf="loginStatus=='login_required' || loginStatus=='verify_login' || loginStatus=='login_failed' ||  loginStatus=='loading_data'"
+             [ngClass]="{  
+          'text-primary' : (loginStatus == 'verify_login'),
+          'text-danger' : (loginStatus == 'login_failed' || loginStatus == 'login_required'),
+          'text-success' : (loginStatus == 'loading_data')
+         }">
+            <p>
+              <i class="fas fa-spinner fa-spin mr-1"
+                *ngIf="loginStatus=='verify_login' || loginStatus=='loading_data'"></i>{{loginStatusMessage}}
+            </p>
+          </div> -->
+
+
+            <div *ngIf="loginStatus=='login_required' || loginStatus=='verify_login' || loginStatus=='login_failed'
+               ||  loginStatus=='loading_data'  ||  loginStatus=='sending_reset_pwd_link' ||  loginStatus=='resetting_pwd' "  class="alert m-0" [ngClass]="{  
+          'alert-primary' : (loginStatus == 'verify_login' || loginStatus=='sending_reset_pwd_link' ||  loginStatus=='resetting_pwd' ),
+          'alert-danger' : (loginStatus == 'login_failed' || loginStatus == 'login_required'),
+          'alert-success' : (loginStatus == 'loading_data')
+         }">
+              <p class="m-0">
+                <i class="fas fa-spinner fa-spin mr-2"
+                  *ngIf="loginStatus=='verify_login' || loginStatus=='loading_data' || loginStatus=='sending_reset_pwd_link' ||  loginStatus=='resetting_pwd' "></i>{{loginStatusMessage}}
+              </p>
+            </div>
+            <div class="productVersionText fz-11">Version {{config.appVersion}}</div>
+          </div>
+
+
+        </div>
+
+      </div>
+
+      <div class="footer px-2">
+        <span class="text-danger fz-11 mr-4 font-weight-bold text-uppercase"><i
+            class="fas fa-exclamation-triangle text-app-blue mr-1"></i>
+          If this is an emergency, please call 911 or proceed to the closest hospital.
+        </span>
+      </div>
+    </div>
+  </div>
+
+</div>

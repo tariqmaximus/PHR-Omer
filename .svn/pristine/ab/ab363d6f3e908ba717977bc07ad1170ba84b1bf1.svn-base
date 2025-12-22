@@ -1,0 +1,123 @@
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AppComponent } from './app.component';
+import { DashboardComponent } from './phr/dashboard/dashboard.component';
+import { EncounterSummaryComponent } from './phr/encounter-summary/encounter-summary.component';
+import { MessagesComponent } from './phr/messages/messages.component';
+import { ActivityLogComponent } from './phr/activity-log/activity-log.component';
+import { LoginLogComponent } from './phr/login-log/login-log.component';
+import { PatientInfoComponent } from './phr/patient-info/patient-info.component';
+import { PhrMessageInboxComponent } from './phr/messages/phr-message-inbox/phr-message-inbox.component';
+import { ObgynComponent } from './phr/obgyn/obgyn.component';
+import { PhrMessageComposeComponent } from './phr/messages/phr-message-compose/phr-message-compose.component';
+import { LogMessage } from './shared/log-message';
+import { PhrService } from './services/phr/phr.service';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { LookupListModule } from './providers/lookupList.module';
+import { AppConfigModule } from './providers/app-config.module';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { GeneralService } from './services/general/general.service';
+import { DateTimeUtil } from './shared/date-time-util';
+import { AuthService } from './authentication/auth-service';
+import { LoadStartupService } from './services/login/load-startup.service';
+import { AuthInterceptor } from './authentication/auth-interceptor';
+import { QuillModule } from 'ngx-quill';
+import { GeneralOperation } from './shared/generalOperation';
+import { ConfirmationPopupComponent } from './general-modules/confirmation-popup/confirmation-popup.component';
+import { DocumentViewerComponent } from './general-modules/document-viewer/document-viewer.component';
+import { Chartreport_Print } from './models/charts/Chartreport_Print';
+import { EncounterPrintViewerComponent } from './general-modules/encounter-print-viewer/encounter-print-viewer.component';
+import { EncounterService } from './services/encounter/encounter.service';
+import { PhrLabSummaryComponent } from './phr/lab/phr-lab-summary/phr-lab-summary.component';
+import { PhrLabResultComponent } from './phr/lab/phr-lab-result/phr-lab-result.component';
+import { PhrLabResultAttachmentsComponent } from './phr/lab/phr-lab-result-attachments/phr-lab-result-attachments.component';
+import { LabResultsComponent } from './phr/lab-results/lab-results.component';
+import { Rptlabresults_Print } from './models/lab/Rptlabresults_Print';
+import { DocumentPrintViewerComponent } from './general-modules/document-print-viewer/document-print-viewer.component';
+import { PasswordResetComponent } from './phr/settings/password-reset/password-reset.component';
+import { AlertPopupComponent } from './general-modules/alert-popup/alert-popup.component';
+import { ListFilterPipe } from './shared/list-filter-pipe';
+import { UniquePipe } from './shared/unique-pipe';
+import { PhonePipe } from './shared/phone-pipe';
+import { SafePipe } from './shared/docSafe-pipe';
+import { LabResultsResultsComponent } from './phr/lab-results/lab-results-results/lab-results-results.component';
+import { LabResultsAttachmentsComponent } from './phr/lab-results/lab-results-attachments/lab-results-attachments.component';
+import { PhrMainComponent } from './phr-main/phr-main.component';
+import { CCDAViewerComponent } from './phr/ccda-viewer/ccda-viewer.component';
+import { PhiComponent } from './phr/phi/phi.component';
+import { EmailSendingComponent } from './phr/email/email-sending/email-sending.component';
+import { DirectEmailSendingComponent } from './phr/email/direct-email/direct-email-send.component';
+import { SortFilterPaginationService,NgbdSortableHeader } from './services/sort-filter-pagination.service';
+import { excelService } from './shared/excelService';
+import { EncryptDecryptService } from './shared/encrypt-decrypt';
+
+//import { PrintChartService } from './services/chartprint/printchart.service';
+@NgModule({
+  declarations: [
+    AppComponent,
+    DashboardComponent,
+    EncounterSummaryComponent,
+    MessagesComponent,
+    ActivityLogComponent,
+    LoginLogComponent,
+    PatientInfoComponent,
+    PhrMessageInboxComponent,
+    ObgynComponent,
+    LabResultsComponent,     
+    PhrMessageComposeComponent,
+    ConfirmationPopupComponent,
+    DocumentViewerComponent,
+    EncounterPrintViewerComponent,
+    PhrLabSummaryComponent,
+    PhrLabResultComponent,
+    PhrLabResultAttachmentsComponent,
+    DocumentPrintViewerComponent,
+    PasswordResetComponent,
+    AlertPopupComponent,
+    ListFilterPipe,
+    UniquePipe,
+    PhonePipe,SafePipe,
+    LabResultsResultsComponent,
+    LabResultsAttachmentsComponent,
+    PhrMainComponent,
+    CCDAViewerComponent,
+    PhiComponent,EmailSendingComponent,DirectEmailSendingComponent,NgbdSortableHeader
+  ],
+  imports: [
+    NgbModule.forRoot(),
+    HttpClientModule,
+    LookupListModule,
+    AppConfigModule,
+    BrowserModule,
+    ReactiveFormsModule,
+    FormsModule,  
+    QuillModule.forRoot({
+      modules: {
+        syntax: false,
+        toolbar: [['bold', 'italic', 'underline'],
+        [{ 'size': ['small', true, 'large', 'huge'] }],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        [{ 'indent': '-1' }, { 'indent': '+1' }],
+        [{ 'font': ['Arial'] }],
+        [{ 'align': [] }],
+        [{ 'color': [] }, { 'background': [] }],
+        ]
+      }
+    }),
+  ],
+  providers: [LogMessage, PhrService, GeneralService,DateTimeUtil,AuthService,LoadStartupService,
+    GeneralOperation,Chartreport_Print,EncounterService,Rptlabresults_Print,ListFilterPipe,
+    SortFilterPaginationService,excelService,
+    EncryptDecryptService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    }
+  ],
+  bootstrap: [AppComponent],
+  entryComponents: [ConfirmationPopupComponent, DocumentViewerComponent, EncounterPrintViewerComponent,PasswordResetComponent,AlertPopupComponent,
+    CCDAViewerComponent,EmailSendingComponent,DirectEmailSendingComponent]
+})
+export class AppModule { }

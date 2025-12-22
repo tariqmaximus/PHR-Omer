@@ -1,0 +1,231 @@
+import { Injectable, Inject } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+//import { SearchCriteria } from "../../models/common/search-criteria";
+//import { ORMLoginVerify } from 'src/app/models/general/ORMLoginVerify';
+import { AuthenticationCredentials } from 'src/app/authentication/authenticationCredentials';
+import { AppConfig, APP_CONFIG } from 'src/app/providers/app-config.module';
+import { ORMLoginVerify } from 'src/app/models/general/ORMLoginVerify';
+import { SearchCriteria } from 'src/app/models/common/search-criteria';
+import { ORMDeleteRecord } from 'src/app/models/general/orm-delete-record';
+import { GenerateResetPasswordLinkModel } from 'src/app/models/generate-reset-password-link-model';
+import { ChangePasswordModel } from 'src/app/models/change-password-model';
+
+@Injectable()
+export class GeneralService {
+  private httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
+  private httpPdfOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    responseType: 'arraybuffer'
+  };
+
+  constructor(private http: HttpClient,
+    @Inject(APP_CONFIG) private config: AppConfig) { }
+
+  printReport(printContents: string) {
+    let popupWin;
+    // printContents = document.getElementById('report').innerHTML;
+    popupWin = window.open('', '_blank', 'top=0,left=0,right=10,height=100%,width=auto');
+    popupWin.document.open();
+    popupWin.document.write(`
+        <html>
+          <head>
+            <title>Print tab</title>          
+            <link rel="stylesheet" type="text/css" href="./assets/css/bootstrap.min.css" media="screen,print">  
+            <link rel="stylesheet" type="text/css" href="./assets/css/fontawesome.min.css" media="screen,print"/>          
+            <link rel="stylesheet" type="text/css" href="./assets/css/report-print.css" media="screen,print"/>                     
+            <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">              
+          </head>
+      <body style="background-color:white; font-size:110%" onload="window.print();">${printContents}</body>
+        </html>`
+    );
+    popupWin.document.close();
+
+    //<body onload="window.print();window.close()">${printContents}</body>
+  }
+
+  // printReport(printContents: string) {
+  //   let popupWin;
+  //   // printContents = document.getElementById('report').innerHTML;
+  //   popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+  //   popupWin.document.open();
+  //   popupWin.document.write(`
+  //     <html>
+  //       <head>
+  //         <title>Print tab</title>
+  //         <link rel="stylesheet" type="text/css" href="../assets/css/bootstrap.min.css" media="screen,print">
+  //         <link rel="stylesheet" type="text/css" href="../assets/css/font-awesome.min.css" media="screen,print"/>
+  //         <link rel="stylesheet" type="text/css" href="../assets/css/font-maximus.css" media="screen,print"/>
+  //         <link rel="stylesheet" type="text/css" href="../assets/css/report.css" media="screen,print"/>
+  //         <link rel="stylesheet" type="text/css" href="../assets/css/maximus-style.css" media="screen,print"/>
+  //         <link rel="stylesheet" type="text/css" href="../assets/css/main-nav.css" media="screen,print"/>
+  //         <link rel="stylesheet" type="text/css" href="../assets/css/dashboard.css" media="screen,print"/>
+  //         <link rel="stylesheet" type="text/css" href="../assets/css/helper.css" media="screen,print"/>
+  //         <link rel="stylesheet" type="text/css" href="../assets/css/encounter.css" media="screen,print"/>
+  //         <link rel="stylesheet" type="text/css" href="./assets/css/report-print.css" media="screen,print"/>
+  //         <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">              
+  //       </head>
+  //   <body style="background-color:white; font-size:14px;" onload="window.print();">${printContents}</body>
+  //     </html>`
+  //   );
+  //   popupWin.document.close();
+
+  //   //<body onload="window.print();window.close()">${printContents}</body>
+  // }
+  printReportWithStyle(printContents: string, style: string) {
+    let popupWin;
+    // printContents = document.getElementById('report').innerHTML;
+    popupWin = window.open('', '_blank', 'top=10,left=10,right=10,height=100%,width=auto');
+    popupWin.document.open();
+    popupWin.document.write(`
+        <html>
+          <head>
+            <title>Print tab</title>          
+            <link rel="stylesheet" type="text/css" href="./assets/css/bootstrap.min.css" media="screen,print">  
+            <link rel="stylesheet" type="text/css" href="./assets/css/fontawesome.min.css" media="screen,print"/>          
+            <link rel="stylesheet" type="text/css" href="./assets/css/report-print.css" media="screen,print"/>                     
+            <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">              
+          </head>`+
+      ' <style> ' + style + '</style>' +
+      `<body style="background-color:white; font-size:110%" onload="window.print();">${printContents}</body>
+        </html>`
+    );
+    popupWin.document.close();
+
+    //<body onload="window.print();window.close()">${printContents}</body>
+  }
+
+  getAccessToken(auth: AuthenticationCredentials) {
+
+    // const options = {
+    //   headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
+    // };
+
+
+    //  const options = {
+    //    headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*','Access-Control-Allow-Methods': 'OPTIONS,POST','Access-Control-Allow-Credentials': 'true','X-Requested-With': '*'})
+    //  };
+
+    // return this.http
+    //   .post(this.config.authServiceEndpoint + '/connect/token', auth);
+
+    return this.http
+      .post(this.config.authServiceEndpoint + '/CustomAccount/LoginPhr', auth);
+
+    // return this.http
+    // .post(this.config.apiEndpoint + 'auth/token', auth);
+  }
+
+  GenerateResetPasswordLink(obj: GenerateResetPasswordLinkModel) {
+
+   
+    return this.http
+      .post(this.config.authServiceEndpoint + '/CustomAccount/GenerateResetPasswordLink', obj);
+  }
+
+  ResetPasswordByToken(obj: ChangePasswordModel, resetToken: string) {
+
+    debugger;
+    const options = {
+      headers: new HttpHeaders({ 'Authorization': ("Bearer " + resetToken) })
+    };
+
+    return this.http
+      .post(this.config.authServiceEndpoint + '/CustomAccount/ResetPasswordByToken', obj,options);
+  }
+
+  test() {
+    return this.http
+      .get('https://192.168.18.21:2025/WeatherForecast', this.httpOptions);
+  }
+
+
+  // userToken(auth: AuthenticationCredentials) {
+  //   return this.http
+  //     .post(this.config.apiEndpoint + 'auth/token', auth);
+  // }
+  getProvider(practice_id: number) {
+    return this.http.get(
+      this.config.apiEndpoint + 'general/getProviderList/' + practice_id, this.httpOptions);
+  }
+  getPracticeUserName(practice_id: number) {
+    return this.http.get(
+      this.config.apiEndpoint + 'general/getPracticeUserName/' + practice_id, this.httpOptions);
+  }
+  getDocCategories(practice_id: number) {
+    return this.http.get(
+      this.config.apiEndpoint + 'general/getDocCategories/' + practice_id, this.httpOptions);
+  }
+  getDocCategoriesList(practice_id: number) {
+    return this.http.get(
+      this.config.apiEndpoint + 'general/getDocCategoriesList/' + practice_id, this.httpOptions);
+  }
+  getDocumentPaths(practice_id: number) {
+    return this.http.get(
+      this.config.apiEndpoint + 'general/getDocumentPaths/' + practice_id, this.httpOptions);
+  }
+  getPatientHeader(patientId) {
+    return this.http.get(this.config.apiEndpoint + 'general/getPatientHeader/' + patientId, this.httpOptions);
+  }
+  getPatientVitals(patientId) {
+    return this.http.get(this.config.apiEndpoint + 'general/getPatientVitalsPHR/' + patientId, this.httpOptions);
+  }
+  getPracticeInfo(practiceId: number) {
+    return this.http.get(this.config.apiEndpoint + 'general/getPracticeInfo/' + practiceId, this.httpOptions);
+  }
+  getPatientAllergies(patientId) {
+    return this.http.get(this.config.apiEndpoint + 'general/getPatientAllergies/' + patientId, this.httpOptions);
+  }
+  getPatientMedicationSummary(patientId) {
+    return this.http.get(this.config.apiEndpoint + 'general/getPatientMedicationSummary/' + patientId, this.httpOptions);
+  }
+  getPatientProblems(patientId) {
+    return this.http.get(this.config.apiEndpoint + 'general/getPatientProblems/' + patientId, this.httpOptions);
+  }
+  getPHREncounterSummary1(patientId: number) {
+    return this.http.get(this.config.apiEndpoint + 'general/getPHREncounterSummary/' + patientId, this.httpOptions);
+  }
+  getPHREncounterSummary(criteria: SearchCriteria) {
+    return this.http.post(this.config.apiEndpoint + 'general/getPHREncounterSummary', criteria);
+  }
+  getReportHeader(chartID: string) {
+    return this.http.get(this.config.apiEndpoint + 'general/getReportHeader/' + chartID, this.httpOptions);
+  }
+  getInsuranceDetails(patientId) {
+    return this.http.get(this.config.apiEndpoint + 'general/getInsuranceDetails/' + patientId, this.httpOptions);
+  }
+  downloadFile(file_name: SearchCriteria) {
+    return this.http.post(
+      this.config.apiEndpoint + 'general/downloadB', file_name, { responseType: 'arraybuffer' });
+  }
+  sendEmailpdf(formData: FormData) {
+    return this.http.post(this.config.apiEndpoint + 'general/sendEmailpdf', formData);
+  }
+  saveHealthInfo(formData: FormData) {
+    return this.http.post(this.config.apiEndpoint + 'patient/AddEditNewHealthInformation', formData);
+  }
+  getPatientHealthInfo(patientId, practice_id) {
+    return this.http.get(this.config.apiEndpoint + 'patient/getHealthInfoCapture/' + patientId + '/' + practice_id, this.httpOptions);
+  }
+
+  getHealthInfoCaptureAttach(obj: SearchCriteria) {
+    return this.http
+      .post(this.config.apiEndpoint + 'patient/getHealthInfoCaptureAttach', obj);
+  }
+  getHealthInfoCaptureLinks(obj: SearchCriteria) {
+    return this.http
+      .post(this.config.apiEndpoint + 'patient/getHealthInfoCaptureLinks', obj);
+  }
+  deleteInfoCapture(obj: ORMDeleteRecord) {
+    return this.http.post(this.config.apiEndpoint + 'patient/deleteInfoCapture', obj, this.httpOptions);
+  }
+  deleteInfoAttachments(obj: ORMDeleteRecord) {
+    return this.http.post(this.config.apiEndpoint + 'patient/deleteInfoAttachments', obj, this.httpOptions);
+  }
+
+  sendDirectMessage(formData: FormData) {
+    return this.http.post(this.config.apiEndpoint + 'direct/sendDirectMessage', formData);
+  }
+
+}

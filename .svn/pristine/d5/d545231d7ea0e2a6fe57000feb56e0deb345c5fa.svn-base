@@ -1,0 +1,29 @@
+<patient-info class="flex-shrink-0"></patient-info>
+
+<!-- <lab-summary class="bg-white m-8 d-flex flex-column flex-grow-1" *ngIf="!labResults"></lab-summary> -->
+
+<div class="dashboard-container d-flex flex-column flex-grow-1 m-8-px" *ngIf="labResults">
+  <div class="dashboard">
+    <ngb-tabset class="dashboard-tabs d-flex flex-column flex-grow-1" [activeId]="selectedTab">
+      <ngb-tab id="lab-home">
+        <ng-template ngbTabTitle>
+          <span class="text-app-blue font-weight-500"><i class="fas fa-arrow-left mr-2"></i>Back to Order Summary</span>
+        </ng-template>
+      </ngb-tab>
+
+      <ngb-tab id="lab-result">
+        <ng-template ngbTabTitle>Lab Result</ng-template>
+        <ng-template ngbTabContent>
+          <lab-results-results class="d-flex flex-column flex-grow-1 light-gray-bg border-top overflow-height p-6"></lab-results-results>
+        </ng-template>
+      </ngb-tab>
+
+      <ngb-tab id="lab-attachment">
+        <ng-template ngbTabTitle>Lab Attachment</ng-template>
+        <ng-template ngbTabContent>
+          <lab-results-attachments class="d-flex flex-column flex-grow-1 overflow-height"></lab-results-attachments>
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
+  </div>
+</div>

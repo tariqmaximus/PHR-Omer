@@ -1,0 +1,367 @@
+<div class="d-flex flex-shrink-0">
+  <div class="flex-1 d-flex flex-column">
+    <div class="info-box-stipes rounded d-flex flex-column flex-grow-1 overflow-height">
+      <div class="form-edit-sub-heading line-height-normal m-1 mb-0 pl-1">Test Description</div>
+
+      <div class="flex-grow-1 overflow-auto max-height-100">
+        <table class="table sm layout-fixed light-blue-striped-border">
+          <tbody>
+            <tr>
+              <td>tst.proc_code tst.proc_description</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex-2 d-flex flex-column ml-6">
+    <form>
+      <div class="info-box-stipes rounded">
+        <div class="form-edit-sub-heading line-height-normal m-1 pl-1">Result Details</div>
+
+        <div class="p-8 pt-0">
+          <div class="form-row form-dashboard">
+            <div class="form-group horizental d-flex col-12 col-md-6">
+              <label class="col-form-label label-w-100">Observation Date:</label>
+              <!-- <input type="date" class="form-control" formControlName="txtDate"> -->
+              <div class="input-group flex-grow-1">
+                <input class="form-control" placeholder="mm/dd/yyyy" name="txtDate">
+                <span class="input-group-btn">
+                  <button class="btn btn-outline-primary" type="button">
+                    <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                  </button>
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group horizental d-flex col-12 col-md-6">
+              <label class="col-form-label label-w-80">Assigned To:</label>
+              <select class="form-control flex-grow-1">
+                <option></option>
+                <option>s.name</option>
+              </select>
+            </div>
+
+            <div class="form-group horizental d-flex col-12 col-md-6">
+              <label class="col-form-label label-w-100" for="input03">Follow Up:</label>
+              <select class="form-control flex-grow-1">
+                <option>s</option>
+              </select>
+            </div>
+
+            <div class="form-group horizental col-12 col-md-3">
+              <select class="form-control">
+                <option>s</option>
+              </select>
+            </div>
+
+            <div class="form-group horizental d-flex align-items-center col-12 col-md-3">
+              <div class="custom-checkbox blue-checkbox">
+                <input type="checkbox" class="custom-control-input" id="chkChangeMed">
+                <label class="custom-control-label" for="chkChangeMed">Change Meds</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-8 border-top">
+          <div class="form-row form-dashboard">
+            <div class="form-group horizental d-flex col-12 col-md-4">
+              <label class="col-form-label label-w-100">Description:</label>
+
+              <div class="form-group has-search flex-grow-1">
+                <!-- <input type="text" class="form-control" formControlName="txtResultCode"> -->
+                <span class="fa fa-search form-control-feedback"></span>
+                <input class="form-control" placeholder="ICDs Search" type="text" id="txtResultCode" #txtResultCode
+                  placeholder="Search Loinc" autocomplete="off">
+                <!-- <inline-loinc-search *ngIf="showloincSearch" [searchValue]="loincSearchCriteria" (onLionicSelect)="onLoincSelect($event)"
+                    (onClose)="closeloincSearch()"></inline-loinc-search> -->
+              </div>
+            </div>
+
+            <div class="form-group horizental d-flex col-12 col-md-8">
+              <div class="form-group has-search flex-grow-1">
+                <!-- <input type="text" class="form-control" formControlName="txtResultDescription"> -->
+                <span class="fa fa-search form-control-feedback"></span>
+                <input class="form-control" placeholder="ICDs Search" type="text" id="txtResultDescription"
+                  #txtResultDescription placeholder="Search Loinc" autocomplete="off">
+                <!-- <inline-loinc-search *ngIf="showloincSearch" [searchValue]="loincSearchCriteria"
+                    (onLionicSelect)="onLoincSelect($event)" (onClose)="closeloincSearch()"></inline-loinc-search> -->
+
+
+              </div>
+            </div>
+
+
+            <div class="form-group horizental d-flex col-12 col-md-4">
+              <label class="col-form-label label-w-100">Result Value:</label>
+              <input type="text" class="form-control flex-grow-1">
+            </div>
+
+            <div class="form-group horizental d-flex col-12 col-md-4">
+              <label class="col-form-label label-w-90">Unit:</label>
+              <select class="form-control flex-grow-1">
+                <option></option>
+                <option>s.result_value_unit</option>
+              </select>
+            </div>
+
+            <div class="form-group horizental d-flex col-12 col-md-4">
+              <label class="col-form-label label-w-90">Recommended:</label>
+              <input type="text" class="form-control flex-grow-1">
+            </div>
+
+            <div class="form-group horizental d-flex col-12 col-md-4">
+              <label class="col-form-label label-w-100">Result Status:</label>
+              <select class="form-control flex-grow-1">
+                <option></option>
+                <option>s.result_status_description</option>
+              </select>
+            </div>
+
+            <div class="form-group horizental d-flex col-12 col-md-4">
+              <label class="col-form-label label-w-90">Abnormal Flag:</label>
+              <select class="form-control flex-grow-1">
+                <option></option>
+                <option>s.range_name</option>
+              </select>
+            </div>
+
+            <div class="form-group horizental d-flex col-12 col-md-4">
+              <label class="col-form-label label-w-90">Collection Date:</label>
+              <input type="text" class="form-control flex-grow-1">
+            </div>
+          </div>
+        </div>
+
+        <div class="p-8 border-top">
+          <div class="form-row form-dashboard">
+            <div class="form-group horizental d-flex col-12 col-md-6">
+              <label class="col-form-label label-w-100">Lab Notes:</label>
+              <input type="text" class="form-control flex-grow-1">
+            </div>
+
+            <div class="form-group horizental d-flex col-12 col-md-6">
+              <label class="col-form-label label-w-100">Physician Notes:</label>
+              <input type="text" class="form-control flex-grow-1">
+            </div>
+
+            <div class="form-group horizental d-flex col-12 col-md-8">
+              <label class="col-form-label label-w-100">Staff Notes:</label>
+              <input type="text" class="form-control flex-grow-1">
+            </div>
+
+            <div class="form-group horizental d-flex align-items-center col-12 col-md-2">
+              <div class="custom-checkbox blue-checkbox">
+                <input type="checkbox" class="custom-control-input" id="chkAlert">
+                <label class="custom-control-label" for="chkAlert">Alert</label>
+              </div>
+            </div>
+
+            <div class="form-group horizental text-right col-12 col-md-2">
+              <button class="btn btn-success">Add New</button>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="title-bar border-top">Previous Staff Notes</div>
+
+        <div class="overflow-auto" style="max-height:90px;">
+          <table class="table sm light-blue-striped-border">
+            <thead>
+              <tr>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- <textarea rows="2" class="form-control" id="input28"></textarea> -->
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="d-flex flex-column flex-grow-1 overflow-height mt-6">
+  <div class="info-box-stipes rounded d-flex flex-column flex-grow-1">
+    <div class="title-bar">Results</div>
+
+    <div class="flex-grow-1 overflow-auto max-height-100">
+      <table class="table sm layout-fixed light-blue-striped-border">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Result Code</th>
+            <th>Description</th>
+            <th>Value</th>
+            <th>Unit</th>
+            <th>Recom. Range</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>tst.observation_date</td>
+            <td>tst.result_code</td>
+            <td>tst.result_description</td>
+            <td>tst.result_value</td>
+            <td>tst.result_value_unit</td>
+            <td>tst.recomended_value</td>
+            <td>tst.result_status</td>
+            <td class="text-right">
+              <button type="button" class="btn btn-link btn-sm text-danger line-height-1 p-0">
+                <i class="far fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="border-top d-flex flex-shrink-0">
+  <div class="flex-2 d-flex flex-column">
+    <div class="rounded-box-title-bar ihr-bg-light-blue flex-shrink-0">Category - Test</div>
+  </div>
+
+  <div class="flex-5 border-left" style="padding: 2px 4px">
+    <div class="form-row form-dashboard align-items-start p-1">
+      <div class="form-group horizental d-flex col-md-4 col-sm-6 col-12">
+        <label class="col-form-label label-w-100" for="input4">Observation Date:</label>
+        <div class="input-group flex-grow-1">
+          <input class="form-control" id="input4" placeholder="mm/dd/yyyy">
+          <span class="input-group-btn">
+            <button class="btn btn-outline-primary" type="button"><i aria-hidden="true" class="far fa-calendar-alt"></i></button>
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group horizental d-flex col-md-8 col-sm-6 col-12">
+        <label class="col-form-label label-w-80" for="input2">Assigned To:</label>
+        <input class="form-control flex-grow-1" id="input2" type="text">
+      </div>
+
+      <div class="form-group horizental d-flex col-md-4 col-sm-6 col-12">
+        <label class="col-form-label label-w-100" for="input2">Follow up:</label>
+        <input class="form-control flex-grow-1" id="input2" type="text">
+      </div>
+
+      <div class="form-group horizental d-flex align-items-center col-md-8 col-sm-6 col-12">
+        <label class="col-form-label label-w-80" for="input2">Reviewed:</label>
+        <span class="fz-13 flex-grow-1">Reviewed</span>
+      </div>
+    </div>
+
+    <div class="form-row form-dashboard rounded-box-title-bar">Result Details</div>
+
+    <div class="form-row form-dashboard align-items-start p-1">
+      <div class="form-group horizental d-flex col-md-3 col-sm-6 col-12">
+        <label class="col-form-label label-w-100" for="input2">Description:</label>
+        <input class="form-control flex-grow-1" id="input2" type="text">
+      </div>
+
+      <div class="form-group horizental d-flex col-md-9 col-sm-12 col-12">
+        <input class="form-control flex-grow-1" id="input2" type="text">
+      </div>
+
+      <div class="form-group horizental d-flex col-md-4 col-sm-6 col-12">
+        <label class="col-form-label label-w-100" for="input2">Result Value:</label>
+        <input class="form-control flex-grow-1" id="input2" type="text">
+      </div>
+
+      <div class="form-group horizental d-flex col-md-4 col-sm-6 col-12">
+        <label class="col-form-label label-w-70" for="input2">Unit:</label>
+        <input class="form-control flex-grow-1" id="input2" type="text">
+      </div>
+
+      <div class="form-group horizental d-flex col-md-4 col-sm-6 col-12">
+        <label class="col-form-label label-w-70" for="input2">Recomened:</label>
+        <input class="form-control flex-grow-1" id="input2" type="text">
+      </div>
+
+      <div class="form-group horizental d-flex col-md-12 col-sm-12 col-12">
+        <label class="col-form-label label-w-100" for="input2">Result Status:</label>
+        <input class="form-control flex-grow-1" id="input2" type="text">
+      </div>
+
+      <div class="form-group horizental d-flex col-md-8 col-sm-12 col-12">
+        <label class="col-form-label label-w-100" for="input2">Abnormal Flag:</label>
+        <input class="form-control flex-grow-1" id="input2" type="text">
+      </div>
+
+      <div class="form-group horizental d-flex col-md-4 col-sm-6 col-12">
+        <label class="col-form-label label-w-120" for="input2">Collection Date Time:</label>
+        <input class="form-control flex-grow-1" id="input2" type="text">
+      </div>
+    </div>
+
+    <div class="form-row form-dashboard align-items-start px-2 py-1 border-top">
+      <div class="form-group horizental d-flex col-md-10 col-sm-12 col-12">
+        <label class="col-form-label label-w-100" for="input2">Physician Notes:</label>
+        <input class="form-control flex-grow-1" id="input2" type="text">
+      </div>
+
+      <div class="form-group horizental d-flex align-items-center col-md-2 col-sm-6 col-12">
+        <div class="custom-checkbox blue-checkbox">
+          <input type="checkbox" class="custom-control-input" id="customCheck2">
+          <label class="custom-control-label" for="customCheck2">Change Meds</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="border flex-grow-1 overflow-auto max-height-100">
+  <table class="table layout-fixed light-blue-striped-border">
+    <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Result code</th>
+        <th scope="col">Description</th>
+        <th scope="col">Value</th>
+        <th scope="col">Unit</th>
+        <th scope="col">Recom. Range</th>
+        <th scope="col">Status</th>
+        <th scope="col">Abn. Flag</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+    </tbody>
+  </table>
+</div> -->

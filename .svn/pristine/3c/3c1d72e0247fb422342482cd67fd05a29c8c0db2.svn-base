@@ -1,0 +1,496 @@
+import { Component, OnInit, Output, EventEmitter, Input, Inject } from '@angular/core';
+import { FormGroup, FormBuilder, AbstractControl, FormControl } from '@angular/forms';
+import { LookupList, LOOKUP_LIST } from 'src/app/providers/lookupList.module';
+import { PhrService } from 'src/app/services/phr/phr.service';
+import { LogMessage } from 'src/app/shared/log-message';
+import * as Quill from 'quill';
+import { ORMPatientMessage } from 'src/app/models/messages/ORMPatientMessage';
+import { ORMAmemdmentRequest } from 'src/app/models/messages/ORMAmemdmentRequest';
+import { ORMPatientMessageDetail } from 'src/app/models/messages/ORMPatientMessageDetail';
+import { DateTimeUtil } from 'src/app/shared/date-time-util';
+import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import { ORMaddAttachment } from 'src/app/models/messages/ORMaddAttachment';
+import { ORMMessageAttachmentsendfromPhr } from 'src/app/models/messages/ORMMessageAttachmentsendfromPhr';
+import { GeneralOperation } from 'src/app/shared/generalOperation';
+import { WrapperPhrMsg } from 'src/app/models/messages/WrapperPhrMsg';
+import { ConfirmationPopupComponent } from 'src/app/general-modules/confirmation-popup/confirmation-popup.component';
+import { PromptResponseEnum, ServiceResponseStatusEnum } from 'src/app/shared/enum-util';
+import { ORMDeleteRecord } from 'src/app/models/general/orm-delete-record';
+
+@Component({
+  selector: 'phr-message-compose',
+  templateUrl: './phr-message-compose.component.html',
+  styleUrls: ['./phr-message-compose.component.css']
+})
+export class PhrMessageComposeComponent implements OnInit {
+  @Output() onCloseNewMessage = new EventEmitter<any>();
+  @Input() objReply;
+
+  phrMsgComposeForm: FormGroup;
+  public txtMessageEdit: AbstractControl;
+  quilComposeMessageEdit: FormGroup;
+
+  arrDetailsMessages: Array<any>;
+  patMsgAttachmentsList: Array<any>;
+  arrLinks: Array<any>;
+  //listInfoCaptureLinks: Array<any>;
+  patMsgLinksList: Array<any>;
+  arrAttachments: Array<any>;
+  arrLinksAttachments: Array<any>;
+  ormListAttachments: ORMaddAttachment = new ORMaddAttachment();
+  //listAttachments: Array<any>;
+  arrMultiFiles: Array<File>;//add files
+  is_attachment: boolean = false;
+  arrMsgSendAttachments;
+  selectedProviderName: string = "";
+
+
+  objMessage: ORMPatientMessage = new ORMPatientMessage();
+  ormObjAmd: ORMAmemdmentRequest = new ORMAmemdmentRequest();
+  objMessageDetail: ORMPatientMessageDetail = new ORMPatientMessageDetail();
+  objMsgAttach: ORMMessageAttachmentsendfromPhr = new ORMMessageAttachmentsendfromPhr();
+  isMessageType="";
+
+  patientId:string="";
+  isLoading = false;
+  constructor(@Inject(LOOKUP_LIST) public lookupList: LookupList,
+    private phrService: PhrService,
+    private logMessage: LogMessage,
+    private modalService: NgbModal,
+    private generalOperation: GeneralOperation,
+    private dateTimeUtil: DateTimeUtil,
+    private formBuilder: FormBuilder) {
+      this.patientId=this.lookupList.patientInfo.patient_id.toString();
+    this.quilComposeMessageEdit = formBuilder.group({
+      'txtMessageEdit': [''],
+    });
+    this.txtMessageEdit = this.quilComposeMessageEdit.controls['txtMessageEdit'];
+  }
+
+  ngOnInit() {
+    debugger;
+    if (this.lookupList.providerList == undefined || this.lookupList.providerList.length == 0) {
+      this.getProviderList();
+    }
+    this.buildForm();
+    debugger;
+    if(this.objReply[0].msgType.length > 0){
+      if(this.objReply[0].msgType[0].action_type){
+        this.isMessageType = this.objReply[0].msgType[0].action_type;
+        this.assignValues();
+      }
+    }else{
+     // if(this.objReply[0].msgFrom.length >0){
+       // (this.phrMsgComposeForm.get("txtMsgFrom") as FormControl).setValue(this.objReply[0].msgFrom[0].name); // this.lookupList.logedInUser.user_name.toString()
+       //(this.phrMsgComposeForm.get("txtMsgFrom") as FormControl).setValue(this.lookupList.logedInUser.userLName+", "+this.lookupList.logedInUser.userFName);
+       (this.phrMsgComposeForm.get("txtMsgFrom") as FormControl).setValue(this.lookupList.patientInfo.last_name+", "+this.lookupList.patientInfo.first_name);
+       
+       
+      //}
+    }
+  }
+  assignValues() {
+    debugger;
+    (this.phrMsgComposeForm.get("txtMsgFrom") as FormControl).setValue(this.objReply[0].msgFrom[0].name);
+    (this.phrMsgComposeForm.get("txt_subject") as FormControl).setValue(this.objReply[0].msgSubject[0].msg_subj);
+    (this.phrMsgComposeForm.get("cmbProvider") as FormControl).setValue(this.objReply[0].selectedProvider[0].msg_selected_provider);
+    (this.phrMsgComposeForm.get("amendment_Flag") as FormControl).setValue(this.objReply[0].msgFrom[0].msg_Amendment);
+    
+    this.selectedProviderName = this.objReply[0].selectedProviderName[0].selected_provider_name;
+    
+    this.quilComposeMessageEdit = this.formBuilder.group({
+      'txtMessageEdit': [this.objReply[0].msgText[0].msg_text],
+    });
+    this.txtMessageEdit = this.quilComposeMessageEdit.controls['txtMessageEdit'];
+
+    if (this.arrAttachments == undefined) {
+      this.arrAttachments = new Array<any>();
+    }
+    this.arrAttachments = this.objReply[0].attachments[0].msg_Attachments;
+    if(this.arrAttachments != null){
+      this.is_attachment = true;
+    }
+  }
+  getProviderList() {
+    this.phrService.getProvider(this.lookupList.practiceInfo.practiceId).subscribe(
+      data => {
+        this.lookupList.providerList = data as Array<any>;
+      },
+      error => {
+        this.getProviderListError(error);
+      }
+    );
+  }
+  getProviderListError(error) {
+    this.logMessage.log("getProviderList Error." + error);
+  }
+  buildForm() {
+    this.phrMsgComposeForm = this.formBuilder.group({
+      cmbProvider: this.formBuilder.control(null),
+      txtMsgFrom: this.formBuilder.control(""),
+      amendment_Flag: this.formBuilder.control(""),
+      txt_subject: this.formBuilder.control(""),
+      txtaddLinks: this.formBuilder.control(null)
+      //prior_Flag: this.formBuilder.control("")
+    })
+  }
+  onFileChange(event) {
+    debugger;
+    this.ormListAttachments = new ORMaddAttachment();
+    if (this.arrAttachments == undefined) {
+      this.arrAttachments = new Array<any>();
+    }
+
+   // if (this.listAttachments == undefined) {
+    //  this.listAttachments = new Array<any>();
+    //}
+    this.ormListAttachments.message_attachment_id = "";
+    this.ormListAttachments.patient_id = this.lookupList.patientInfo.patient_id.toString();
+    this.ormListAttachments.practice_id = this.lookupList.practiceInfo.practiceId.toString();
+    this.ormListAttachments.document_date = "";
+    this.ormListAttachments.name = event.target.files[0].name;
+    this.ormListAttachments.original_file_name = event.target.files[0].name;
+    this.ormListAttachments.link = "";
+    this.ormListAttachments.message_id = "";
+    this.ormListAttachments.attach_type = "file";
+
+    this.arrAttachments.push(this.ormListAttachments);
+   // this.listAttachments.push(this.arrAttachments[0]);
+    if (this.arrMultiFiles == undefined) {
+      this.arrMultiFiles = new Array<any>();
+    }
+    this.arrMultiFiles.push(event.target.files[0]);
+    this.is_attachment = true;
+  }
+  validateLink() {
+    if ((this.phrMsgComposeForm.get('txtaddLinks') as FormControl).value.trim() == "") {
+      alert("Pleas enter link.");
+      return false;
+    }
+    return true;
+  }
+  addLink() {
+    if (this.validateLink()) {
+      this.ormListAttachments = new ORMaddAttachment();
+      if (this.arrLinks == undefined) {
+        this.arrLinks = new Array<any>();
+      }
+      // if (this.listInfoCaptureLinks == undefined) {
+      //   this.listInfoCaptureLinks = new Array<any>();
+      // }
+
+      this.ormListAttachments.message_attachment_id = "";
+      this.ormListAttachments.name = (this.phrMsgComposeForm.get('txtaddLinks') as FormControl).value;
+      this.ormListAttachments.original_file_name = "";
+      this.ormListAttachments.link = (this.phrMsgComposeForm.get('txtaddLinks') as FormControl).value;
+      this.ormListAttachments.message_id = "";
+      this.ormListAttachments.attach_type = "link";
+      
+      this.arrLinks.push(this.ormListAttachments);
+      //this.listInfoCaptureLinks.push(this.arrLinks[0]);
+    }
+  }
+  sendPhrEmail(event: any) {
+    debugger;
+    if (event.key === "Enter") {
+      return;
+    }
+    if (!this.Validation())
+      return;
+
+    this.arrDetailsMessages = new Array<any>();
+    this.isLoading = true;
+    
+    var strToUser: String = "";
+    var strCcUser: String = "";
+
+    this.objMessage.mess_subject = (this.phrMsgComposeForm.get('txt_subject') as FormControl).value
+
+    var quill = new Quill('#messageRichEditorEdit', {
+      theme: 'snow'
+    });
+
+    this.objMessage.mess_body_html = this.quilComposeMessageEdit.controls.txtMessageEdit.value;
+    this.objMessage.mess_body_text = quill.getText().trim();
+    this.objMessage.mess_to = this.selectedProviderName;
+    this.objMessage.deleted = false;
+    this.objMessage.message_type = "PHR";
+    this.objMessage.from_id = this.patientId;
+    this.objMessage.to_id = (this.phrMsgComposeForm.get('cmbProvider') as FormControl).value;
+    
+    this.objMessage.sender_id = this.lookupList.logedInUser.userId.toString(); //null;// null or 0 in case of PHR
+    
+    this.objMessage.is_amendments = this.phrMsgComposeForm.get("amendment_Flag").value == true ? true : false;
+    this.objMessage.client_date_created = this.dateTimeUtil.getCurrentDateTimeString();
+    this.objMessage.client_date_modified = this.dateTimeUtil.getCurrentDateTimeString();
+    //this.objMessage.client_date_created = "2019-05-31 17:11:01.000";
+    //this.objMessage.client_date_modified = "2019-05-31 17:11:01.000";
+    this.objMessage.created_user = this.lookupList.logedInUser.user_name;
+    this.objMessage.message_id = "";
+    this.objMessage.is_draft = false;
+    this.objMessage.modified_user = this.lookupList.logedInUser.user_name;
+    this.objMessage.practice_id = this.lookupList.practiceInfo.practiceId.toString();
+
+    this.objMessageDetail = new ORMPatientMessageDetail();
+    this.objMessageDetail.recieve_date = this.dateTimeUtil.getCurrentDateTimeString();
+    this.objMessageDetail.readed = false;
+    this.objMessageDetail.mail_status = "inbox";
+    this.objMessageDetail.patient_id = this.patientId;
+    this.objMessageDetail.deleted = false;
+
+
+    this.objMessageDetail.user_id = this.lookupList.logedInUser.userId.toString();
+    this.objMessageDetail.modified_user = this.lookupList.logedInUser.user_name;
+    this.objMessageDetail.client_date_created = this.dateTimeUtil.getCurrentDateTimeString();
+    this.objMessageDetail.client_date_modified = this.dateTimeUtil.getCurrentDateTimeString();
+    this.objMessageDetail.phr_user = this.lookupList.logedInUser.user_name;
+    this.objMessageDetail.created_user = this.lookupList.logedInUser.user_name;
+
+    this.arrDetailsMessages.push(this.objMessageDetail);
+    //this.messageComposeForm.get("prior_Flag").value == true ? true : false;
+    //AMENDMENT check
+    if (this.phrMsgComposeForm.get("amendment_Flag").value == true) {
+      this.ormObjAmd = new ORMAmemdmentRequest();
+      this.ormObjAmd.patient_id = this.patientId;
+      var quill = new Quill('#messageRichEditorEdit', {
+        theme: 'snow'
+      });
+
+      this.ormObjAmd.request_details = quill.getText().trim();
+      this.ormObjAmd.request_status = "Pending";
+      this.ormObjAmd.practice_id = this.lookupList.practiceInfo.practiceId.toString();
+      this.ormObjAmd.request_date = this.dateTimeUtil.getCurrentDateTimeString();
+      if(this.lookupList.is_AuthUser)
+        this.ormObjAmd.created_user = this.lookupList.logedInUser.user_name + " (Authorized User)";
+      else
+        this.ormObjAmd.created_user = this.lookupList.logedInUser.user_name;
+
+      // if(GeneralOptions.is_AuthUser)
+      //   ormObjAmd.modified_user= GeneralOptions.loginUser+" (Authorized User)";
+      //  else
+      //    ormObjAmd.modified_user= GeneralOptions.loginUser;
+      this.ormObjAmd.client_date_created = this.dateTimeUtil.getCurrentDateTimeString();
+      this.ormObjAmd.client_date_modified = this.dateTimeUtil.getCurrentDateTimeString();
+    }
+    //attach file
+    if (this.is_attachment) {
+      if (this.arrAttachments != null) {
+        if (this.arrMsgSendAttachments == undefined) {
+          this.arrMsgSendAttachments =  new Array();
+        }
+        for (var i = 0; i < this.arrAttachments.length; i++) {
+          this.objMsgAttach = new ORMMessageAttachmentsendfromPhr();
+          // if (this.arrAttachments[i].fileBytes == null || this.arrAttachments[i].fileBytes == "") {
+          //   alert("Problem in " + this.arrAttachments[i].name + ", please re-attach the Attachment.");
+          //   return;
+          // }
+
+          if(this.arrAttachments[i].message_id != ""){
+            this.objMsgAttach.message_attachment_id = this.arrAttachments[i].message_id;
+            this.objMsgAttach.patient_id = this.patientId;
+            this.objMsgAttach.practice_id = this.lookupList.practiceInfo.practiceId.toString();
+            this.objMsgAttach.document_date = "";//GeneralOptions.CurrentDateTimeString();
+            this.objMsgAttach.original_file_name = this.arrAttachments[i].original_file_name; //browseFile.name;
+            this.objMsgAttach.name = this.arrAttachments[i].original_file_name; //fine name.
+            this.objMsgAttach.link = this.arrAttachments[i].link
+            this.objMsgAttach.attach_type = "file";
+            this.arrMsgSendAttachments.push(this.objMsgAttach);
+          }else{
+            this.objMsgAttach.message_attachment_id = "";
+            this.objMsgAttach.patient_id = this.patientId;
+            this.objMsgAttach.practice_id = this.lookupList.practiceInfo.practiceId.toString();
+            this.objMsgAttach.document_date = "";//GeneralOptions.CurrentDateTimeString();
+            this.objMsgAttach.original_file_name = this.arrAttachments[i].name; //browseFile.name;
+            this.objMsgAttach.name = this.arrAttachments[i].name;
+            this.objMsgAttach.link = "";
+            this.objMsgAttach.attach_type = "file";
+            this.arrMsgSendAttachments.push(this.objMsgAttach);
+          }
+
+          // this.objMsgAttach.message_attachment_id = "";
+          // this.objMsgAttach.patient_id = this.lookupList.logedInUser.patientID.toString();
+          // this.objMsgAttach.practice_id = this.lookupList.practiceInfo.practiceId.toString();
+          // this.objMsgAttach.document_date = "";//GeneralOptions.CurrentDateTimeString();
+          // this.objMsgAttach.original_file_name = this.arrAttachments[i].name; //browseFile.name;
+          // this.objMsgAttach.name = this.arrAttachments[i].name;
+          // this.objMsgAttach.link = "";
+          // this.objMsgAttach.attach_type = "file";
+          // this.arrMsgSendAttachments.push(this.objMsgAttach);
+        }
+      }
+    }//attach end
+    //links
+    //if (this.arrLinks != null || this.arrLinks != undefined) {
+    if (this.arrLinks){
+      //check this detail
+      if (this.arrMsgSendAttachments == null || this.arrMsgSendAttachments == undefined) {
+        this.arrMsgSendAttachments = new Array();
+      }
+      for (var z = 0; z < this.arrLinks.length; z++) {
+        this.objMsgAttach = new ORMMessageAttachmentsendfromPhr();
+        if (this.arrLinks[z].message_attachment_id == "") {
+          this.objMsgAttach.message_attachment_id = "";
+          this.objMsgAttach.patient_id = this.patientId;
+          this.objMsgAttach.practice_id = this.lookupList.practiceInfo.practiceId.toString();
+          this.objMsgAttach.document_date = "";
+          this.objMsgAttach.name = this.arrLinks[z].name;
+          this.objMsgAttach.original_file_name = this.arrLinks[z].name;
+          this.objMsgAttach.link = this.arrLinks[z].name;
+          this.objMsgAttach.message_id = "";
+          this.objMsgAttach.attach_type = "link";
+          this.arrMsgSendAttachments.push(this.objMsgAttach);
+        }
+      }
+    }//link end
+
+    var acAttachmentPath = this.generalOperation.filterArray(this.lookupList.lstdocumentPath, "category_name", "Messages");
+    //if (this.arrMsgSendAttachments == null) {
+    if (!this.arrMsgSendAttachments){
+      this.arrMsgSendAttachments = new Array<any>();
+    }
+
+    //if (this.arrDetailsMessages == null) {
+    if (!this.arrDetailsMessages){
+      this.arrDetailsMessages = new Array<any>();
+    }
+    //if (this.arrLinks == null) {
+    if (!this.arrLinks) {
+      this.arrLinks = new Array<any>();
+    }
+    //if (this.ormObjAmd == null) {
+    if (!this.ormObjAmd){
+      this.ormObjAmd = new ORMAmemdmentRequest();
+    }
+    //roMessages.SavePatientMessages.send("Messages", arrLinks);
+    let WrapperPHRmsg: WrapperPhrMsg = new WrapperPhrMsg();
+    WrapperPHRmsg.objPatientMessage = this.objMessage;
+    WrapperPHRmsg.objPatientMessageDetails = this.arrDetailsMessages;
+    WrapperPHRmsg.objAmemdmentReq = this.ormObjAmd;
+    WrapperPHRmsg.objMessageAttachmentPhr = this.arrMsgSendAttachments;
+    if(acAttachmentPath){
+      if(acAttachmentPath.length>0)
+      WrapperPHRmsg.path = acAttachmentPath[0].upload_path;
+    else
+      WrapperPHRmsg.path = "";
+    }else
+      WrapperPHRmsg.path = "";
+    
+
+    const formData: FormData = new FormData();
+    if (this.arrMultiFiles != undefined || this.arrMultiFiles != null) {
+      for (let a = 0; a < this.arrMultiFiles.length; a++) {
+        formData.append('attachFile', this.arrMultiFiles[a]);
+      }
+    } else {
+      formData.append('attachFile', null);
+    }
+    formData.append('phrWrapperData', JSON.stringify(WrapperPHRmsg));
+
+    this.phrService.savePatiehtPhrMsg(formData).subscribe(
+      data => {
+        this.discardMessage();
+      },
+      error => {
+        this.isLoading = false;
+        return;
+      }
+    );
+
+  }
+  Validation() {
+    if ((this.phrMsgComposeForm.get('cmbProvider') as FormControl).value == "") {
+      alert("Please select valid provider.");
+      return false;
+    }
+    if ((this.phrMsgComposeForm.get('txt_subject') as FormControl).value.trim() == "") {
+      alert("Please enter message subject.");
+      return false;
+    }
+    var quill = new Quill('#messageRichEditorEdit', {
+      theme: 'snow'
+    });
+    if (quill.getText().trim() == "") {
+      alert("Please enter message detail.");
+      return false;
+    }
+    return true;
+  }
+  discardMessage(){
+    this.isLoading = false;
+    this.onCloseNewMessage.emit();
+  }
+  poupUpOptions: NgbModalOptions = {
+    backdrop: 'static',
+    keyboard: false
+  };
+  deleteSelectedRecord(value, index){
+      const modalRef = this.modalService.open(ConfirmationPopupComponent, this.poupUpOptions);
+      modalRef.componentInstance.promptHeading = 'Confirm Removal !';
+      modalRef.componentInstance.promptMessage = 'Are you sure you want to remove selected record?';
+      let closeResult;
+      modalRef.result.then((result) => {
+        if (result == PromptResponseEnum.YES) {
+          if(value.message_attachment_id == ""){
+            this.arrLinks.splice(index,1);
+          }
+        }
+      }, (reason) => {
+        //alert(reason);
+      });
+    
+  }
+  checkEnter(event){
+    if (event.key === "Enter") {
+      return false;
+    }
+  }
+//   deleteSelectedAttach(value, index){
+//   // if(value.message_id !=""){
+//   //   const modalRef = this.modalService.open(ConfirmationPopupComponent, this.poupUpOptions);
+//   //       modalRef.componentInstance.promptHeading = 'Confirm Removal !';
+//   //       modalRef.componentInstance.promptMessage = 'Are you sure you want to delete selected attachment?';
+//   //       let closeResult;
+//   //       modalRef.result.then((result) => {
+//   //         if (result == PromptResponseEnum.YES) {
+//   //           let deleteRecordData = new ORMDeleteRecord();
+//   //           deleteRecordData.column_id = value.message_id.toString();
+//   //           deleteRecordData.modified_user = this.lookupList.logedInUser.user_name;
+//   //           deleteRecordData.client_date_time = "2019-05-31 17:11:01.000";//this.dateTimeUtil.getCurrentDateTimeString();
+//   //           deleteRecordData.client_ip = this.lookupList.logedInUser.systemIp;
+    
+//   //           this.phrService.deleteSelectedAttachment(deleteRecordData)
+//   //             .subscribe(
+//   //               data => this.ondeleteAttachSuccessfully(data, index),
+//   //               error => alert(error),
+//   //               () => this.logMessage.log("Implantable Device Deleted Successfull.")
+//   //             );
+//   //         }
+//   //       }, (reason) => {
+//   //         //alert(reason);
+//   //       });
+//   // }else{
+//     const modalRef = this.modalService.open(ConfirmationPopupComponent, this.poupUpOptions);
+//         modalRef.componentInstance.promptHeading = 'Confirm Removal !';
+//         modalRef.componentInstance.promptMessage = 'Are you sure you want to remove selected attachment?';
+//         let closeResult;
+//         modalRef.result.then((result) => {
+//           if (result == PromptResponseEnum.YES) {
+//             if(value.message_id == ""){
+//               this.arrAttachments.splice(index,1);
+//             }
+//           }
+//         }, (reason) => {
+//           //alert(reason);
+//         });
+//  // }
+
+
+    
+//   }
+//   ondeleteAttachSuccessfully(data, index) {
+//       this.arrAttachments.splice(index,1);
+//   }
+getSelectedProviderName(index){
+  this.selectedProviderName = this.lookupList.providerList[index].name;
+}
+}
