@@ -14,7 +14,7 @@ import { ObgynComponent } from './phr/obgyn/obgyn.component';
 import { PhrMessageComposeComponent } from './phr/messages/phr-message-compose/phr-message-compose.component';
 import { LogMessage } from './shared/log-message';
 import { PhrService } from './services/phr/phr.service';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { LookupListModule } from './providers/lookupList.module';
 import { AppConfigModule } from './providers/app-config.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -56,71 +56,63 @@ import { AuthorizedAppsComponent } from './phr/setting/authorized-apps/authorize
 import { PasswordResetComponent } from './phr/setting/password-reset/password-reset.component';
 
 //import { PrintChartService } from './services/chartprint/printchart.service';
-@NgModule({
-  declarations: [
-    AppComponent,
-    DashboardComponent,
-    EncounterSummaryComponent,
-    MessagesComponent,
-    ActivityLogComponent,
-    LoginLogComponent,
-    PatientInfoComponent,
-    PhrMessageInboxComponent,
-    ObgynComponent,
-    LabResultsComponent,     
-    PhrMessageComposeComponent,
-    ConfirmationPopupComponent,
-    DocumentViewerComponent,
-    EncounterPrintViewerComponent,
-    PhrLabSummaryComponent,
-    PhrLabResultComponent,
-    PhrLabResultAttachmentsComponent,
-    DocumentPrintViewerComponent,
-    PasswordResetComponent,
-    AlertPopupComponent,
-    ListFilterPipe,
-    UniquePipe,
-    PhonePipe,SafePipe,
-    LabResultsResultsComponent,
-    LabResultsAttachmentsComponent,
-    PhrMainComponent,
-    CCDAViewerComponent,
-    PhiComponent,EmailSendingComponent,DirectEmailSendingComponent,NgbdSortableHeader, SettingMainComponent, AuthorizedAppsComponent
-  ],
-  imports: [
-    CommonModule,
-    NgbModule,
-    HttpClientModule,
-    LookupListModule,
-    AppConfigModule,
-    BrowserModule,
-    ReactiveFormsModule,
-    FormsModule,  
-    QuillModule.forRoot({
-      modules: {
-        syntax: false,
-        toolbar: [['bold', 'italic', 'underline'],
-        [{ 'size': ['small', true, 'large', 'huge'] }],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        [{ 'indent': '-1' }, { 'indent': '+1' }],
-        [{ 'font': ['Arial'] }],
-        [{ 'align': [] }],
-        [{ 'color': [] }, { 'background': [] }],
-        ]
-      }
-    }),
-  ],
-  providers: [LogMessage, PhrService, GeneralService,DateTimeUtil,AuthService,LoadStartupService,
-    GeneralOperation,Chartreport_Print,EncounterService,Rptlabresults_Print,ListFilterPipe,
-    SortFilterPaginationService,excelService,
-    EncryptDecryptService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true,
-    }
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        DashboardComponent,
+        EncounterSummaryComponent,
+        MessagesComponent,
+        ActivityLogComponent,
+        LoginLogComponent,
+        PatientInfoComponent,
+        PhrMessageInboxComponent,
+        ObgynComponent,
+        LabResultsComponent,
+        PhrMessageComposeComponent,
+        ConfirmationPopupComponent,
+        DocumentViewerComponent,
+        EncounterPrintViewerComponent,
+        PhrLabSummaryComponent,
+        PhrLabResultComponent,
+        PhrLabResultAttachmentsComponent,
+        DocumentPrintViewerComponent,
+        PasswordResetComponent,
+        AlertPopupComponent,
+        ListFilterPipe,
+        UniquePipe,
+        PhonePipe, SafePipe,
+        LabResultsResultsComponent,
+        LabResultsAttachmentsComponent,
+        PhrMainComponent,
+        CCDAViewerComponent,
+        PhiComponent, EmailSendingComponent, DirectEmailSendingComponent, NgbdSortableHeader, SettingMainComponent, AuthorizedAppsComponent
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    bootstrap: [AppComponent], imports: [CommonModule,
+        NgbModule,
+        LookupListModule,
+        AppConfigModule,
+        BrowserModule,
+        ReactiveFormsModule,
+        FormsModule,
+        QuillModule.forRoot({
+            modules: {
+                syntax: false,
+                toolbar: [['bold', 'italic', 'underline'],
+                    [{ 'size': ['small', true, 'large', 'huge'] }],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                    [{ 'indent': '-1' }, { 'indent': '+1' }],
+                    [{ 'font': ['Arial'] }],
+                    [{ 'align': [] }],
+                    [{ 'color': [] }, { 'background': [] }],
+                ]
+            }
+        })], providers: [LogMessage, PhrService, GeneralService, DateTimeUtil, AuthService, LoadStartupService,
+        GeneralOperation, Chartreport_Print, EncounterService, Rptlabresults_Print, ListFilterPipe,
+        SortFilterPaginationService, excelService,
+        EncryptDecryptService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true,
+        }, provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }
