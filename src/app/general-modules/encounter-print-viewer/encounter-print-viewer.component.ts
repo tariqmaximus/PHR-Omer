@@ -16,7 +16,7 @@ import { GeneralService } from 'src/app/services/general/general.service';
   .tableMain td {font-family:Trebuchet MS,Arial,Helvetica, sans-serif; border:.1px solid #5bb6d0;padding:3px 7px 2px 7px;}
   .tableMain tr {font-family:Trebuchet MS,Arial,Helvetica, sans-serif; border:.1px solid #5bb6d0; }
   .tableMain th {font-family:Trebuchet MS,Arial,Helvetica, sans-serif; font-size:12px;text-align:left;padding:3px 7px 2px 7px;background-color:#5bb6d0;color:#000000;} 
-  .tableNoBorder{font-size:11px;font-family:Trebuchet MS, Arial, Helvetica, sans-serif;border-collapse:collapse;border: border:0px;}
+  .tableNoBorder{font-size:11px;font-family:Trebuchet MS, Arial, Helvetica, sans-serif;border-collapse:collapse;border:0px;}
   .tableNoBorder td {font-family:Trebuchet MS,Arial,Helvetica, sans-serif; border:0px ;padding:3px 5px 2px 5px;valign:top;} 
   .tableNoBorder tr {font-family:Trebuchet MS,Arial,Helvetica, sans-serif; border:0px ; }
   .tableNoBorder th {font-family:Trebuchet MS,Arial,Helvetica, sans-serif; valign:center;  background-color: #edfbf6; color:#000000; font-weight:bold;font-size:12px;border:.1px solid #5bb6d0;padding:3px 5px 2px 5px;}  
@@ -33,7 +33,7 @@ import { GeneralService } from 'src/app/services/general/general.service';
         .tableMain td {font-family:Trebuchet MS,Arial,Helvetica, sans-serif;border:.1px solid #333333;padding:3px 5px 2px 5px;}
         .tableMain tr {font-family:Trebuchet MS,Arial,Helvetica, sans-serif;border:.1px solid #333333; }
         .tableMain tr {font-family:Trebuchet MS,Arial,Helvetica, sans-serif;border:.1px solid #333333; }
-        .tableNoBorder{font-family:Trebuchet MS,Arial,Helvetica, sans-serif;font-size:12px;font-family:Arial;border-collapse:collapse;border: border:0px;}
+        .tableNoBorder{font-family:Trebuchet MS,Arial,Helvetica, sans-serif;font-size:12px;font-family:Arial;border-collapse:collapse;border:0px;}
         .tableNoBorder td {font-family:Trebuchet MS,Arial,Helvetica, sans-serif;border:0px ;padding:3px 5px 2px 5px;valign:top;}
         .tableNoBorder tr {font-family:Trebuchet MS,Arial,Helvetica, sans-serif;border:0px ; } 
         .tableNoBorder th {font-family:Trebuchet MS,Arial,Helvetica, sans-serif;valign:center;text-align:left;  background-color: #f4fafd; color:#000000; font-weight:bold;font-size:10px;border:.1px solid #333333;padding:3px 5px 2px 5px;}

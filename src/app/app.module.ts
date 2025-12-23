@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './phr/dashboard/dashboard.component';
@@ -87,7 +88,8 @@ import { PasswordResetComponent } from './phr/setting/password-reset/password-re
     PhiComponent,EmailSendingComponent,DirectEmailSendingComponent,NgbdSortableHeader, SettingMainComponent, AuthorizedAppsComponent
   ],
   imports: [
-    NgbModule.forRoot(),
+    CommonModule,
+    NgbModule,
     HttpClientModule,
     LookupListModule,
     AppConfigModule,
@@ -118,8 +120,7 @@ import { PasswordResetComponent } from './phr/setting/password-reset/password-re
       multi: true,
     }
   ],
-  bootstrap: [AppComponent],
-  entryComponents: [ConfirmationPopupComponent, DocumentViewerComponent, EncounterPrintViewerComponent,PasswordResetComponent,AlertPopupComponent,
-    CCDAViewerComponent,EmailSendingComponent,DirectEmailSendingComponent]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

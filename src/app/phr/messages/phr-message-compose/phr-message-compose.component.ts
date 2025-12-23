@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, AbstractControl, FormControl } from '@angular/f
 import { LookupList, LOOKUP_LIST } from 'src/app/providers/lookupList.module';
 import { PhrService } from 'src/app/services/phr/phr.service';
 import { LogMessage } from 'src/app/shared/log-message';
-import * as Quill from 'quill';
+import Quill from 'quill';
 import { ORMPatientMessages } from 'src/app/models/messages/ORMPatientMessages';
 import { ORMAmemdmentRequest } from 'src/app/models/messages/ORMAmemdmentRequest';
 import { DateTimeUtil } from 'src/app/shared/date-time-util';

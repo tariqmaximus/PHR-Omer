@@ -2,7 +2,7 @@ import { NgbActiveModal, NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-boot
 import { SafePipe } from '../../shared/docSafe-pipe';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Component, OnInit, Inject } from '@angular/core';
-import { SafeResourceUrl, SafeUrl } from '@angular/platform-browser/src/security/dom_sanitization_service';
+import { SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 
 
