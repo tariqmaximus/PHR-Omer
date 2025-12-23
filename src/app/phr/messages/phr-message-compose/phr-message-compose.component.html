@@ -7,130 +7,139 @@
       <!-- <div class="mr-2">
       <button class="btn btn-sm bg-info">Save as draft</button>
     </div> -->
-      <div class="mr-2">
-        <button class="btn btn-sm btn-danger" (click)="discardMessage()">Discard</button>
-      </div>
-    </ul>
-    <!-- <div class="p-6 d-flex flex-column flex-grow-1 light-sky-blue" style="height:530px !important;">
-      <div class="row p3 flex-grow-1 flex-wrap-nowrap">
-        <div class="col-md-8 col-sm-8 d-flex flex-column flex-grow-1">
-          <div class="border rounded bg-white d-flex flex-column flex-grow-1">
-            <div class="border rounded bg-white d-flex flex-column flex-grow-1">
-              <div class="justify-content-between">
-
-
-                <div class="d-flex flex-column flex-grow-1">
-                  <div class="border-top bg-white flex-grow-1 overflow-auto"> -->
-    <div class="messages-list d-flex flex-grow-1">
-      <div class="tab-content bg-white">
-        <div class="">
-
-          <div class="message-detail flex-grow-1 p-3">
-            <div class="form-row form-dashboard  mb-1">
-              <div class="form-group horizental row zero col-12">
-                <label class="col-form-label width-100" for="txtPatientSearchTo">From:</label>
-                <label class="form-control py-1 bg-disabled col">{{patientName}}</label>
-
-              </div>
-            </div>
-
-
-            <div class="form-row form-dashboard  mb-1">
-              <div class="form-group horizental row zero col-12">
-                <label class="col-form-label width-100" for="cmbProvider">Provider:</label>
-
-                <label class="form-control py-1 bg-disabled col" *ngIf="cmposeMessageParams.message_type == 'reply'">{{selectedProviderName}}</label>
-
-                <select class="form-control col" id="cmbProvider" formControlName="cmbProvider"
-                *ngIf="cmposeMessageParams.message_type == 'new'"
-                  (change)="getSelectedProviderName($event.target.selectedIndex)">
-                  <option *ngFor="let pro of lookupList.providerList" [value]="pro.id">
-                    {{pro.name}}</option>
-                </select>
-
-              </div>
-            </div>
-
-            <div class="form-row form-dashboard mb-1">
-              <div class="form-group horizental row zero col-12">
-                <label class="col-form-label width-100" for="txt_subject">Subject:</label>
-
-                <input type="text" class="form-control col" id="txt_subject" placeholder="Subject"
-                  formControlName="txt_subject">
-
-              </div>
-            </div>
-
-
-            <div class="h-30 d-flex align-items-center justify-content-between">
-              <div>
-                <div class="form-check form-check-inline pt-1 custom-checkbox blue-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="amendmentFlag" name="amendmentFlag"
-                    formControlName="amendment_Flag">
-                  <label class="custom-control-label" for="amendmentFlag">Amendment</label>
-                </div>
-              </div>
-            </div>
+    <div class="mr-2">
+      <button class="btn btn-sm btn-danger" (click)="discardMessage()">Discard</button>
+    </div>
+  </ul>
+  <!-- <div class="p-6 d-flex flex-column flex-grow-1 light-sky-blue" style="height:530px !important;">
+  <div class="row p3 flex-grow-1 flex-wrap-nowrap">
+    <div class="col-md-8 col-sm-8 d-flex flex-column flex-grow-1">
+      <div class="border rounded bg-white d-flex flex-column flex-grow-1">
+        <div class="border rounded bg-white d-flex flex-column flex-grow-1">
+          <div class="justify-content-between">
 
 
             <div class="d-flex flex-column flex-grow-1">
+              <div class="border-top bg-white flex-grow-1 overflow-auto"> -->
+                <div class="messages-list d-flex flex-grow-1">
+                  <div class="tab-content bg-white">
+                    <div class="">
+
+                      <div class="message-detail flex-grow-1 p-3">
+                        <div class="form-row form-dashboard  mb-1">
+                          <div class="form-group horizental row zero col-12">
+                            <label class="col-form-label width-100" for="txtPatientSearchTo">From:</label>
+                            <label class="form-control py-1 bg-disabled col">{{patientName}}</label>
+
+                          </div>
+                        </div>
 
 
-              <div class="d-flex justify-content-end">
+                        <div class="form-row form-dashboard  mb-1">
+                          <div class="form-group horizental row zero col-12">
+                            <label class="col-form-label width-100" for="cmbProvider">Provider:</label>
 
-                <input id="attachFile" type="file" style="display: none" file-handler (change)="onFileChange($event)">
+                            @if (cmposeMessageParams.message_type == 'reply') {
+                              <label class="form-control py-1 bg-disabled col">{{selectedProviderName}}</label>
+                            }
 
-                <div class="d-flex">
-                  <button type="button" class="btn btn-link fz-13 title-bar-blue-btn font-weight-400 py-0"
-                    onclick="document.getElementById('attachFile').click();">Attach
-                    File</button>
+                            @if (cmposeMessageParams.message_type == 'new') {
+                              <select class="form-control col" id="cmbProvider" formControlName="cmbProvider"
+                                (change)="getSelectedProviderName($event.target.selectedIndex)">
+                                @for (pro of lookupList.providerList; track pro) {
+                                  <option [value]="pro.id">
+                                  {{pro.name}}</option>
+                                }
+                              </select>
+                            }
+
+                          </div>
+                        </div>
+
+                        <div class="form-row form-dashboard mb-1">
+                          <div class="form-group horizental row zero col-12">
+                            <label class="col-form-label width-100" for="txt_subject">Subject:</label>
+
+                            <input type="text" class="form-control col" id="txt_subject" placeholder="Subject"
+                              formControlName="txt_subject">
+
+                          </div>
+                        </div>
+
+
+                        <div class="h-30 d-flex align-items-center justify-content-between">
+                          <div>
+                            <div class="form-check form-check-inline pt-1 custom-checkbox blue-checkbox">
+                              <input type="checkbox" class="custom-control-input" id="amendmentFlag" name="amendmentFlag"
+                                formControlName="amendment_Flag">
+                              <label class="custom-control-label" for="amendmentFlag">Amendment</label>
+                            </div>
+                          </div>
+                        </div>
+
+
+                        <div class="d-flex flex-column flex-grow-1">
+
+
+                          <div class="d-flex justify-content-end">
+
+                            <input id="attachFile" type="file" style="display: none" file-handler (change)="onFileChange($event)">
+
+                            <div class="d-flex">
+                              <button type="button" class="btn btn-link fz-13 title-bar-blue-btn font-weight-400 py-0"
+                                onclick="document.getElementById('attachFile').click();">Attach
+                              File</button>
+                            </div>
+
+                          </div>
+
+                          <div class="form-row form-dashboard attachment-tag-list px-1">
+                            @for (attach of lstAttachmentsAdded; track attach; let i = $index) {
+                              <div class="tag">
+                                <span class="text-gray fz-12">
+                                  <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                  {{attach.original_file_name}}
+                                </span>
+                                <button class="btn btn-link btn-delete btn-remove" (click)="onRemoveAttachment(i)">
+                                  <i aria-hidden="true" class="fa fa-times"></i></button>
+                                </div>
+                              }
+                            </div>
+
+
+                          </div>
+
+                          <div class="form-row form-dashboard">
+                            <div class="form-group col-12 mt-3" style="height: calc(100vh - 440px)">
+                              <!-- <div class="mt-3" style="height: calc(100vh - 440px)"> -->
+                              <quill-editor id="messageRichEditorToEdit" #messageRichEditorToEdit [required]="true" format="text|html"
+                              [formControl]="txtMessageEditTo" placeholder="Insert your message here...."></quill-editor>
+                            <!-- </div> -->
+                          </div>
+                        </div>
+
+
+                      </div>
+                    </div>
+                  </div>
                 </div>
-
-              </div>
-
-              <div class="form-row form-dashboard attachment-tag-list px-1">
-                <div *ngFor="let attach of lstAttachmentsAdded; let i = index" class="tag">
-                  <span class="text-gray fz-12">
-                    <i class="fa fa-paperclip" aria-hidden="true"></i>
-                    {{attach.original_file_name}}
-                  </span>
-                  <button class="btn btn-link btn-delete btn-remove" (click)="onRemoveAttachment(i)">
-                    <i aria-hidden="true" class="fa fa-times"></i></button>
-                </div>
-              </div>
-
-
+              <!-- </div>
             </div>
-
-            <div class="form-row form-dashboard">
-              <div class="form-group col-12 mt-3" style="height: calc(100vh - 440px)">
-                <!-- <div class="mt-3" style="height: calc(100vh - 440px)"> -->
-                <quill-editor id="messageRichEditorToEdit" #messageRichEditorToEdit [required]="true" format="text|html"
-                  [formControl]="txtMessageEditTo" placeholder="Insert your message here...."></quill-editor>
-                <!-- </div> -->
-              </div>
-            </div>
-
-
           </div>
+
         </div>
       </div>
     </div>
-    <!-- </div>
-                </div>
-              </div>
 
-            </div>
-          </div>
-        </div>
+  </div>
+</div> -->
+</form>
 
-      </div>
-    </div> -->
-  </form>
-
-  <div class="div-ui-blocker" id="uiBlocker" *ngIf="isLoading">
+@if (isLoading) {
+  <div class="div-ui-blocker" id="uiBlocker">
     <div class="div-ui-blocker-message-box ">
       <i class="fas fa-spinner fa-spin mr-1"></i>Loading
     </div>
   </div>
+}
 </div>

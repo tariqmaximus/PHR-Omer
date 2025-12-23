@@ -7,10 +7,12 @@
 
 
 
-    <div *ngIf="lstAuthorizedApps==undefined || lstAuthorizedApps.length==0" class="no-content ml-2 p-6">
-      <i class="fas fa-exclamation-triangle text-warning mr-2"></i>No Authorized Application Found.
-    </div>
-    <ng-container *ngFor="let app of lstAuthorizedApps">
+    @if (lstAuthorizedApps==undefined || lstAuthorizedApps.length==0) {
+      <div class="no-content ml-2 p-6">
+        <i class="fas fa-exclamation-triangle text-warning mr-2"></i>No Authorized Application Found.
+      </div>
+    }
+    @for (app of lstAuthorizedApps; track app) {
       <div class="row mb-2">
         <div class="col-12 col-md-6">
           <div class="card">
@@ -31,7 +33,6 @@
                   <label class="col-form-label font-weight-500">{{app.clientName}}</label>
                 </div>
               </div>
-
               <table class="table light-blue-striped-border">
                 <thead>
                   <tr>
@@ -41,68 +42,66 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let user of lstAuthorizedAppsUsers | listFilter : 'clientId' : app.clientId">
-                    <td>{{user.userName}}</td>
-                    <td>{{user.email}}</td>
-                    <td>{{user.relationship}}</td>
-                  </tr>
+                  @for (user of lstAuthorizedAppsUsers | listFilter : 'clientId' : app.clientId; track user) {
+                    <tr>
+                      <td>{{user.userName}}</td>
+                      <td>{{user.email}}</td>
+                      <td>{{user.relationship}}</td>
+                    </tr>
+                  }
                 </tbody>
               </table>
-
             </div>
           </div>
-
           <!-- <div class="dashboard patient-summary-graph mt-3 h-100">
-            <div class="dashboard-title green-light-title">
-              <div class="title">
-                {{app.clientName}}
-              </div>
+          <div class="dashboard-title green-light-title">
+            <div class="title">
+              {{app.clientName}}
             </div>
-            <div class="dashboard-content">
-
-              <div class="form-row form-dashboard mb-2">
-                <div class="form-group col-md-12">
-                  <label class="col-form-label">Applicatino ID:</label>
-                  <label class="col-form-label font-weight-500">{{app.clientId}}</label>
-                </div>
-              </div>
-              <div class="form-row form-dashboard mb-2">
-                <div class="form-group col-md-12">
-                  <label class="col-form-label">Applicatino Name:</label>
-                  <label class="col-form-label font-weight-500">{{app.clientName}}</label>
-                </div>
-              </div>
-
-            </div>
-          </div> -->
-        </div>
-      </div>
-    </ng-container>
-
-  </div>
-  <!-- <div class="row">
-      <div class="col-lg-12 mt-2">
-        <div class="card">
-          <div class="card-body PHITableDiv">
-            <table class="table light-blue-striped-border">
-              <thead>
-                <tr>
-                  <th>Application ID</th>
-                  <th>Application Name</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let app of lstAuthorizedApps">
-                  <td>{{app.clientId}}</td>
-                  <td>{{app.clientName}}</td>
-                </tr>
-              </tbody>
-            </table>
           </div>
-        </div>
-
+          <div class="dashboard-content">
+            <div class="form-row form-dashboard mb-2">
+              <div class="form-group col-md-12">
+                <label class="col-form-label">Applicatino ID:</label>
+                <label class="col-form-label font-weight-500">{{app.clientId}}</label>
+              </div>
+            </div>
+            <div class="form-row form-dashboard mb-2">
+              <div class="form-group col-md-12">
+                <label class="col-form-label">Applicatino Name:</label>
+                <label class="col-form-label font-weight-500">{{app.clientName}}</label>
+              </div>
+            </div>
+          </div>
+        </div> -->
       </div>
-    </div> -->
+    </div>
+  }
+
+</div>
+<!-- <div class="row">
+<div class="col-lg-12 mt-2">
+  <div class="card">
+    <div class="card-body PHITableDiv">
+      <table class="table light-blue-striped-border">
+        <thead>
+          <tr>
+            <th>Application ID</th>
+            <th>Application Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let app of lstAuthorizedApps">
+            <td>{{app.clientId}}</td>
+            <td>{{app.clientName}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+</div> -->
 
 
 

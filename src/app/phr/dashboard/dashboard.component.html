@@ -100,59 +100,62 @@
         </div>
 
         <!-- <div class="d-flex border-top mt-3 pt-3">
-           
 
-            <div class="flex-1 px-2 py-3 d-flex flex-column align-items-center">
-                <h6 class="text-black-50 mb-2"></h6>
-                <h4 class="mb-0"></h4>
-            </div>
-        </div> -->
-      </div>
-      <div class="dashboard-container flex-grow-1 max-height-auto">
 
-        <div class="row p8">
+        <div class="flex-1 px-2 py-3 d-flex flex-column align-items-center">
+          <h6 class="text-black-50 mb-2"></h6>
+          <h4 class="mb-0"></h4>
+        </div>
+      </div> -->
+    </div>
+    <div class="dashboard-container flex-grow-1 max-height-auto">
 
-          <div class="col-12 col-md-6">
-            <div class="dashboard patient-summary-graph mt-3 h-100">
-              <div class="dashboard-title green-light-title">
-                <div class="icon">
-                  <img class="img-h-24" src="./assets/images/icons/allergies_ico.svg" alt="Patient Allergies">
-                </div>
-                <div class="title">
-                  Allergies
-                </div>
+      <div class="row p8">
+
+        <div class="col-12 col-md-6">
+          <div class="dashboard patient-summary-graph mt-3 h-100">
+            <div class="dashboard-title green-light-title">
+              <div class="icon">
+                <img class="img-h-24" src="./assets/images/icons/allergies_ico.svg" alt="Patient Allergies">
               </div>
-              <div class="dashboard-content">
-                <ul>
-                  <li *ngFor="let allergy of lookupList.patientAllergies">
+              <div class="title">
+                Allergies
+              </div>
+            </div>
+            <div class="dashboard-content">
+              <ul>
+                @for (allergy of lookupList.patientAllergies; track allergy) {
+                  <li>
                     <div>
                       <small>
                         <span>{{allergy.description}}</span>
                       </small>
                     </div>
                   </li>
-                </ul>
+                }
+              </ul>
 
-              </div>
             </div>
           </div>
+        </div>
 
-          <div class="col-12 col-md-6">
-            <div class="dashboard patient-summary-graph mt-3 h-100">
-              <div class="dashboard-title green-light-title">
-                <div class="icon">
-                  <!-- <i class="fas fa-pills" aria-hidden="true"></i> -->
-                  <img class="img-h-24" src="./assets/images/icons/Dashboard_ico_refill.svg" alt="Patient Medication">
-                </div>
-
-                <div class="title">
-                  Medication
-                </div>
-
+        <div class="col-12 col-md-6">
+          <div class="dashboard patient-summary-graph mt-3 h-100">
+            <div class="dashboard-title green-light-title">
+              <div class="icon">
+                <!-- <i class="fas fa-pills" aria-hidden="true"></i> -->
+                <img class="img-h-24" src="./assets/images/icons/Dashboard_ico_refill.svg" alt="Patient Medication">
               </div>
-              <div class="dashboard-content">
-                <div role="tablist position-relative max-height-auto overflow-auto">
-                  <div class="card dashboard-card" *ngFor="let med of lookupList.patientMedication">
+
+              <div class="title">
+                Medication
+              </div>
+
+            </div>
+            <div class="dashboard-content">
+              <div role="tablist position-relative max-height-auto overflow-auto">
+                @for (med of lookupList.patientMedication; track med) {
+                  <div class="card dashboard-card">
                     <div class="card-header" role="tab">
                       <h1 class="mb-0">
                         <a data-toggle="collapse" href="#summaryMedication{{med.sno}}"
@@ -161,90 +164,95 @@
                         </a>
                       </h1>
                     </div>
-
                     <div class="collapse" id="summaryMedication{{med.sno}}">
                       <div class="card-body">
                         <p>Prescription: <strong>{{med.drug_info}}</strong></p>
                         <p>Date:<strong>{{med.start_date}}</strong></p>
                         <p>Sig Detail:<strong>{{med.sig_text}}</strong></p>
-                        <p *ngIf="med.num_of_refills_allowed>0">Refill:<strong>{{med.num_of_refills_allowed}}</strong>
+                        @if (med.num_of_refills_allowed>0) {
+                          <p>Refill:<strong>{{med.num_of_refills_allowed}}</strong>
                         </p>
-                        <p *ngIf="med.pharmacist_notes">Phar. Notes:<strong>{{med.pharmacist_notes}}</strong></p>
-                      </div>
+                      }
+                      @if (med.pharmacist_notes) {
+                        <p>Phar. Notes:<strong>{{med.pharmacist_notes}}</strong></p>
+                      }
                     </div>
                   </div>
                 </div>
-              </div>
+              }
             </div>
           </div>
-
-          <div class="col-12 col-md-12">
-            <div class="dashboard patient-summary-graph mt-3 h-100">
-              <div class="dashboard-title orange-light-title">
-                <div class="icon">
-                  <img class="img-h-24" src="./assets/images/icons/problems-ico.svg" alt="Patient Problems">
-                </div>
-
-                <div class="title">
-                  Problems
-                </div>
-              </div>
-              <div class="dashboard-content">
-                <div role="tablist">
-                  <div class="card dashboard-card" *ngFor="let problem of lookupList.PatientProblems">
-                    <div class="card-header" role="tab">
-                      <h1 class="mb-0">
-                        <a data-toggle="collapse" href="#summaryproblem{{problem.sno}}" aria-expanded="false">
-                          <span class="icd-code">{{problem.prob_code}}</span> {{problem.prob_description}}
-                        </a>
-                      </h1>
-                    </div>
-
-                    <div id="summaryproblem{{problem.sno}}" class="collapse">
-                      <div class="card-body">
-                        <p>Code:
-                          <strong>{{problem.prob_code}}</strong>
-                        </p>
-                        <p>Description:
-                          <strong>{{problem.prob_description}}</strong>
-                        </p>
-                        <p>Date:
-                          <strong class="mr-5">{{problem.prob_date}}</strong>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
         </div>
-
-
-
-
       </div>
+
+      <div class="col-12 col-md-12">
+        <div class="dashboard patient-summary-graph mt-3 h-100">
+          <div class="dashboard-title orange-light-title">
+            <div class="icon">
+              <img class="img-h-24" src="./assets/images/icons/problems-ico.svg" alt="Patient Problems">
+            </div>
+
+            <div class="title">
+              Problems
+            </div>
+          </div>
+          <div class="dashboard-content">
+            <div role="tablist">
+              @for (problem of lookupList.PatientProblems; track problem) {
+                <div class="card dashboard-card">
+                  <div class="card-header" role="tab">
+                    <h1 class="mb-0">
+                      <a data-toggle="collapse" href="#summaryproblem{{problem.sno}}" aria-expanded="false">
+                        <span class="icd-code">{{problem.prob_code}}</span> {{problem.prob_description}}
+                      </a>
+                    </h1>
+                  </div>
+                  <div id="summaryproblem{{problem.sno}}" class="collapse">
+                    <div class="card-body">
+                      <p>Code:
+                        <strong>{{problem.prob_code}}</strong>
+                      </p>
+                      <p>Description:
+                        <strong>{{problem.prob_description}}</strong>
+                      </p>
+                      <p>Date:
+                        <strong class="mr-5">{{problem.prob_date}}</strong>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+
     </div>
 
-  </div>
-
-
-  <div class="d-flex flex-column flex-12">
-
-
-
-
-
-
-
-
-
-
-
 
 
 
   </div>
+</div>
+
+</div>
+
+
+<div class="d-flex flex-column flex-12">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
 </div>

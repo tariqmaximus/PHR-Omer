@@ -19,21 +19,23 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let summary of lstPHRLabOrderSummary" (click)="getAttachments(summary)"
-              [ngClass]="{'active' : (summary.order_id === selectedOrder_id)}">
-              <td>{{summary.order_date}}</td>
-              <td>{{summary.provider_name}}</td>
-              <td>{{summary.name}}</td>
-              <td>{{summary.lab_name}}</td>
-              <!-- <td>{{summary.assigned_to}}</td> -->
-              <td class="text-right">
-                <button type="button" class="btn btn-link text-primary line-height-1 p-0"
-                  (click)="previewSelectedRecord(summary)" title="Preview Results">
-                  <!-- <i class="fas fa-folder-open"></i> -->
-                  <i class="fas fa-eye" aria-hidden="true"></i>
-                </button>
-              </td>
-            </tr>
+            @for (summary of lstPHRLabOrderSummary; track summary) {
+              <tr (click)="getAttachments(summary)"
+                [ngClass]="{'active' : (summary.order_id === selectedOrder_id)}">
+                <td>{{summary.order_date}}</td>
+                <td>{{summary.provider_name}}</td>
+                <td>{{summary.name}}</td>
+                <td>{{summary.lab_name}}</td>
+                <!-- <td>{{summary.assigned_to}}</td> -->
+                <td class="text-right">
+                  <button type="button" class="btn btn-link text-primary line-height-1 p-0"
+                    (click)="previewSelectedRecord(summary)" title="Preview Results">
+                    <!-- <i class="fas fa-folder-open"></i> -->
+                    <i class="fas fa-eye" aria-hidden="true"></i>
+                  </button>
+                </td>
+              </tr>
+            }
           </tbody>
         </table>
       </div>
@@ -51,79 +53,83 @@
               <div class="messages-list d-flex flex-grow-1">
                 <table class="table layout-fixed sm light-blue-striped-border">
                   <tbody>
-                    <tr *ngFor="let attach of lstPHRLabAttachments"
-                      [ngClass]="{'active' : (attach.patient_order_attachment_id === selectedAttachID)}">
-                      <td (click)="openDocument(attach)"> {{attach.name}} </td>
-                    </tr>
-                </table>
+                    @for (attach of lstPHRLabAttachments; track attach) {
+                      <tr
+                        [ngClass]="{'active' : (attach.patient_order_attachment_id === selectedAttachID)}">
+                        <td (click)="openDocument(attach)"> {{attach.name}} </td>
+                      </tr>
+                    }
+                  </table>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
+        </div>
       </div>
     </div>
+    @if (isLoading) {
+      <div class="div-ui-blocker" id="uiBlocker">
+        <div class="div-ui-blocker-message-box ">
+          <i class="fas fa-spinner fa-spin mr-1"></i>Loading
+        </div>
+      </div>
+    }
   </div>
-  <div class="div-ui-blocker" id="uiBlocker" *ngIf="isLoading">
-    <div class="div-ui-blocker-message-box ">
-      <i class="fas fa-spinner fa-spin mr-1"></i>Loading
-    </div>
-  </div>
+
+
+
+
+
+
+
+  <!-- <div class="border section-title pl-3">
+  <span class="text-app-blue font-weight-500">Lab Summary</span>
 </div>
 
+<div class="border flex-grow-1 overflow-auto max-height-100" *ngIf="!labResults">
+  <table class="table light-blue-striped-border">
+    <thead>
+      <tr>
+        <th>Order Date</th>
+        <th>Provider</th>
+        <th>Location</th>
+        <th>Lab</th>
+        <th>Assign To</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
 
+    <tbody>
+      <tr >
+        <td>summary.order_date</td>
+        <td>summary.provider_name</td>
+        <td>summary.name</td>
+        <td>summary.lab_name</td>
+        <td>summary.assigned_to</td>
+        <td class="text-right">
+          <button type="button" class="btn btn-link text-primary line-height-1 p-0"
+            (click)="openSelectedRecord(summary)" title="Open Results">
+            <i class="fas fa-folder-open"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-
-
-
-
-<!-- <div class="border section-title pl-3">
-    <span class="text-app-blue font-weight-500">Lab Summary</span>
-  </div>
-  
-  <div class="border flex-grow-1 overflow-auto max-height-100" *ngIf="!labResults">
-    <table class="table light-blue-striped-border">
-      <thead>
-        <tr>
-          <th>Order Date</th>
-          <th>Provider</th>
-          <th>Location</th>
-          <th>Lab</th>
-          <th>Assign To</th>
-          <th>&nbsp;</th>
-        </tr>
-      </thead>
-  
-      <tbody>
-        <tr >
-            <td>summary.order_date</td>
-            <td>summary.provider_name</td>
-            <td>summary.name</td>
-            <td>summary.lab_name</td>
-            <td>summary.assigned_to</td>
-            <td class="text-right">
-              <button type="button" class="btn btn-link text-primary line-height-1 p-0" 
-              (click)="openSelectedRecord(summary)" title="Open Results">
-                <i class="fas fa-folder-open"></i>
-              </button>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-  </div>
-  
 <div class="dashboard-container d-flex flex-column flex-grow-1 m-8-px" *ngIf="labResults">
-    <div class="dashboard">
-      <ngb-tabset class="dashboard-tabs d-flex flex-column flex-grow-1" [activeId]="selectedTab">
-                
-        <ngb-tab id="lab-home" >
-          
-          <ng-template ngbTabTitle >
-              <button class="btn new-meesage flex-shrink-0" (click)="backToSum()" type="button">
-                  <i class="fas fa-arrow-left mr-2"></i>Back to Order Summary</button>
+  <div class="dashboard">
+    <ngb-tabset class="dashboard-tabs d-flex flex-column flex-grow-1" [activeId]="selectedTab">
+
+      <ngb-tab id="lab-home" >
+
+        <ng-template ngbTabTitle >
+          <button class="btn new-meesage flex-shrink-0" (click)="backToSum()" type="button">
+            <i class="fas fa-arrow-left mr-2"></i>Back to Order Summary</button>
           </ng-template>
-        </ngb-tab> 
-  
+        </ngb-tab>
+
         <ngb-tab id="lab-result">
           <ng-template ngbTabTitle>Lab Result</ng-template>
           <ng-template ngbTabContent>
@@ -131,7 +137,7 @@
             (BackToPhrSummary)="onBackFromLabResult($event)" [orderID]="orderID"></phr-lab-result>
           </ng-template>
         </ngb-tab>
-  
+
         <ngb-tab id="lab-attachment">
           <ng-template ngbTabTitle>Lab Attachment</ng-template>
           <ng-template ngbTabContent>

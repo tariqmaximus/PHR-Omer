@@ -7,21 +7,23 @@
         <a class="nav-link " [ngClass]="{  
           'active' : (module_name  === 'my_profile')
          }">
-          <span>My Profile</span>
-        </a>
-      </li> -->
-      <li class="nav-item" (click)="openModule('authorized_apps')">
+        <span>My Profile</span>
+      </a>
+    </li> -->
+    <li class="nav-item" (click)="openModule('authorized_apps')">
         <a class="nav-link " [ngClass]="{  
           'active' : (module_name  === 'authorized_apps')
          }">
-          <span>Authorized Applications</span>
-        </a>
-      </li>
-    </ul>
+        <span>Authorized Applications</span>
+      </a>
+    </li>
+  </ul>
 
-    <div class="tab-content">
-      <authorized-apps *ngIf="module_name==='authorized_apps'"
-        class="main-app d-flex flex-column p-0"></authorized-apps>
-    </div>
+  <div class="tab-content">
+    @if (module_name==='authorized_apps') {
+      <authorized-apps
+      class="main-app d-flex flex-column p-0"></authorized-apps>
+    }
   </div>
+</div>
 </div>

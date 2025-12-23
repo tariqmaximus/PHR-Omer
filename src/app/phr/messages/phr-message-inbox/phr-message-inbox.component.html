@@ -1,135 +1,136 @@
-<ul class="nav message-bar pl-3 flex-shrink-0 align-items-center justify-content-between phrMessageContent"
-  *ngIf="!isNewMessage">
-  <div class="fz-15 ihr-text-dark-blue font-weight-500">{{message_type}}</div>
-  <div class="d-flex">
-    <a class="nav-link" href="#" *ngIf="showInArchive == 'archive'"
-      (click)="deletearchiveSelectedMessage('delete')">Delete</a>
-    <a class="nav-link" href="#" *ngIf="showInArchive == 'inbox'" (click)="replySelectedMessage('reply')">Reply</a>
-    <!-- <a class="nav-link" href="#" *ngIf="showInArchive == 'inbox'" (click)="replySelectedMessage('forward')">Forward</a> -->
-    <a class="nav-link" href="#" *ngIf="showInArchive == 'inbox'"
-      (click)="deletearchiveSelectedMessage('archive')">Archive</a>
-    <a class="nav-link" href="#" *ngIf="showInArchive == 'inbox'" (click)="refreshSendReceive()">Send/Receive</a>
-    <button class="btn new-meesage flex-shrink-0" (click)="onNewMessage()">
-      <i class="fas fa-plus mr-2"></i>New Message</button>
-  </div>
+@if (!isNewMessage) {
+  <ul class="nav message-bar pl-3 flex-shrink-0 align-items-center justify-content-between phrMessageContent"
+    >
+    <div class="fz-15 ihr-text-dark-blue font-weight-500">{{message_type}}</div>
+    <div class="d-flex">
+      @if (showInArchive == 'archive') {
+        <a class="nav-link" href="#"
+        (click)="deletearchiveSelectedMessage('delete')">Delete</a>
+      }
+      @if (showInArchive == 'inbox') {
+        <a class="nav-link" href="#" (click)="replySelectedMessage('reply')">Reply</a>
+      }
+      <!-- <a class="nav-link" href="#" *ngIf="showInArchive == 'inbox'" (click)="replySelectedMessage('forward')">Forward</a> -->
+      @if (showInArchive == 'inbox') {
+        <a class="nav-link" href="#"
+        (click)="deletearchiveSelectedMessage('archive')">Archive</a>
+      }
+      @if (showInArchive == 'inbox') {
+        <a class="nav-link" href="#" (click)="refreshSendReceive()">Send/Receive</a>
+      }
+      <button class="btn new-meesage flex-shrink-0" (click)="onNewMessage()">
+        <i class="fas fa-plus mr-2"></i>New Message</button>
+      </div>
+    </ul>
+  }
 
-</ul>
-
-<div class="messages-list d-flex flex-grow-1 overflow-height" *ngIf="showInArchive != 'Amendment'">
-  <ul class="nav nav-tabs justify-content-start">
-
-    <div *ngIf="lstMessages==undefined || lstMessages.length==0" class="no-content ml-2 p-6">
-      <i class="fas fa-exclamation-triangle text-warning mr-2"></i>No Message Found.
-    </div>
-
-    <li class="nav-item">
-      <a class="nav-link " *ngFor="let msg of lstMessages;let i = index"
-        [ngClass]="{'active' : (msg.message_id === messageID)}" (click)="onMessageChange(msg,i)">
+  @if (showInArchive != 'Amendment') {
+    <div class="messages-list d-flex flex-grow-1 overflow-height">
+      <ul class="nav nav-tabs justify-content-start">
+        @if (lstMessages==undefined || lstMessages.length==0) {
+          <div class="no-content ml-2 p-6">
+            <i class="fas fa-exclamation-triangle text-warning mr-2"></i>No Message Found.
+          </div>
+        }
+        <li class="nav-item">
+          @for (msg of lstMessages; track msg; let i = $index) {
+            <a class="nav-link "
+              [ngClass]="{'active' : (msg.message_id === messageID)}" (click)="onMessageChange(msg,i)">
         <div class="message" [ngClass]="{
           'new': (msg.readed==false)
         }">
-          <div class="d-flex align-items-center justify-content-between">
-            <div class="title">{{msg.sender_name}}</div>
-            <!-- <div class="date">{{msg.client_date_created}}</div> -->
-          </div>
-          <!-- <div class="subject">{{msg.subject}}</div> -->
-          <div class="d-flex justify-content-between">
-            <div class="subject">{{msg.message_subject}}</div>
-            <div class="date">{{msg.message_date}}</div>
-          </div>
-        </div>
-      </a>
-    </li>
-  </ul>
-
-  <phr-message-compose *ngIf="isNewMessage" (onCloseNewMessage)="onCloseNewMessage($event)"
-    [cmposeMessageParams]="cmposeMessageParams" class="d-flex flex-column flex-grow-1 bg-white"></phr-message-compose>
-
-
-  <div class="tab-content bg-white position-relative" *ngIf="!isNewMessage">
-
-
-    <div *ngIf="isLoadingMessageDetail" class="div-loader"></div>
-
-    <div *ngIf="messageID==0 && !isLoadingMessageDetail && lstMessages!=undefined && lstMessages.length>0"
-      class="no-content ml-2 p-6">
-      <i class="fas fa-exclamation-triangle text-warning mr-2"></i>No Message Selected.
-    </div>
-
-    <div class="d-flex flex-shrink-1" *ngIf="messageID>0">
-      <div class="d-flex flex-column flex-grow-1">
-        <div class="message-info">
-
-          <div class="d-flex justify-content-between">
-
-            <span class="form-view row zero">
-              <div class="title font-weight-400 width-75 text-right">Provider:</div>
-              <div class="value font-weight-400  pl-2">{{messageProviderName}}</div>
-            </span>
-
-            <span class="form-view row zero">
-              <!-- <div class="title font-weight-400 width-75 text-right">Patient:</div> -->
-              <div class="value font-weight-400  pl-2">{{messageDate}}</div>
-            </span>
-          </div>
-
-
-          <div class="form-view row zero">
-            <div class="title font-weight-400 width-75  text-right">Subject:</div>
-            <div class="value font-weight-400 col pl-2"> {{subject}}</div>
-          </div>
-
-          <!-- <div class="form-view row zero">
-            <div class="title font-weight-400 col-1 text-left">From:</div>
-            <div class="value font-weight-400 col-11 pl-2">{{messageProviderName}}</div>
-          </div>
-
-          <div class="form-view row zero">
-            <div class="title font-weight-400 col-1 text-left">Sent:</div>
-            <div class="value font-weight-400 col-11 pl-2">{{messageDate}}</div>
-          </div> -->
-
-          <!-- <div class="form-view row zero">
-            <div class="title font-weight-400 col-1 text-left">To:</div>
-            <div class="value font-weight-400 col-11 pl-2">{{msg_mess_to}}</div>
-          </div> -->
-
-          <!-- <div class="form-view row zero">
-            <div class="title font-weight-400 col-1 text-left">Cc:</div>
-            <div class="value font-weight-400 col-11 pl-2">{{msg_detail_cc}}</div>
-          </div>
-     -->
-
-
-          <div class="form-view row zero attachment-tag-list px-1"
-            *ngIf="msgPatAttachmentsList!=undefined && msgPatAttachmentsList.length>0">
-            <div class="title font-weight-400  width-75 text-right">Attachments:</div>
-            <div class="d-flex pl-2">
-              <div *ngFor="let attach of msgPatAttachmentsList; let i = index" class="tag">
-                <button class="link-btn" (click)="openDocument(attach)">
-                  <i class="fa fa-paperclip" aria-hidden="true"></i>
-                  {{attach.original_file_name}}
-                </button>
-                <!-- <button class="btn btn-link btn-delete btn-remove" (click)="onRemoveAttachment(i)">
-                                  <i aria-hidden="true" class="fa fa-times"></i></button> -->
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="title">{{msg.sender_name}}</div>
+                  <!-- <div class="date">{{msg.client_date_created}}</div> -->
+                </div>
+                <!-- <div class="subject">{{msg.subject}}</div> -->
+                <div class="d-flex justify-content-between">
+                  <div class="subject">{{msg.message_subject}}</div>
+                  <div class="date">{{msg.message_date}}</div>
+                </div>
               </div>
+            </a>
+          }
+        </li>
+      </ul>
+      @if (isNewMessage) {
+        <phr-message-compose (onCloseNewMessage)="onCloseNewMessage($event)"
+        [cmposeMessageParams]="cmposeMessageParams" class="d-flex flex-column flex-grow-1 bg-white"></phr-message-compose>
+      }
+      @if (!isNewMessage) {
+        <div class="tab-content bg-white position-relative">
+          @if (isLoadingMessageDetail) {
+            <div class="div-loader"></div>
+          }
+          @if (messageID==0 && !isLoadingMessageDetail && lstMessages!=undefined && lstMessages.length>0) {
+            <div
+              class="no-content ml-2 p-6">
+              <i class="fas fa-exclamation-triangle text-warning mr-2"></i>No Message Selected.
             </div>
-
+          }
+          @if (messageID>0) {
+            <div class="d-flex flex-shrink-1">
+              <div class="d-flex flex-column flex-grow-1">
+                <div class="message-info">
+                  <div class="d-flex justify-content-between">
+                    <span class="form-view row zero">
+                      <div class="title font-weight-400 width-75 text-right">Provider:</div>
+                      <div class="value font-weight-400  pl-2">{{messageProviderName}}</div>
+                    </span>
+                    <span class="form-view row zero">
+                      <!-- <div class="title font-weight-400 width-75 text-right">Patient:</div> -->
+                      <div class="value font-weight-400  pl-2">{{messageDate}}</div>
+                    </span>
+                  </div>
+                  <div class="form-view row zero">
+                    <div class="title font-weight-400 width-75  text-right">Subject:</div>
+                    <div class="value font-weight-400 col pl-2"> {{subject}}</div>
+                  </div>
+                  <!-- <div class="form-view row zero">
+                  <div class="title font-weight-400 col-1 text-left">From:</div>
+                  <div class="value font-weight-400 col-11 pl-2">{{messageProviderName}}</div>
+                </div>
+                <div class="form-view row zero">
+                  <div class="title font-weight-400 col-1 text-left">Sent:</div>
+                  <div class="value font-weight-400 col-11 pl-2">{{messageDate}}</div>
+                </div> -->
+                <!-- <div class="form-view row zero">
+                <div class="title font-weight-400 col-1 text-left">To:</div>
+                <div class="value font-weight-400 col-11 pl-2">{{msg_mess_to}}</div>
+              </div> -->
+              <!-- <div class="form-view row zero">
+              <div class="title font-weight-400 col-1 text-left">Cc:</div>
+              <div class="value font-weight-400 col-11 pl-2">{{msg_detail_cc}}</div>
+            </div>
+            -->
+            @if (msgPatAttachmentsList!=undefined && msgPatAttachmentsList.length>0) {
+              <div class="form-view row zero attachment-tag-list px-1"
+                >
+                <div class="title font-weight-400  width-75 text-right">Attachments:</div>
+                <div class="d-flex pl-2">
+                  @for (attach of msgPatAttachmentsList; track attach; let i = $index) {
+                    <div class="tag">
+                      <button class="link-btn" (click)="openDocument(attach)">
+                        <i class="fa fa-paperclip" aria-hidden="true"></i>
+                        {{attach.original_file_name}}
+                      </button>
+                      <!-- <button class="btn btn-link btn-delete btn-remove" (click)="onRemoveAttachment(i)">
+                      <i aria-hidden="true" class="fa fa-times"></i></button> -->
+                    </div>
+                  }
+                </div>
+              </div>
+            }
           </div>
-
+          <div class="message-detail flex-grow-1 p-3 overflow-auto">
+            <form class="d-flex flex-column flex-grow-1">
+              <quill-editor id="messageRichEditorView" #messageRichEditorView [modules]="{toolbar: false}"
+                [readOnly]="true" [required]="true" [formControl]="messageTextView" placeholder="">
+              </quill-editor>
+            </form>
+          </div>
         </div>
-
-        <div class="message-detail flex-grow-1 p-3 overflow-auto">
-          <form class="d-flex flex-column flex-grow-1">
-            <quill-editor id="messageRichEditorView" #messageRichEditorView [modules]="{toolbar: false}"
-              [readOnly]="true" [required]="true" [formControl]="messageTextView" placeholder="">
-            </quill-editor>
-          </form>
-        </div>
-      </div>
-      <!-- <div class="col-md-4 col-sm-4 col-4 d-flex flex-column flex-grow-1">
-
-
+        <!-- <div class="col-md-4 col-sm-4 col-4 d-flex flex-column flex-grow-1">
         <div class="border rounded bg-white d-flex flex-column flex-grow-1">
           <div class="justify-content-between">
             <div
@@ -145,44 +146,47 @@
                     <tr *ngFor="let atch of msgPatAttachmentsList">
                       <td (click)="openDocument(atch)"> {{atch.original_file_name}} </td>
                     </tr>
-                </table>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-
-      </div> -->
-    </div>
+        </div> -->
+      </div>
+    }
   </div>
+}
 </div>
-<div class="messages-list d-flex flex-grow-1 overflow-height" *ngIf="showInArchive == 'Amendment'">
-  <div class="tab-content bg-white">
-    <div class="row p3 flex-grow-1 flex-wrap-nowrap">
-      <div class="col-md-12 col-sm-12 col-12 d-flex flex-column flex-grow-1">
-        <table class="table light-blue-striped-border">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Message</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr *ngFor="let summary of lstAmendent" [ngClass]="{
+}
+@if (showInArchive == 'Amendment') {
+  <div class="messages-list d-flex flex-grow-1 overflow-height">
+    <div class="tab-content bg-white">
+      <div class="row p3 flex-grow-1 flex-wrap-nowrap">
+        <div class="col-md-12 col-sm-12 col-12 d-flex flex-column flex-grow-1">
+          <table class="table light-blue-striped-border">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Message</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (summary of lstAmendent; track summary) {
+<tr [ngClass]="{
             'text-black' : (summary.request_status === 'ACCEPTED'),
             'text-danger' : (summary.request_status === 'DENIED')
              
           }">
-              <td>{{summary.request_date}}</td>
-              <td>{{summary.request_details}}</td>
-              <td>{{summary.request_status}}</td>
-
-            </tr>
-          </tbody>
-        </table>
+                  <td>{{summary.request_date}}</td>
+                  <td>{{summary.request_details}}</td>
+                  <td>{{summary.request_status}}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </div>
-
     </div>
   </div>
-</div>
+}

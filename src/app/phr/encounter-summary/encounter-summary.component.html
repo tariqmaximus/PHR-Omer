@@ -1,146 +1,149 @@
 <patient-info class="flex-shrink-0"></patient-info>
 
 <div class="bg-white m-8 d-flex flex-column flex-grow-1 overflow-height">
-    <div class="border border-bottom-0 ">
-      <div class="form-row form-dashboard">
-        <div class="col-lg-6">
-          <span class="section-title pl-3 text-app-blue font-weight-500">Encounters</span>
-        </div>
-        <div class="col-lg-6 EncounterFilters">
-          
-          <form [formGroup]="encounterReportForm">
-           
-              <!-- <label class="col-form-label required" for="dateFrom">Date Range:</label> -->
-              <div class="d-flex flex-grow-3 col-12">
-      
-                <div class="input-group pr-0 col-5 EncountersInput">
-      
-                  <div class="input-group-prepend">
-                    <label for="dateFrom" class="input-group-text">From</label>
-                  </div>
-      
-                  <input id="dateFrom" formControlName="dateFrom" class="form-control mr-0 date-control "
-                    placeholder="mm/dd/yyyy" name="dateFrom" ngbDatepicker #dateFrom="ngbDatepicker">
-      
-                  <span class="input-group-btn">
-                    <button class="btn date-control-btn" (click)="dateFrom.toggle()" type="button" focusable="false"
-                      tabindex="-1">
-                    </button>
-                  </span>
-      
-                </div>
-      
-                <div class="input-group pr-0 col-5 EncountersInput">
-                  <div class="input-group-prepend">
-                    <label for="dateTo" class="input-group-text">To</label>
-                  </div>
-      
-                  <input id="dateTo" formControlName="dateTo" class="form-control mr-0 date-control "
-                    placeholder="mm/dd/yyyy" name="dateTo" ngbDatepicker #dateTo="ngbDatepicker">
-      
-                  <span class="input-group-btn">
-                    <button class="btn date-control-btn" (click)="dateTo.toggle()" type="button" focusable="false"
-                      tabindex="-1">
-                    </button>
-                  </span>
-      
-                </div>
-                <div class="input-group pr-0 col-2 EncountersInput">
-                <button type="button" class="btn btn-primary w-100"
-                (click)="onSearchClick(encounterReportForm.value)">Search</button>
-      
-              </div>
-              </div>
-              
-            
-            
-            </form>
-          
-        </div>
+  <div class="border border-bottom-0 ">
+    <div class="form-row form-dashboard">
+      <div class="col-lg-6">
+        <span class="section-title pl-3 text-app-blue font-weight-500">Encounters</span>
       </div>
-     
-        
-    </div>
-    <div class="border flex-grow-1 overflow-auto max-height-100 position-relative">
+      <div class="col-lg-6 EncounterFilters">
 
-        <table class="table layout-fixed light-blue-striped-border">
-            <thead>
-                <tr>
-                    <th width="150px"> Visit Date</th>
-                    <th width="200px"> Provider</th>
-                    <th width="180px"> Location</th>
-                    <th width="130"> Visit Reason</th>
-                    <th width="120px"> Primary Diagnosis</th>
-                    <th width="200px">Action</th>
-                   
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let pat of lstPHREncounterSummary" [ngClass]="{'active' : (pat.chart_id === isSelectedChartID)}" 
-                (click)="changeRowSelection(pat)">
-                    <td>
-                        <span>
-                            {{pat.visit_date}}
-                        </span>
-                    </td>
-                    <td>
-                        {{pat.provider_name}}
-                    </td>
-                    <td>
-                        {{pat.location_name}}
-                    </td>
-                    <td title="{{pat.reason_detail}}">
-                        {{pat.reason_detail}}
-                    </td>
-                    <td>
-                        {{pat.primary_diag}}
-                    </td>
-                    <td class="text-center">
-                        <button class="mr-5-px btn-sm encounterBtn_sm btn btn-primary" (click)="previewSelectedChart(pat)">
-                            Preview 
-                            <!-- |  -->
-                        </button>
-                         <button class="mr-5-px btn-sm encounterBtn_sm btn btn-primary" (click)="generateCCDA(pat)">
-                            Generate CCD
-                        </button> 
-                    </td>
-                    
-                </tr>
-            </tbody>
-        </table>
+        <form [formGroup]="encounterReportForm">
 
-        
+          <!-- <label class="col-form-label required" for="dateFrom">Date Range:</label> -->
+          <div class="d-flex flex-grow-3 col-12">
+
+            <div class="input-group pr-0 col-5 EncountersInput">
+
+              <div class="input-group-prepend">
+                <label for="dateFrom" class="input-group-text">From</label>
+              </div>
+
+              <input id="dateFrom" formControlName="dateFrom" class="form-control mr-0 date-control "
+                placeholder="mm/dd/yyyy" name="dateFrom" ngbDatepicker #dateFrom="ngbDatepicker">
+
+                <span class="input-group-btn">
+                  <button class="btn date-control-btn" (click)="dateFrom.toggle()" type="button" focusable="false"
+                    tabindex="-1">
+                </button>
+              </span>
+
+            </div>
+
+            <div class="input-group pr-0 col-5 EncountersInput">
+              <div class="input-group-prepend">
+                <label for="dateTo" class="input-group-text">To</label>
+              </div>
+
+              <input id="dateTo" formControlName="dateTo" class="form-control mr-0 date-control "
+                placeholder="mm/dd/yyyy" name="dateTo" ngbDatepicker #dateTo="ngbDatepicker">
+
+                <span class="input-group-btn">
+                  <button class="btn date-control-btn" (click)="dateTo.toggle()" type="button" focusable="false"
+                    tabindex="-1">
+                </button>
+              </span>
+
+            </div>
+            <div class="input-group pr-0 col-2 EncountersInput">
+              <button type="button" class="btn btn-primary w-100"
+              (click)="onSearchClick(encounterReportForm.value)">Search</button>
+
+            </div>
+          </div>
+
+
+
+        </form>
+
       </div>
-      <!-- <table class="table layout-fixed light-blue-striped-border">
-        <thead>
-          <tr>
-            <th scope="col" sortable="visit_date" type="datetime" formate="MM/DD/YYYY hh:mm A">Visit  Date</th>
-            <th scope="col" sortable="provider_name" type="alpha">Provider</th>
-            <th scope="col" sortable="location_name" type="alpha">Location</th>
-            <th scope="col" sortable="reason_detail" type="alpha">Visit Reason</th>
-            <th scope="col" sortable="primary_diag" type="alpha">Primary Diagnosis</th>
-            <th width="60px" scope="col" sortable="signed" type="alpha">Signed</th>
-            <th width="80px" scope="col" sortable="co_signed" type="alpha">Co-Signed</th>
-            <th width="130px">&nbsp;</th>
-          </tr>
-        </thead>
-    
-        <tbody>
-          <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-          </tr>
-        </tbody>
-      </table> -->
     </div>
-    <div class="div-ui-blocker" id="uiBlocker" *ngIf="isLoading">
-        <div class="div-ui-blocker-message-box ">
-            <i class="fas fa-spinner fa-spin mr-1"></i>Loading
-        </div>
+
+
+  </div>
+  <div class="border flex-grow-1 overflow-auto max-height-100 position-relative">
+
+    <table class="table layout-fixed light-blue-striped-border">
+      <thead>
+        <tr>
+          <th width="150px"> Visit Date</th>
+          <th width="200px"> Provider</th>
+          <th width="180px"> Location</th>
+          <th width="130"> Visit Reason</th>
+          <th width="120px"> Primary Diagnosis</th>
+          <th width="200px">Action</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        @for (pat of lstPHREncounterSummary; track pat) {
+          <tr [ngClass]="{'active' : (pat.chart_id === isSelectedChartID)}"
+            (click)="changeRowSelection(pat)">
+            <td>
+              <span>
+                {{pat.visit_date}}
+              </span>
+            </td>
+            <td>
+              {{pat.provider_name}}
+            </td>
+            <td>
+              {{pat.location_name}}
+            </td>
+            <td title="{{pat.reason_detail}}">
+              {{pat.reason_detail}}
+            </td>
+            <td>
+              {{pat.primary_diag}}
+            </td>
+            <td class="text-center">
+              <button class="mr-5-px btn-sm encounterBtn_sm btn btn-primary" (click)="previewSelectedChart(pat)">
+                Preview
+                <!-- |  -->
+              </button>
+              <button class="mr-5-px btn-sm encounterBtn_sm btn btn-primary" (click)="generateCCDA(pat)">
+                Generate CCD
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+
+  </div>
+  <!-- <table class="table layout-fixed light-blue-striped-border">
+  <thead>
+    <tr>
+      <th scope="col" sortable="visit_date" type="datetime" formate="MM/DD/YYYY hh:mm A">Visit  Date</th>
+      <th scope="col" sortable="provider_name" type="alpha">Provider</th>
+      <th scope="col" sortable="location_name" type="alpha">Location</th>
+      <th scope="col" sortable="reason_detail" type="alpha">Visit Reason</th>
+      <th scope="col" sortable="primary_diag" type="alpha">Primary Diagnosis</th>
+      <th width="60px" scope="col" sortable="signed" type="alpha">Signed</th>
+      <th width="80px" scope="col" sortable="co_signed" type="alpha">Co-Signed</th>
+      <th width="130px">&nbsp;</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+  </tbody>
+</table> -->
 </div>
+@if (isLoading) {
+  <div class="div-ui-blocker" id="uiBlocker">
+    <div class="div-ui-blocker-message-box ">
+      <i class="fas fa-spinner fa-spin mr-1"></i>Loading
+    </div>
+  </div>
+}

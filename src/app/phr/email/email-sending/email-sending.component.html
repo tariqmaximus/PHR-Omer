@@ -7,99 +7,100 @@
             <img alt="Maximus" class="logo" src="./assets/images/logo-small.png">
             <h1 class="modal-title fz-14">Compose Email</h1>
             <br>
-            <button type="button" class="close" aria-label="Close" (click)="onClose()">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body" style="padding: 20; height: 300px;">
-            <div class="form-row form-dashboard">
-              <div class="col-md-12 col-sm-12 col-12">
-                <div class="px-2">
-                  <div class="form-row form-dashboard">
-                    <div class="form-group horizental row zero col-12">
-                      <label class="width-80 col-form-label required" for="txtEmailto">To</label>
-                      <input type="text" class="form-control required col" id="txtEmailto" autoFocus
-                        formControlName="txtEmailto" autocomplete="off" maxlength="50">
+              <button type="button" class="close" aria-label="Close" (click)="onClose()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body" style="padding: 20; height: 300px;">
+              <div class="form-row form-dashboard">
+                <div class="col-md-12 col-sm-12 col-12">
+                  <div class="px-2">
+                    <div class="form-row form-dashboard">
+                      <div class="form-group horizental row zero col-12">
+                        <label class="width-80 col-form-label required" for="txtEmailto">To</label>
+                        <input type="text" class="form-control required col" id="txtEmailto" autoFocus
+                          formControlName="txtEmailto" autocomplete="off" maxlength="50">
+                      </div>
                     </div>
-                  </div>
-                  <div class="form-row form-dashboard">
-                    <div class="form-group horizental row zero col-12">
-                      <label class="width-80 col-form-label" for="txtEmailcc">cc</label>
-                      <input type="text" class="form-control col" id="txtEmailcc" formControlName="txtEmailcc"
-                        autocomplete="off" maxlength="15">
+                    <div class="form-row form-dashboard">
+                      <div class="form-group horizental row zero col-12">
+                        <label class="width-80 col-form-label" for="txtEmailcc">cc</label>
+                        <input type="text" class="form-control col" id="txtEmailcc" formControlName="txtEmailcc"
+                          autocomplete="off" maxlength="15">
+                      </div>
                     </div>
-                  </div>
-                  <div class="form-row form-dashboard">
-                    <div class="form-group horizental row zero col-12">
-                      <label class="width-80 col-form-label" for="txtSubject">Subject</label>
-                      <input type="text" class="form-control col" id="txtSubject" formControlName="txtSubject"
-                        autocomplete="off" >
+                    <div class="form-row form-dashboard">
+                      <div class="form-group horizental row zero col-12">
+                        <label class="width-80 col-form-label" for="txtSubject">Subject</label>
+                        <input type="text" class="form-control col" id="txtSubject" formControlName="txtSubject"
+                          autocomplete="off" >
+                      </div>
                     </div>
-                  </div>
-                  <div class="form-row form-dashboard">
-                    <div class="form-group horizental row zero col-12">
-                      <label class="width-80 col-form-label" for="txtemailmsg">Message</label>
+                    <div class="form-row form-dashboard">
+                      <div class="form-group horizental row zero col-12">
+                        <label class="width-80 col-form-label" for="txtemailmsg">Message</label>
 
-                      <textarea class="form-control col" #txtemailmsg id="txtemailmsg" type="text"
+                        <textarea class="form-control col" #txtemailmsg id="txtemailmsg" type="text"
                         name="txtEmailmessage" rows="4" formControlName="txtEmailmessage"></textarea>
 
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="d-flex flex-column flex-grow-1 mt-2">
-              <div class="rounded bg-white flex-1 d-flex flex-column overflow-height">
-                <div
-                  class="rounded-box-title-bar ihr-bg-light-blue flex-shrink-0 justify-content-between pr-0 rounded-top flex-shrink-0">
-                  <span id="Attach_File">Attachments</span>
-                  <input id="attachFile" type="file"  aria-labelledby="Attach_File" style="display: none" file-handler (change)="onFileChange($event)">
-                  <button type="button"
-                  class="btn btn-link fz-13 title-bar-blue-btn font-weight-400 py-0"
-                  onclick="document.getElementById('attachFile').click();">Attach
-                  File</button>
-
-                </div>
-
-                <div class="border border-top-0 rounded-bottom flex-grow-1 overflow-auto max-height-100">
-
-
-                  <div class="d-flex justify-content-between pl-2 pr-2" *ngFor="let att of lstAttachments; let i = index">
-                      <div>
-                       
-                          <i class="fa fa-paperclip fa-md text-app-blue mr-1" aria-hidden="true"></i>
-                          {{att.document_name}}
-                      </div>
-                      <div>
-                        <span class="btn btn-link btn-sm text-danger line-height-1 p-0 mr-2"
-                            (click)="onRemoveAttachment(i)">
-                            <i aria-hidden="true" class="far fa-trash-alt"></i></span>
-                      </div>
-
+              <div class="d-flex flex-column flex-grow-1 mt-2">
+                <div class="rounded bg-white flex-1 d-flex flex-column overflow-height">
+                  <div
+                    class="rounded-box-title-bar ihr-bg-light-blue flex-shrink-0 justify-content-between pr-0 rounded-top flex-shrink-0">
+                    <span id="Attach_File">Attachments</span>
+                    <input id="attachFile" type="file"  aria-labelledby="Attach_File" style="display: none" file-handler (change)="onFileChange($event)">
+                    <button type="button"
+                      class="btn btn-link fz-13 title-bar-blue-btn font-weight-400 py-0"
+                      onclick="document.getElementById('attachFile').click();">Attach
+                    File</button>
 
                   </div>
-            
+
+                  <div class="border border-top-0 rounded-bottom flex-grow-1 overflow-auto max-height-100">
+
+
+                    @for (att of lstAttachments; track att; let i = $index) {
+                      <div class="d-flex justify-content-between pl-2 pr-2">
+                        <div>
+                          <i class="fa fa-paperclip fa-md text-app-blue mr-1" aria-hidden="true"></i>
+                          {{att.document_name}}
+                        </div>
+                        <div>
+                          <span class="btn btn-link btn-sm text-danger line-height-1 p-0 mr-2"
+                            (click)="onRemoveAttachment(i)">
+                            <i aria-hidden="true" class="far fa-trash-alt"></i></span>
+                          </div>
+                        </div>
+                      }
+
+                    </div>
+                  </div>
                 </div>
+              </div>
+              <div class="modal-footer custom pl-0">
+
+                <div class=" rounded-bottom-left px-2 py-1 my-0 mx-0 fz-12">
+                  <i class="fas mr-1"></i>
+                  <span class="fz-12"> Please use semicolon (<b class="pl-2 pr-2">;</b>) as email address separator</span>
+                </div>
+                <button type="button" style="width: 80px;" class="btn btn-dark btn-sm" (click)="onClose()">Cancel</button>
+                <button style="width: 80px;" class="btn btn-primary btn-sm" type="button"
+                (click)="sendEmail()">Send</button>
               </div>
             </div>
           </div>
-          <div class="modal-footer custom pl-0">
-
-            <div class=" rounded-bottom-left px-2 py-1 my-0 mx-0 fz-12">
-              <i class="fas mr-1"></i>
-              <span class="fz-12"> Please use semicolon (<b class="pl-2 pr-2">;</b>) as email address separator</span>
+          @if (isLoading) {
+            <div class="div-ui-blocker" id="uiBlocker">
+              <div class="div-ui-blocker-message-box ">
+                <i class="fas fa-spinner fa-spin mr-1"></i>Loading...
+              </div>
             </div>
-            <button type="button" style="width: 80px;" class="btn btn-dark btn-sm" (click)="onClose()">Cancel</button>
-            <button style="width: 80px;" class="btn btn-primary btn-sm" type="button"
-              (click)="sendEmail()">Send</button>
-          </div>
+          }
         </div>
       </div>
-       <div class="div-ui-blocker" id="uiBlocker" *ngIf="isLoading">
-        <div class="div-ui-blocker-message-box ">
-          <i class="fas fa-spinner fa-spin mr-1"></i>Loading...
-        </div>
-      </div> 
-    </div>
-  </div>
-</form>
+    </form>

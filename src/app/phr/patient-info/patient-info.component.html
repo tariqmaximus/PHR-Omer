@@ -32,7 +32,9 @@
     </div>
 
     <div class="status statusPHI">
-      <p *ngIf="patient_weight !=''">{{patient_weight}}</p>
+      @if (patient_weight !='') {
+        <p>{{patient_weight}}</p>
+      }
       <p>Weight (kg)</p>
     </div>
 
@@ -40,7 +42,7 @@
       <p>{{patient_height}}</p>
       <p>Height (ft.in)</p>
     </div>
-    
+
     <div class="status statusPHI">
       <p>{{patietn_bmi}}</p>
       <p>BMI</p>
@@ -48,13 +50,13 @@
 
     <div class="status statusPHI">
       <p>{{patietn_temp}}<span>&#176;</span>
-      </p>
-      <p>Temp (<span>&#176;F</span>)</p>
-    </div>
-
-    <div class="status statusPHI">
-      <p>{{patietn_bp}}</p>
-      <p>BP </p>
-    </div>
+    </p>
+    <p>Temp (<span>&#176;F</span>)</p>
   </div>
+
+  <div class="status statusPHI">
+    <p>{{patietn_bp}}</p>
+    <p>BP </p>
+  </div>
+</div>
 </div>
