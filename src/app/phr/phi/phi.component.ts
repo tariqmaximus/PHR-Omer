@@ -20,9 +20,10 @@ import { GeneralOperation } from 'src/app/shared/generalOperation';
 import { LogMessage } from 'src/app/shared/log-message';
 
 @Component({
-  selector: 'phi',
-  templateUrl: './phi.component.html',
-  styleUrls: ['./phi.component.css']
+    selector: 'phi',
+    templateUrl: './phi.component.html',
+    styleUrls: ['./phi.component.css'],
+    standalone: false
 })
 export class PhiComponent implements OnInit {
 

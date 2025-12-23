@@ -3,9 +3,9 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { GeneralService } from 'src/app/services/general/general.service';
 
 @Component({
-  selector: 'app-document-print-viewer',
-  templateUrl: './document-print-viewer.component.html',
-  styles: [`
+    selector: 'app-document-print-viewer',
+    templateUrl: './document-print-viewer.component.html',
+    styles: [`
       .styleTopHeader {	font-family: Calibri;	font-weight: bold;	font-size: 18px; color:#0376a8;}
     .styleTopSubHeader {	font-family: Calibri;	font-weight: bold;	font-size: 13px; color:#0376a8;}
     .styleMainHeading {font-family: Calibri; font-weight: bold; font-size: 14px; color:#0376a8;}
@@ -20,7 +20,8 @@ import { GeneralService } from 'src/app/services/general/general.service';
     #customers th {font-size:1.4em;text-align:left;padding-top:5px;padding-bottom:4px;background-color:#0376BB;color:#fff;}
     .styleAbnormal {font-family: Calibri;font-size: 12px;font-weight: bold; color:#C5381C;}
   `],
-  encapsulation:ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class DocumentPrintViewerComponent implements OnInit {
   @Input('section') section: string;

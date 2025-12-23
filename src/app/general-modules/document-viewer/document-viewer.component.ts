@@ -20,9 +20,9 @@ declare var myExtObject: any;
 
 
 @Component({
-  selector: 'app-document-viewer',
-  templateUrl: './document-viewer.component.html',
-  styles:[`
+    selector: 'app-document-viewer',
+    templateUrl: './document-viewer.component.html',
+    styles: [`
   .styleTopHeader {font-family:Trebuchet MS,Arial,Helvetica, sans-serif;font-weight: bold;font-size: 18px; color:#00000;}
   .styleTopSubHeader {font-family:Trebuchet MS, Arial, Helvetica, sans-serif;	font-weight: bold;font-size: 12px; color:#0f4977;}
   .styleMainHeading {font-family:Trebuchet MS, Arial, Helvetica, sans-serif; font-weight: bold; font-size: 13px; color:#0f4977;}
@@ -56,7 +56,8 @@ declare var myExtObject: any;
         .tableNoBorder th {font-family:Trebuchet MS,Arial,Helvetica, sans-serif;valign:center;text-align:left;  background-color: #f4fafd; color:#000000; font-weight:bold;font-size:10px;border:.1px solid #333333;padding:3px 5px 2px 5px;}
         .tabletest{border-collapse: collapse;font-size: 9px; font-family: Verdana;} 
         .tablewrite tr, .tblvitals tr{height:20px;}.tblvitals{border:1px solid black;border-bottom:0;border-collapse: collapse;height:20px;}.tblvitals td{border-left:1px solid black;} 
-  `]
+  `],
+    standalone: false
 })
 
 export class DocumentViewerComponent implements OnInit {

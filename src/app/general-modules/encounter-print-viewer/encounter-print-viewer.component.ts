@@ -53,7 +53,8 @@ import { GeneralService } from 'src/app/services/general/general.service';
         #customers th {font-size:1.4em;text-align:left;padding-top:5px;padding-bottom:4px;background-color:#0376BB;color:#fff;} 
         .styleAbnormal {font-family: Calibri;font-size: 12px;font-weight: bold; color:#C5381C;} 
   `],
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class EncounterPrintViewerComponent implements OnInit {
     @Input('section') section: string;

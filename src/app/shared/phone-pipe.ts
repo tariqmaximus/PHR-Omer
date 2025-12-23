@@ -1,9 +1,10 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe(
-    { 
-        name: 'phonePipe' 
-    }
+    {
+    name: 'phonePipe',
+    standalone: false
+}
 )
 export class PhonePipe implements PipeTransform {
   transform(phoneNo) {    

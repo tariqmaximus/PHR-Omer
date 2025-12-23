@@ -13,9 +13,10 @@ import { DateTimeFormat, DateTimeUtil } from 'src/app/shared/date-time-util';
 import { SearchCriteria } from 'src/app/models/common/search-criteria';
 
 @Component({
-  selector: 'encounter-summary',
-  templateUrl: './encounter-summary.component.html',
-  styleUrls: ['./encounter-summary.component.css']
+    selector: 'encounter-summary',
+    templateUrl: './encounter-summary.component.html',
+    styleUrls: ['./encounter-summary.component.css'],
+    standalone: false
 })
 export class EncounterSummaryComponent implements OnInit {
   

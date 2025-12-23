@@ -16,9 +16,10 @@ import { excelService } from 'src/app/shared/excelService';
 //import { excelService } from 'src/app/shared/excelService';
 
 @Component({
-  selector: 'app-activity-log',
-  templateUrl: './activity-log.component.html',
-  styleUrls: ['./activity-log.component.css']
+    selector: 'app-activity-log',
+    templateUrl: './activity-log.component.html',
+    styleUrls: ['./activity-log.component.css'],
+    standalone: false
 })
 export class ActivityLogComponent implements OnInit {
 

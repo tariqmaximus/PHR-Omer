@@ -10,9 +10,10 @@ import { NgbModalOptions, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Rptlabresults_Print } from 'src/app/models/lab/Rptlabresults_Print';
 
 @Component({
-  selector: 'phr-lab-summary',
-  templateUrl: './phr-lab-summary.component.html',
-  styleUrls: ['./phr-lab-summary.component.css']
+    selector: 'phr-lab-summary',
+    templateUrl: './phr-lab-summary.component.html',
+    styleUrls: ['./phr-lab-summary.component.css'],
+    standalone: false
 })
 export class PhrLabSummaryComponent implements OnInit {
   //orderID = '123';

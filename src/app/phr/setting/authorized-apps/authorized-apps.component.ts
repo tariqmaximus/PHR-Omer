@@ -13,9 +13,10 @@ import { LogMessage } from 'src/app/shared/log-message';
 import { UniquePipe } from 'src/app/shared/unique-pipe';
 
 @Component({
-  selector: 'authorized-apps',
-  templateUrl: './authorized-apps.component.html',
-  styleUrls: ['./authorized-apps.component.css']
+    selector: 'authorized-apps',
+    templateUrl: './authorized-apps.component.html',
+    styleUrls: ['./authorized-apps.component.css'],
+    standalone: false
 })
 export class AuthorizedAppsComponent implements OnInit {
 

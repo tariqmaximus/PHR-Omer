@@ -19,9 +19,10 @@ import { GeneralService } from 'src/app/services/general/general.service';
 
 
 @Component({
-  selector: 'phr-message-compose',
-  templateUrl: './phr-message-compose.component.html',
-  styleUrls: ['./phr-message-compose.component.css']
+    selector: 'phr-message-compose',
+    templateUrl: './phr-message-compose.component.html',
+    styleUrls: ['./phr-message-compose.component.css'],
+    standalone: false
 })
 export class PhrMessageComposeComponent implements OnInit {
   @Output() onCloseNewMessage = new EventEmitter<any>();

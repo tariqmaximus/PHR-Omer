@@ -3,9 +3,10 @@ import { AlertTypeEnum, PromptResponseEnum } from 'src/app/shared/enum-util';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'alert-popup',
-  templateUrl: './alert-popup.component.html',
-  styleUrls: ['./alert-popup.component.css']
+    selector: 'alert-popup',
+    templateUrl: './alert-popup.component.html',
+    styleUrls: ['./alert-popup.component.css'],
+    standalone: false
 })
 export class AlertPopupComponent implements OnInit {
   @Input() promptHeading:string;

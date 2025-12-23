@@ -9,9 +9,10 @@ import { AlertTypeEnum, FaxAttachemntsTypeEnum, ServiceResponseStatusEnum } from
 import { GeneralOperation } from 'src/app/shared/generalOperation';
 
 @Component({
-  selector: 'direct-email-send',
-  templateUrl: './direct-email-send.component.html',
-  styleUrls: ['./direct-email-send.component.css']
+    selector: 'direct-email-send',
+    templateUrl: './direct-email-send.component.html',
+    styleUrls: ['./direct-email-send.component.css'],
+    standalone: false
 })
 export class DirectEmailSendingComponent implements OnInit {
   email_response=''

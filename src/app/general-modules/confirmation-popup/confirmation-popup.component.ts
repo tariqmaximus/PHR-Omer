@@ -3,9 +3,10 @@ import { PromptResponseEnum } from 'src/app/shared/enum-util';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'confirmation-popup',
-  templateUrl: './confirmation-popup.component.html',
-  styleUrls: ['./confirmation-popup.component.css']
+    selector: 'confirmation-popup',
+    templateUrl: './confirmation-popup.component.html',
+    styleUrls: ['./confirmation-popup.component.css'],
+    standalone: false
 })
 export class ConfirmationPopupComponent implements OnInit {
 

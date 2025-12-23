@@ -1,9 +1,10 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe(
-    { 
-        name: 'listFilter' 
-    }
+    {
+    name: 'listFilter',
+    standalone: false
+}
 )
 export class ListFilterPipe implements PipeTransform {
   transform(list:any,col:any,value:any) { 

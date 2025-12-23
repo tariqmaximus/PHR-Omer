@@ -11,9 +11,10 @@ import { PhrService } from 'src/app/services/phr/phr.service';
 import { ChangePasswordModel } from 'src/app/models/change-password-model';
 
 @Component({
-  selector: 'password-reset',
-  templateUrl: './password-reset.component.html',
-  styleUrls: ['./password-reset.component.css']
+    selector: 'password-reset',
+    templateUrl: './password-reset.component.html',
+    styleUrls: ['./password-reset.component.css'],
+    standalone: false
 })
 export class PasswordResetComponent implements OnInit {
   inputForm: FormGroup;

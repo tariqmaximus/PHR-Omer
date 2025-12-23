@@ -15,9 +15,10 @@ import { ORMKeyValue } from 'src/app/models/general/orm-key-value';
 import { ComposeMessageParams } from 'src/app/models/messages/compse-messge-params';
 
 @Component({
-  selector: 'phr-message-inbox',
-  templateUrl: './phr-message-inbox.component.html',
-  styleUrls: ['./phr-message-inbox.component.css']
+    selector: 'phr-message-inbox',
+    templateUrl: './phr-message-inbox.component.html',
+    styleUrls: ['./phr-message-inbox.component.css'],
+    standalone: false
 })
 export class PhrMessageInboxComponent implements OnInit {
   @Input() isNewMessage;

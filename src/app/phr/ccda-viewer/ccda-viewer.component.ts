@@ -24,11 +24,10 @@ declare var myExtObject: any;
 declare var webGlObject: any;
 
 @Component({
-  selector: 'ccda-viewer',
-  templateUrl: './ccda-viewer.component.html',
-
-  styleUrls: ['./ccda-viewer.component.css']
-
+    selector: 'ccda-viewer',
+    templateUrl: './ccda-viewer.component.html',
+    styleUrls: ['./ccda-viewer.component.css'],
+    standalone: false
 })
 
 export class CCDAViewerComponent implements OnInit {

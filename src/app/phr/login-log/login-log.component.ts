@@ -10,9 +10,10 @@ import { GeneralOperation } from 'src/app/shared/generalOperation';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AlertTypeEnum } from 'src/app/shared/enum-util';
 @Component({
-  selector: 'app-login-log',
-  templateUrl: './login-log.component.html',
-  styleUrls: ['./login-log.component.css']
+    selector: 'app-login-log',
+    templateUrl: './login-log.component.html',
+    styleUrls: ['./login-log.component.css'],
+    standalone: false
 })
 export class LoginLogComponent implements OnInit {
 

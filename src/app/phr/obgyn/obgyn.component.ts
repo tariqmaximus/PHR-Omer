@@ -3,9 +3,10 @@ import { PhrService } from 'src/app/services/phr/phr.service';
 import { LookupList, LOOKUP_LIST } from 'src/app/providers/lookupList.module';
 
 @Component({
-  selector: 'obgyn',
-  templateUrl: './obgyn.component.html',
-  styleUrls: ['./obgyn.component.css']
+    selector: 'obgyn',
+    templateUrl: './obgyn.component.html',
+    styleUrls: ['./obgyn.component.css'],
+    standalone: false
 })
 export class ObgynComponent implements OnInit {
 

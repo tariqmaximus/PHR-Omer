@@ -2,9 +2,10 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { PhrService } from 'src/app/services/phr/phr.service';
 
 @Component({
-  selector: 'phr-lab-result',
-  templateUrl: './phr-lab-result.component.html',
-  styleUrls: ['./phr-lab-result.component.css']
+    selector: 'phr-lab-result',
+    templateUrl: './phr-lab-result.component.html',
+    styleUrls: ['./phr-lab-result.component.css'],
+    standalone: false
 })
 export class PhrLabResultComponent implements OnInit {
 

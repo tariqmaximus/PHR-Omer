@@ -9,9 +9,10 @@ import { AlertTypeEnum, FaxAttachemntsTypeEnum, ServiceResponseStatusEnum } from
 import { GeneralOperation } from 'src/app/shared/generalOperation';
 
 @Component({
-  selector: 'email-send',
-  templateUrl: './email-sending.component.html',
-  styleUrls: ['./email-sending.component.css']
+    selector: 'email-send',
+    templateUrl: './email-sending.component.html',
+    styleUrls: ['./email-sending.component.css'],
+    standalone: false
 })
 export class EmailSendingComponent implements OnInit {
 

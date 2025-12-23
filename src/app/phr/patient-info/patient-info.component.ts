@@ -2,9 +2,10 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { LookupList, LOOKUP_LIST } from 'src/app/providers/lookupList.module';
 
 @Component({
-  selector: 'patient-info',
-  templateUrl: './patient-info.component.html',
-  styleUrls: ['./patient-info.component.css']
+    selector: 'patient-info',
+    templateUrl: './patient-info.component.html',
+    styleUrls: ['./patient-info.component.css'],
+    standalone: false
 })
 export class PatientInfoComponent implements OnInit {
   patient_Name;

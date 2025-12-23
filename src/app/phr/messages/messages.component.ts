@@ -4,9 +4,10 @@ import { LookupList, LOOKUP_LIST } from 'src/app/providers/lookupList.module';
 import { LogMessage } from 'src/app/shared/log-message';
 
 @Component({
-  selector: 'app-messages',
-  templateUrl: './messages.component.html',
-  styleUrls: ['./messages.component.css']
+    selector: 'app-messages',
+    templateUrl: './messages.component.html',
+    styleUrls: ['./messages.component.css'],
+    standalone: false
 })
 export class MessagesComponent implements OnInit {
 

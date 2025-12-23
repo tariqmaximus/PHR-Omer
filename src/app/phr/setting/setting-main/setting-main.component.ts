@@ -5,9 +5,10 @@ import { GeneralOperation } from 'src/app/shared/generalOperation';
 import { LogMessage } from 'src/app/shared/log-message';
 
 @Component({
-  selector: 'setting-main',
-  templateUrl: './setting-main.component.html',
-  styleUrls: ['./setting-main.component.css']
+    selector: 'setting-main',
+    templateUrl: './setting-main.component.html',
+    styleUrls: ['./setting-main.component.css'],
+    standalone: false
 })
 export class SettingMainComponent implements OnInit {
 

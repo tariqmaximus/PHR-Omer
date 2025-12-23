@@ -12,9 +12,10 @@ import { PasswordResetComponent } from '../phr/setting/password-reset/password-r
 
 
 @Component({
-  selector: 'phr-main',
-  templateUrl: './phr-main.component.html',
-  styleUrls: ['./phr-main.component.css']
+    selector: 'phr-main',
+    templateUrl: './phr-main.component.html',
+    styleUrls: ['./phr-main.component.css'],
+    standalone: false
 })
 export class PhrMainComponent implements OnInit {
 

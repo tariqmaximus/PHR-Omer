@@ -3,9 +3,10 @@ import { LookupList, LOOKUP_LIST } from 'src/app/providers/lookupList.module';
 import { GeneralOperation } from 'src/app/shared/generalOperation';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+    selector: 'app-dashboard',
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.css'],
+    standalone: false
 })
 export class DashboardComponent implements OnInit {
   patientName:string='';
