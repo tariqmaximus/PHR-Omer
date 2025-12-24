@@ -1,4 +1,3 @@
-import { log } from 'util';
 import { GeneralService } from './../general/general.service';
 import { LOOKUP_LIST, LookupList } from './../../providers/lookupList.module';
 import { Injectable, Inject } from '@angular/core';
