@@ -61,13 +61,15 @@ export class GeneralService {
   }
 
   getAccessToken(auth: AuthenticationCredentials) {
+    const url = this.config.authServiceEndpoint + '/api/CustomAccount/LoginPhr';
+    console.log('Login URL:', url);
     return this.http
-      .post(this.config.authServiceEndpoint + 'api/CustomAccount/LoginPhr', auth);
+      .post(url, auth);
   }
 
   GenerateResetPasswordLink(obj: GenerateResetPasswordLinkModel) {
     return this.http
-      .post(this.config.authServiceEndpoint + 'api/CustomAccount/GenerateResetPasswordLink', obj);
+      .post(this.config.authServiceEndpoint + '/api/CustomAccount/GenerateResetPasswordLink', obj);
   }
 
   ResetPasswordByToken(obj: ChangePasswordModel, resetToken: string) {
@@ -78,7 +80,7 @@ export class GeneralService {
     };
 
     return this.http
-      .post(this.config.authServiceEndpoint + 'api/CustomAccount/ResetPasswordByToken', obj, options);
+      .post(this.config.authServiceEndpoint + '/api/CustomAccount/ResetPasswordByToken', obj, options);
   }
 
   getProvider(practice_id: number) {

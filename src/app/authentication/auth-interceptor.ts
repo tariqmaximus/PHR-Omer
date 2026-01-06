@@ -14,9 +14,9 @@ export class AuthInterceptor implements HttpInterceptor {
         
             //"http://maximusare-04:8080/ems-secure-jwt/auth"
         if (req.url.endsWith("/auth/token")
-        || req.url.endsWith("api/CustomAccount/LoginPhr")
-        || req.url.endsWith("api/CustomAccount/GenerateResetPasswordLink")
-        || req.url.endsWith("api/CustomAccount/ResetPasswordByToken") ) {
+        || req.url.endsWith("/api/CustomAccount/LoginPhr")
+        || req.url.endsWith("/api/CustomAccount/GenerateResetPasswordLink")
+        || req.url.endsWith("/api/CustomAccount/ResetPasswordByToken") ) {
 
             return next.handle(req);
         }
