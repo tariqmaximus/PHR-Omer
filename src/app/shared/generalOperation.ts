@@ -8,7 +8,9 @@ import { LogMessage } from './log-message';
 import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { AlertPopupComponent } from '../general-modules/alert-popup/alert-popup.component';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class GeneralOperation {
 
     constructor(@Inject(LOOKUP_LIST) public lookupList: LookupList,

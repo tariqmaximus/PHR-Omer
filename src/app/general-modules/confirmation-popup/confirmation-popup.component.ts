@@ -1,12 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { PromptResponseEnum } from 'src/app/shared/enum-util';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'confirmation-popup',
     templateUrl: './confirmation-popup.component.html',
     styleUrls: ['./confirmation-popup.component.css'],
-    standalone: false
+    standalone: true,
+    imports: [CommonModule, NgbModule]
 })
 export class ConfirmationPopupComponent implements OnInit {
 

@@ -1,12 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { AlertTypeEnum, PromptResponseEnum } from 'src/app/shared/enum-util';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'alert-popup',
     templateUrl: './alert-popup.component.html',
     styleUrls: ['./alert-popup.component.css'],
-    standalone: false
+    standalone: true,
+    imports: [CommonModule, NgbModule]
 })
 export class AlertPopupComponent implements OnInit {
   @Input() promptHeading:string;

@@ -6,7 +6,9 @@ import { APP_CONFIG, AppConfig } from '../../providers/app-config.module';
 import { GetPrescriptionAllergies } from 'src/app/models/encounter/GetPrescriptionAllergies';
 import { ORMCCDRequest } from 'src/app/models/charts/ORMCCDRequest';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class EncounterService {
   private httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })

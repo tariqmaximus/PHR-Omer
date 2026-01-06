@@ -4,7 +4,9 @@ import * as XLSX from 'xlsx';
 import { ExcelColumn } from '../models/general/excel-column';
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 const EXCEL_EXTENSION = '.xlsx';
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class excelService {
   constructor() { }
   public exportAsExcelFile(json: any[], display_columns: string, excelFileName: string): void {

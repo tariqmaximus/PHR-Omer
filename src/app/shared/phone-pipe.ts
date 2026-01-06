@@ -3,7 +3,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe(
     {
     name: 'phonePipe',
-    standalone: false
+    standalone: true
 }
 )
 export class PhonePipe implements PipeTransform {

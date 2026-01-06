@@ -43,7 +43,9 @@ export enum DateTimeFormat {
   DATEFORMAT_MMM_YYYY = "MMM, YYYY"  
 }
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class DateTimeUtil {
 
   moment;

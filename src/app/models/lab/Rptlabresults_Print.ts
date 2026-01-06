@@ -8,7 +8,9 @@ import { EncounterPrintViewerComponent } from "src/app/general-modules/encounter
 
 
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class Rptlabresults_Print {
 
     //#region Style

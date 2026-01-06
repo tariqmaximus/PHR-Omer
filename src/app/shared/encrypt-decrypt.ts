@@ -1,7 +1,9 @@
 import { Injectable } from "@angular/core";
 import * as CryptoJS from 'crypto-js';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class EncryptDecryptService {
 
     private baseSecretKey: any = '27%RSA$#@$^@1R@2';

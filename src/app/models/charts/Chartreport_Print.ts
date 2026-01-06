@@ -11,7 +11,9 @@ import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { EncounterPrintViewerComponent } from '../../general-modules/encounter-print-viewer/encounter-print-viewer.component';
 import { AlertTypeEnum } from 'src/app/shared/enum-util';
 import { ListFilterPipe } from 'src/app/shared/list-filter-pipe';
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class Chartreport_Print {
     constructor(private encounterService: EncounterService,
         private generalOperation: GeneralOperation,

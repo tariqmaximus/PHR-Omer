@@ -7,7 +7,9 @@ import { ORMDeleteRecord } from 'src/app/models/general/orm-delete-record';
 import { GenerateResetPasswordLinkModel } from 'src/app/models/generate-reset-password-link-model';
 import { ChangePasswordModel } from 'src/app/models/change-password-model';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class GeneralService {
   private httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -60,12 +62,12 @@ export class GeneralService {
 
   getAccessToken(auth: AuthenticationCredentials) {
     return this.http
-      .post(this.config.authServiceEndpoint + '/CustomAccount/LoginPhr', auth);
+      .post(this.config.authServiceEndpoint + 'api/CustomAccount/LoginPhr', auth);
   }
 
   GenerateResetPasswordLink(obj: GenerateResetPasswordLinkModel) {
     return this.http
-      .post(this.config.authServiceEndpoint + '/CustomAccount/GenerateResetPasswordLink', obj);
+      .post(this.config.authServiceEndpoint + 'api/CustomAccount/GenerateResetPasswordLink', obj);
   }
 
   ResetPasswordByToken(obj: ChangePasswordModel, resetToken: string) {
@@ -76,7 +78,7 @@ export class GeneralService {
     };
 
     return this.http
-      .post(this.config.authServiceEndpoint + '/CustomAccount/ResetPasswordByToken', obj, options);
+      .post(this.config.authServiceEndpoint + 'api/CustomAccount/ResetPasswordByToken', obj, options);
   }
 
   getProvider(practice_id: number) {

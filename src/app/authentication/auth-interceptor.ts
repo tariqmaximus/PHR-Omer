@@ -5,16 +5,18 @@ import { AuthService } from './auth-service';
 
 import { debounce,tap } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class AuthInterceptor implements HttpInterceptor {
     constructor(private auth: AuthService) { }
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         
             //"http://maximusare-04:8080/ems-secure-jwt/auth"
         if (req.url.endsWith("/auth/token")
-        || req.url.endsWith("/CustomAccount/LoginPhr")
-        || req.url.endsWith("/CustomAccount/GenerateResetPasswordLink")
-        || req.url.endsWith("/CustomAccount/ResetPasswordByToken") ) {
+        || req.url.endsWith("api/CustomAccount/LoginPhr")
+        || req.url.endsWith("api/CustomAccount/GenerateResetPasswordLink")
+        || req.url.endsWith("api/CustomAccount/ResetPasswordByToken") ) {
 
             return next.handle(req);
         }

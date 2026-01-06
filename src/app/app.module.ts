@@ -12,31 +12,26 @@ import { PatientInfoComponent } from './phr/patient-info/patient-info.component'
 import { PhrMessageInboxComponent } from './phr/messages/phr-message-inbox/phr-message-inbox.component';
 import { ObgynComponent } from './phr/obgyn/obgyn.component';
 import { PhrMessageComposeComponent } from './phr/messages/phr-message-compose/phr-message-compose.component';
-import { LogMessage } from './shared/log-message';
-import { PhrService } from './services/phr/phr.service';
+
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { LookupListModule } from './providers/lookupList.module';
 import { AppConfigModule } from './providers/app-config.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { GeneralService } from './services/general/general.service';
-import { DateTimeUtil } from './shared/date-time-util';
-import { AuthService } from './authentication/auth-service';
-import { LoadStartupService } from './services/login/load-startup.service';
+
 import { AuthInterceptor } from './authentication/auth-interceptor';
 import { QuillModule } from 'ngx-quill';
-import { GeneralOperation } from './shared/generalOperation';
-import { ConfirmationPopupComponent } from './general-modules/confirmation-popup/confirmation-popup.component';
+
 import { DocumentViewerComponent } from './general-modules/document-viewer/document-viewer.component';
-import { Chartreport_Print } from './models/charts/Chartreport_Print';
+
 import { EncounterPrintViewerComponent } from './general-modules/encounter-print-viewer/encounter-print-viewer.component';
-import { EncounterService } from './services/encounter/encounter.service';
+
 import { PhrLabSummaryComponent } from './phr/lab/phr-lab-summary/phr-lab-summary.component';
 import { PhrLabResultComponent } from './phr/lab/phr-lab-result/phr-lab-result.component';
 import { PhrLabResultAttachmentsComponent } from './phr/lab/phr-lab-result-attachments/phr-lab-result-attachments.component';
 import { LabResultsComponent } from './phr/lab-results/lab-results.component';
-import { Rptlabresults_Print } from './models/lab/Rptlabresults_Print';
+
 import { DocumentPrintViewerComponent } from './general-modules/document-print-viewer/document-print-viewer.component';
-import { AlertPopupComponent } from './general-modules/alert-popup/alert-popup.component';
+
 import { ListFilterPipe } from './shared/list-filter-pipe';
 import { UniquePipe } from './shared/unique-pipe';
 import { PhonePipe } from './shared/phone-pipe';
@@ -48,9 +43,8 @@ import { CCDAViewerComponent } from './phr/ccda-viewer/ccda-viewer.component';
 import { PhiComponent } from './phr/phi/phi.component';
 import { EmailSendingComponent } from './phr/email/email-sending/email-sending.component';
 import { DirectEmailSendingComponent } from './phr/email/direct-email/direct-email-send.component';
-import { SortFilterPaginationService,NgbdSortableHeader } from './services/sort-filter-pagination.service';
-import { excelService } from './shared/excelService';
-import { EncryptDecryptService } from './shared/encrypt-decrypt';
+import { NgbdSortableHeader } from './services/sort-filter-pagination.service';
+
 import { SettingMainComponent } from './phr/setting/setting-main/setting-main.component';
 import { AuthorizedAppsComponent } from './phr/setting/authorized-apps/authorized-apps.component';
 import { PasswordResetComponent } from './phr/setting/password-reset/password-reset.component';
@@ -68,7 +62,6 @@ import { PasswordResetComponent } from './phr/setting/password-reset/password-re
         ObgynComponent,
         LabResultsComponent,
         PhrMessageComposeComponent,
-        ConfirmationPopupComponent,
         DocumentViewerComponent,
         EncounterPrintViewerComponent,
         PhrLabSummaryComponent,
@@ -76,10 +69,6 @@ import { PasswordResetComponent } from './phr/setting/password-reset/password-re
         PhrLabResultAttachmentsComponent,
         DocumentPrintViewerComponent,
         PasswordResetComponent,
-        AlertPopupComponent,
-        ListFilterPipe,
-        UniquePipe,
-        PhonePipe, SafePipe,
         LabResultsResultsComponent,
         LabResultsAttachmentsComponent,
         PhrMainComponent,
@@ -106,10 +95,8 @@ import { PasswordResetComponent } from './phr/setting/password-reset/password-re
                     [{ 'color': [] }, { 'background': [] }],
                 ]
             }
-        })], providers: [LogMessage, PhrService, GeneralService, DateTimeUtil, AuthService, LoadStartupService,
-        GeneralOperation, Chartreport_Print, EncounterService, Rptlabresults_Print, ListFilterPipe,
-        SortFilterPaginationService, excelService,
-        EncryptDecryptService,
+        }), ListFilterPipe, UniquePipe, PhonePipe, SafePipe],
+    providers: [
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,

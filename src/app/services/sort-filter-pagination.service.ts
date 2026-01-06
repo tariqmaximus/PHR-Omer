@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, Input, Output, Injectable } from '@angular/core';
 import { QueryList } from '@angular/core';
 
 export type SortDirection = 'asc' | 'desc' | '';
@@ -271,6 +271,10 @@ function sort(sortEvent: SortEvent, lst: Array<any>, headers: QueryList<NgbdSort
 }
 
 
+
+@Injectable({
+    providedIn: 'root'
+})
 export class SortFilterPaginationService {
 
 

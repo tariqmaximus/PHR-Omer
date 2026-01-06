@@ -4,7 +4,9 @@ import { Injectable, Inject } from '@angular/core';
 import { LogMessage } from '../../shared/log-message';
 import { ORMLoginVerify } from 'src/app/models/general/ORMLoginVerify';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class LoadStartupService {
   waitForLogin = 0;
   constructor(@Inject(LOOKUP_LIST) public lookupList: LookupList,

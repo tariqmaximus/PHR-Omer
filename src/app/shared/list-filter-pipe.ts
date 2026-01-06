@@ -3,7 +3,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe(
     {
     name: 'listFilter',
-    standalone: false
+    standalone: true
 }
 )
 export class ListFilterPipe implements PipeTransform {

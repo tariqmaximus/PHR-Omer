@@ -9,7 +9,9 @@ import { ChangePasswordModel } from "src/app/models/change-password-model";
 import { ORMKeyValue } from "src/app/models/general/orm-key-value";
 import { UpdateRecordModel } from "src/app/models/update-record-model";
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class PhrService {
 
   private httpOptions = {

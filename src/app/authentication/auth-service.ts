@@ -7,7 +7,9 @@ import { LookupList, LOOKUP_LIST } from '../providers/lookupList.module';
 import { EncryptDecryptService } from '../shared/encrypt-decrypt';
 
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class AuthService {
     constructor(private dateTime: DateTimeUtil,
         @Inject(LOOKUP_LIST) public lookupList: LookupList, public generalService: GeneralService,
